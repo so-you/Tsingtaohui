@@ -605,6 +605,10 @@ select {
   gap: 14px;
 }
 
+.order-confirm-page {
+  padding-bottom: 76px;
+}
+
 .cart-list {
   display: grid;
   gap: 10px;
@@ -697,6 +701,20 @@ select {
   min-height: 76px;
   padding-top: 10px;
   resize: vertical;
+}
+
+.order-confirm-page .sticky-actions {
+  position: fixed;
+  right: 0;
+  bottom: 68px;
+  left: 0;
+  z-index: 19;
+  grid-template-columns: 1fr;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 10px 16px;
+  background: rgba(248, 250, 252, 0.96);
+  border-top: 1px solid var(--color-border);
 }
 
 .orders-page,

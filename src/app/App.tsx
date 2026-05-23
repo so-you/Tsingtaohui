@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { CatalogPage } from "../features/catalog/CatalogPage";
 import { ProductDetailPage } from "../features/catalog/ProductDetailPage";
+import { OrderConfirmPage } from "../features/cart/OrderConfirmPage";
 import { HomePage } from "../features/home/HomePage";
 import { InvalidShipTokenPage } from "../features/ship/InvalidShipTokenPage";
 import { resolveShipToken } from "../features/ship/shipLogic";
@@ -12,6 +13,7 @@ import type { AppRoute } from "./routes";
 function AppInner() {
   const [route, setRoute] = useState<AppRoute>("home");
   const [selectedProductId, setSelectedProductId] = useState("prod-water");
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const { currentShip, setCurrentShip } = useAppState();
 
   useEffect(() => {
@@ -56,10 +58,12 @@ function AppInner() {
         );
       case "cart":
         return (
-          <section className="page">
-            <h1>订单确认</h1>
-            <p>Cart and order confirmation are implemented in the next task.</p>
-          </section>
+          <OrderConfirmPage
+            onOrderCreated={(orderId) => {
+              setSelectedOrderId(orderId);
+              setRoute("orderDetail");
+            }}
+          />
         );
       case "orders":
         return (
@@ -80,6 +84,13 @@ function AppInner() {
           <section className="page">
             <h1>我的</h1>
             <p>Profile settings are implemented in a later task.</p>
+          </section>
+        );
+      case "orderDetail":
+        return (
+          <section className="page">
+            <h1>订单详情</h1>
+            <p>{selectedOrderId ?? "Order detail is implemented in a later task."}</p>
           </section>
         );
       default:

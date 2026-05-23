@@ -599,3 +599,102 @@ select {
   min-height: calc(100vh - 140px);
   align-content: center;
 }
+
+.cart-page,
+.order-confirm-page {
+  gap: 14px;
+}
+
+.cart-list {
+  display: grid;
+  gap: 10px;
+}
+
+.cart-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  padding: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.cart-line div {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.cart-line strong,
+.cart-line span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.cart-line span {
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.summary-panel {
+  display: grid;
+  grid-template-columns: minmax(80px, 0.75fr) minmax(0, 1fr);
+  gap: 9px 12px;
+  padding: 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.summary-panel span {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.summary-panel strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.form-panel {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.validation-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 12px 14px 12px 30px;
+  color: var(--color-red);
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+}
+
+.success-banner {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  padding: 0 10px;
+  color: var(--color-green);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+  background: #dcfce7;
+  border-radius: 999px;
+}
+
+.text-area {
+  min-height: 76px;
+  padding-top: 10px;
+  resize: vertical;
+}

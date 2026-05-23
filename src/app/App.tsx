@@ -3,6 +3,10 @@ import { CatalogPage } from "../features/catalog/CatalogPage";
 import { ProductDetailPage } from "../features/catalog/ProductDetailPage";
 import { OrderConfirmPage } from "../features/cart/OrderConfirmPage";
 import { HomePage } from "../features/home/HomePage";
+import { OrderDetailPage } from "../features/orders/OrderDetailPage";
+import { OrdersPage } from "../features/orders/OrdersPage";
+import { ProfilePage } from "../features/profile/ProfilePage";
+import { ScanPage } from "../features/scan/ScanPage";
 import { InvalidShipTokenPage } from "../features/ship/InvalidShipTokenPage";
 import { resolveShipToken } from "../features/ship/shipLogic";
 import { I18nProvider } from "../shared/i18n/I18nProvider";
@@ -14,7 +18,7 @@ function AppInner() {
   const [route, setRoute] = useState<AppRoute>("home");
   const [selectedProductId, setSelectedProductId] = useState("prod-water");
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
-  const { currentShip, setCurrentShip } = useAppState();
+  const { currentShip, orders, setCurrentShip } = useAppState();
 
   useEffect(() => {
     if (currentShip) {
@@ -34,6 +38,11 @@ function AppInner() {
   function openProduct(productId: string) {
     setSelectedProductId(productId);
     setRoute("productDetail");
+  }
+
+  function openOrder(orderId: string) {
+    setSelectedOrderId(orderId);
+    setRoute("orderDetail");
   }
 
   function renderRoute() {
@@ -66,33 +75,13 @@ function AppInner() {
           />
         );
       case "orders":
-        return (
-          <section className="page">
-            <h1>订单</h1>
-            <p>Order tracking is implemented in a later task.</p>
-          </section>
-        );
+        return <OrdersPage onOpenOrder={openOrder} />;
       case "scan":
-        return (
-          <section className="page">
-            <h1>扫码模拟</h1>
-            <p>Scan actions are implemented in a later task.</p>
-          </section>
-        );
+        return <ScanPage onOpenOrder={openOrder} onOpenProduct={openProduct} />;
       case "mine":
-        return (
-          <section className="page">
-            <h1>我的</h1>
-            <p>Profile settings are implemented in a later task.</p>
-          </section>
-        );
+        return <ProfilePage />;
       case "orderDetail":
-        return (
-          <section className="page">
-            <h1>订单详情</h1>
-            <p>{selectedOrderId ?? "Order detail is implemented in a later task."}</p>
-          </section>
-        );
+        return <OrderDetailPage orderId={selectedOrderId ?? orders[0]?.id ?? ""} onBack={() => setRoute("orders")} />;
       default:
         return null;
     }

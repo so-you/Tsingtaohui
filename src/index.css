@@ -698,3 +698,246 @@ select {
   padding-top: 10px;
   resize: vertical;
 }
+
+.orders-page,
+.order-detail-page,
+.scan-page,
+.profile-page {
+  gap: 14px;
+}
+
+.order-list,
+.order-item-list {
+  display: grid;
+  gap: 10px;
+}
+
+.order-card,
+.order-hero,
+.order-item-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.order-card {
+  width: 100%;
+  padding: 14px;
+  text-align: left;
+}
+
+.order-hero,
+.order-item-row {
+  padding: 14px;
+}
+
+.order-card > span,
+.order-hero > div,
+.order-item-row > span {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.order-card strong,
+.order-card small,
+.order-hero strong,
+.order-hero span,
+.order-item-row strong,
+.order-item-row small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.order-card small,
+.order-hero span,
+.order-item-row small {
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.detail-panel h2,
+.receipt-panel strong,
+.profile-panel h2 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.detail-actions,
+.receipt-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.detail-actions {
+  grid-template-columns: 1fr;
+}
+
+.button svg {
+  flex: 0 0 auto;
+}
+
+.order-timeline {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
+  padding: 0 0 16px;
+}
+
+.timeline-item::before {
+  position: absolute;
+  top: 18px;
+  bottom: 0;
+  left: 7px;
+  width: 2px;
+  content: "";
+  background: var(--color-border);
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-dot {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  background: #cbd5e1;
+  border: 3px solid #edf2f7;
+  border-radius: 999px;
+}
+
+.timeline-current .timeline-dot {
+  background: var(--color-primary);
+}
+
+.timeline-item span:last-child {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.timeline-item small {
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.receipt-panel,
+.profile-panel,
+.scan-result {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.receipt-panel p,
+.scan-result small {
+  margin: 4px 0 0;
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.scan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.scan-card {
+  display: grid;
+  min-width: 0;
+  min-height: 86px;
+  place-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  color: var(--color-primary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.scan-card span {
+  max-width: 100%;
+  overflow: hidden;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scan-result {
+  align-items: start;
+}
+
+.scan-result span {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.scan-result strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 20px;
+}
+
+.scan-result.muted strong {
+  color: var(--color-muted);
+  font-size: 16px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-primary);
+}
+
+.segmented-control {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 3px;
+  background: #eef2f6;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.segmented-control button {
+  min-height: 38px;
+  color: var(--color-muted);
+  font-weight: 800;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+}
+
+.segmented-control .segment-active {
+  color: var(--color-primary-strong);
+  background: var(--color-surface);
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+}

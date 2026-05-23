@@ -5,7 +5,7 @@ export const shippingAgents: ShippingAgent[] = [
   { id: "agent-qdh-02", nameZh: "汇港船务代理", nameEn: "Harbor Link Agency", contact: "+86 532 8000 1002" }
 ];
 
-export const demoShipTokens: Record<string, ShipContext | null> & {
+export const demoShipTokens: Partial<Record<string, ShipContext | null>> & {
   "demo-ship-token": ShipContext;
   "invalid-token": null;
 } = {
@@ -25,6 +25,8 @@ export const demoShipTokens: Record<string, ShipContext | null> & {
   },
   "invalid-token": null
 };
+
+const createDemoShipSnapshot = (): ShipContext => ({ ...demoShipTokens["demo-ship-token"] });
 
 export const categories: Category[] = [
   { id: "food", nameZh: "食品饮料", nameEn: "Food & Beverage" },
@@ -111,7 +113,7 @@ export const products: Product[] = [
 export const initialOrders: Order[] = [
   {
     id: "ORD-20260523-0001",
-    ship: demoShipTokens["demo-ship-token"],
+    ship: createDemoShipSnapshot(),
     items: [
       {
         productId: "prod-water",
@@ -139,11 +141,22 @@ export const initialOrders: Order[] = [
   },
   {
     id: "ORD-20260522-0007",
-    ship: demoShipTokens["demo-ship-token"],
-    items: [],
-    totalPrice: 0,
-    totalWeightKg: 0,
-    totalVolumeM3: 0,
+    ship: createDemoShipSnapshot(),
+    items: [
+      {
+        productId: "prod-cleaner",
+        skuCode: "BW-CLEAN-05",
+        nameZh: "甲板清洁剂",
+        nameEn: "Deck Cleaner",
+        quantity: 1,
+        unitPrice: 92,
+        unitWeightKg: 5.5,
+        unitVolumeM3: 0.018
+      }
+    ],
+    totalPrice: 92,
+    totalWeightKg: 5.5,
+    totalVolumeM3: 0.018,
     tradeMode: "MATCHING_ORDER",
     status: "COMPLETED",
     warehouseStatus: "OUTBOUND_DONE",

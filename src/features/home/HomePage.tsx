@@ -9,10 +9,14 @@ import { formatCurrency } from "../../shared/lib/format";
 import { ShipContextPanel } from "../ship/ShipContextPanel";
 
 export function HomePage({ onNavigate }: { onNavigate: (route: AppRoute) => void }) {
-  const { currentShip, orders } = useAppState();
+  const { currentShip, language, orders } = useAppState();
   const { t } = useI18n();
   const activeOrders = orders.filter((order) => !["COMPLETED", "CANCELLED"].includes(order.status));
   const firstActiveOrder = activeOrders[0];
+  const entryLabels =
+    language === "zh"
+      ? { goods: "选购商品", orders: "订单跟踪", scan: "扫码模拟", mine: "我的信息" }
+      : { goods: "Shop Goods", orders: "Track Orders", scan: "Scan Demo", mine: "Profile" };
 
   return (
     <section className="page home-page">
@@ -31,16 +35,16 @@ export function HomePage({ onNavigate }: { onNavigate: (route: AppRoute) => void
 
       <div className="entry-grid">
         <Button onClick={() => onNavigate("goods")} variant="secondary">
-          <PackageSearch size={18} /> {t("tabs.goods")}
+          <PackageSearch size={18} /> {entryLabels.goods}
         </Button>
         <Button onClick={() => onNavigate("orders")} variant="secondary">
-          <ShipWheel size={18} /> {t("tabs.orders")}
+          <ShipWheel size={18} /> {entryLabels.orders}
         </Button>
         <Button onClick={() => onNavigate("scan")} variant="secondary">
-          <QrCode size={18} /> {t("tabs.scan")}
+          <QrCode size={18} /> {entryLabels.scan}
         </Button>
         <Button onClick={() => onNavigate("mine")} variant="secondary">
-          <UserRound size={18} /> {t("tabs.mine")}
+          <UserRound size={18} /> {entryLabels.mine}
         </Button>
       </div>
 

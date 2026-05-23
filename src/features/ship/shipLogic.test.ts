@@ -6,6 +6,10 @@ describe("shipLogic", () => {
     expect(resolveShipToken(undefined).ship?.shipName).toBe("TSINGTAO STAR");
   });
 
+  it("marks null token as invalid", () => {
+    expect(resolveShipToken(null)).toEqual({ status: "invalid", ship: null });
+  });
+
   it("marks invalid token as invalid", () => {
     expect(resolveShipToken("invalid-token").status).toBe("invalid");
   });

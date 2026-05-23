@@ -11,6 +11,11 @@ describe("orderLogic", () => {
     expect(decideTradeMode(items, products, ship)).toBe("AUTO_TRADE");
   });
 
+  it("decides matching order when aggregate weight exceeds drone payload", () => {
+    const items: CartItem[] = [{ productId: "prod-water", quantity: 2 }];
+    expect(decideTradeMode(items, products, ship)).toBe("MATCHING_ORDER");
+  });
+
   it("decides matching order when a product needs manual delivery confirmation", () => {
     const items: CartItem[] = [{ productId: "prod-cleaner", quantity: 1 }];
     expect(decideTradeMode(items, products, ship)).toBe("MATCHING_ORDER");
@@ -18,7 +23,7 @@ describe("orderLogic", () => {
 
   it("creates order items and totals from cart", () => {
     const order = createOrderFromCart({
-      cartItems: [{ productId: "prod-water", quantity: 2 }],
+      cartItems: [{ productId: "prod-water", quantity: 1 }],
       products,
       ship,
       consigneeName: "Alex Chen",
@@ -28,8 +33,8 @@ describe("orderLogic", () => {
 
     expect(order.id).toMatch(/^ORD-20260523-/);
     expect(order.tradeMode).toBe("AUTO_TRADE");
-    expect(order.totalPrice).toBe(136);
-    expect(order.items[0].quantity).toBe(2);
+    expect(order.totalPrice).toBe(68);
+    expect(order.items[0].quantity).toBe(1);
   });
 
   it("advances order status through demo states", () => {

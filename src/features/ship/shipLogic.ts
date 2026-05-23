@@ -4,7 +4,8 @@ import type { ShipContext } from "../../shared/types/domain";
 export type ShipTokenResolution = { status: "valid"; ship: ShipContext } | { status: "invalid"; ship: null };
 
 export function resolveShipToken(token?: string | null): ShipTokenResolution {
-  const ship = demoShipTokens[token || "demo-ship-token"];
+  const tokenKey = token === undefined ? "demo-ship-token" : token;
+  const ship = tokenKey === null ? null : demoShipTokens[tokenKey];
 
   if (!ship) {
     return { status: "invalid", ship: null };

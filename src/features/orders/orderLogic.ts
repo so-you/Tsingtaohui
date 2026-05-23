@@ -175,6 +175,7 @@ export function decideTradeMode(items: CartItem[], products: Product[], ship: Sh
   }
 
   const productById = getProductById(products);
+  let totalWeightKg = 0;
   let totalVolumeM3 = 0;
 
   for (const item of items) {
@@ -184,14 +185,11 @@ export function decideTradeMode(items: CartItem[], products: Product[], ship: Sh
       return "MATCHING_ORDER";
     }
 
-    if (roundTo(product.weightKg, 2) > AUTO_TRADE_MAX_WEIGHT_KG) {
-      return "MATCHING_ORDER";
-    }
-
+    totalWeightKg += product.weightKg * item.quantity;
     totalVolumeM3 += product.volumeM3 * item.quantity;
   }
 
-  if (roundTo(totalVolumeM3, 3) > AUTO_TRADE_MAX_VOLUME_M3) {
+  if (roundTo(totalWeightKg, 2) > AUTO_TRADE_MAX_WEIGHT_KG || roundTo(totalVolumeM3, 3) > AUTO_TRADE_MAX_VOLUME_M3) {
     return "MATCHING_ORDER";
   }
 

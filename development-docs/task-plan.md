@@ -55,12 +55,12 @@
 
 | # | 任务 | 状态 | 分支 | 提交 |
 |---|------|------|------|------|
-| 3-1 | 仓库拣货/复核/打包 API | ⏳ 待开发 | dev/phase3-warehouse | — |
-| 3-2 | 仓库出库 + 库存查询 | ⏳ 待开发 | dev/phase3-warehouse | — |
-| 3-3 | Warehouse Client 脚手架 + 工作台 + 拣货复核 | ⏳ 待开发 | dev/phase3-warehouse | — |
-| 3-4 | 无人机管理 + 配送任务 + 外部 API 集成 | ⏳ 待开发 | dev/phase3-drone | — |
-| 3-5 | 海关同步服务 + Admin 海关管理 | ⏳ 待开发 | dev/phase3-customs | — |
-| 3-6 | 收货确认 API + H5 扫码收货 | ⏳ 待开发 | dev/phase3-receipt | — |
+| 3-1 | 仓库拣货/复核/打包 API | ✅ 完成 | dev/phase3-warehouse-drone-customs | 4e4e39c |
+| 3-2 | 仓库出库 + 库存查询 | ✅ 完成 | dev/phase3-warehouse-drone-customs | 4e4e39c |
+| 3-3 | Warehouse Client 脚手架 + 工作台 + 拣货复核 | ✅ 完成 | dev/phase3-warehouse-drone-customs | (本次) |
+| 3-4 | 无人机管理 + 配送任务 + 外部 API 集成 | ✅ 完成 | dev/phase3-warehouse-drone-customs | 4e4e39c |
+| 3-5 | 海关同步服务 + Admin 海关管理 | ✅ 完成 | dev/phase3-warehouse-drone-customs | (本次) |
+| 3-6 | 收货确认 API + H5 扫码收货 | ✅ 完成 | dev/phase3-warehouse-drone-customs | 4e4e39c |
 
 ## 阶段 4：运营完善 + 验收
 

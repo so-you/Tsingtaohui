@@ -11,7 +11,9 @@ export default {
     dashboard: '运营仪表盘',
     users: '用户管理',
     products: '商品管理',
-    orders: '订单管理'
+    orders: '订单管理',
+    drones: '无人机管理',
+    customsSync: '海关同步'
   },
   common: {
     confirm: '确定',
@@ -124,5 +126,45 @@ export default {
     totalOrders: '总订单数',
     activeDeliveries: '配送中',
     pendingMatches: '待撮合'
+  },
+  drone: {
+    title: '无人机管理',
+    droneCode: '编码',
+    model: '型号',
+    flightNo: '航班号',
+    maxPayloadKg: '最大载重(kg)',
+    maxVolumeM3: '最大体积(m³)',
+    maxRangeKm: '航程(km)',
+    deliverableCategories: '可配送品类',
+    status: '状态',
+    addDrone: '添加无人机',
+    statuses: {
+      AVAILABLE: '可用',
+      DISPATCHED: '已调度',
+      MAINTENANCE: '维护中',
+      OFFLINE: '离线'
+    }
+  },
+  customs: {
+    title: '海关同步管理',
+    syncNo: '同步编号',
+    orderId: '订单号',
+    nodeType: '同步节点',
+    level: '级别',
+    status: '状态',
+    retryCount: '重试次数',
+    retryAction: '重试',
+    levels: {
+      RED: '红牌',
+      YELLOW: '黄牌'
+    },
+    statuses: {
+      SYNC_NONE: '未同步',
+      SYNCING: '同步中',
+      SYNC_SUCCESS: '同步成功',
+      SYNC_FAILED: '同步失败',
+      RETRYING: '重试中',
+      MANUAL_RESOLVED: '人工解决'
+    }
   }
 }

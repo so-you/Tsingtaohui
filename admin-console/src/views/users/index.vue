@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 import { getUsers, updateUserStatus } from '@/api/user'
 import type { IUserInfo } from '@/types'
-import { Search, Refresh, User } from '@element-plus/icons-vue'
+import { Search, Refresh } from '@element-plus/icons-vue'
 
 const { t } = useI18n()
 

@@ -100,6 +100,54 @@ export type TOrderStatus =
 
 export type TTradeMode = 'AUTO_TRADE' | 'MATCHING_ORDER'
 
+// Drone types
+export type TDroneStatus = 'AVAILABLE' | 'DISPATCHED' | 'MAINTENANCE' | 'OFFLINE'
+
+export interface IDrone {
+  id: number
+  droneCode: string
+  model: string
+  flightNo: string
+  maxPayloadKg: number
+  maxVolumeM3: number
+  maxRangeKm: number
+  deliverableCategories: string[]
+  status: TDroneStatus
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface ICreateDroneParams {
+  droneCode: string
+  model: string
+  flightNo: string
+  maxPayloadKg: number
+  maxVolumeM3: number
+  maxRangeKm: number
+  deliverableCategories: string[]
+  status: TDroneStatus
+}
+
+// Customs sync types
+export type TCustomsSyncLevel = 'RED' | 'YELLOW'
+export type TCustomsSyncStatus = 'SYNC_NONE' | 'SYNCING' | 'SYNC_SUCCESS' | 'SYNC_FAILED' | 'RETRYING' | 'MANUAL_RESOLVED'
+
+export interface ICustomsSyncRecord {
+  id: number
+  syncNo: string
+  orderId: number
+  orderNo?: string
+  nodeType: string
+  level: TCustomsSyncLevel
+  status: TCustomsSyncStatus
+  requestBody?: string
+  responseBody?: string
+  retryCount: number
+  maxRetries: number
+  createdAt?: string
+  updatedAt?: string
+}
+
 export interface IOrderItem {
   id?: number
   productId: number

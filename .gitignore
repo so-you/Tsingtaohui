@@ -4,7 +4,11 @@
 /prd-demo-v1/coverage/
 /prd-demo-v1/.superpowers/
 /prd-demo-v1/.worktrees/
-
+/h5-client/node_modules/
+/h5-client/dist/
+/warehouse-client/node_modules/
+/warehouse-client/dist/
+/admin-console/dist/
 # Local OS and log files
 .DS_Store
 *.log

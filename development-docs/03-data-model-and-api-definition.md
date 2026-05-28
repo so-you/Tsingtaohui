@@ -1,7 +1,7 @@
 # 数据模型与接口定义
 
-版本：V1.1  
-日期：2026-05-28  
+版本：V1.2  
+日期：2026-05-29  
 
 ## 1. 设计原则
 
@@ -315,7 +315,7 @@
 | max_volume_m3 | DECIMAL(10,4) | 是 | 可载体积 |
 | max_range_km | DECIMAL(10,2) | 是 | 可飞距离 |
 | deliverable_categories | VARCHAR(512) | 否 | 可配送品类 |
-| status | VARCHAR(32) | 是 | AVAILABLE、IN_MISSION、MAINTENANCE、DISABLED |
+| status | VARCHAR(32) | 是 | AVAILABLE、DISPATCHED、MAINTENANCE、OFFLINE |
 
 ### 4.13 配送任务表 `t_delivery_task`
 
@@ -509,7 +509,7 @@
 
 ### 6.8 订单试算
 
-`POST /api/v1/orders/quote`
+`POST /api/v1/orders/estimate`
 
 请求：
 
@@ -581,7 +581,7 @@
 
 ### 6.11 订单详情
 
-`GET /api/v1/orders/{order_no}`
+`GET /api/v1/orders/{order_id}`
 
 ### 6.12 验证码收货
 
@@ -625,10 +625,21 @@
 
 ```json
 {
-  "outbound_allowed": false,
-  "blocked_by": "CUSTOMS_RED_CARD",
-  "sync_record_no": "CS202605280001",
-  "message": "Customs outbound sync failed"
+  "blocked": true,
+  "reason": "Customs sync failed: ...",
+  "orderId": 10001,
+  "orderNo": "OD202605280001"
+}
+```
+
+出库成功时：
+
+```json
+{
+  "blocked": false,
+  "orderId": 10001,
+  "orderNo": "OD202605280001",
+  "orderStatus": "OUTBOUND"
 }
 ```
 
@@ -636,29 +647,30 @@
 
 | 模块 | 方法 | 路径 | 说明 |
 |------|------|------|------|
+| 管理员资料 | GET | `/api/v1/admin/profile` | 当前管理员信息 |
 | 用户 | GET | `/api/v1/admin/users` | 用户列表 |
-| 用户 | PUT | `/api/v1/admin/users/{user_id}/status` | 启停用户 |
-| 船舶 | GET | `/api/v1/admin/ships` | 船舶列表 |
-| 船舶 | POST | `/api/v1/admin/ships` | 新增船舶 |
-| 船代 | GET | `/api/v1/admin/shipping-agents` | 船舶代理人列表 |
+| 用户 | PATCH | `/api/v1/admin/users/{user_id}/status` | 启停用户 |
+| 船舶 | GET | `/api/v1/admin/ships` | 船舶列表（待实现） |
+| 船舶 | POST | `/api/v1/admin/ships` | 新增船舶（待实现） |
+| 船代 | GET | `/api/v1/admin/shipping-agents` | 船舶代理人列表（待实现） |
 | 商品 | GET | `/api/v1/admin/products` | 商品列表 |
-| 商品 | POST | `/api/v1/admin/products` | 新增商品 |
+| 商品 | PATCH | `/api/v1/admin/products/{product_id}/status` | 商品上下架 |
 | 商品 | PUT | `/api/v1/admin/products/{product_id}` | 更新商品 |
 | 库存 | GET | `/api/v1/admin/inventory` | 库存列表 |
-| 库存 | POST | `/api/v1/admin/inventory/adjustments` | 库存调整 |
+| 库存 | POST | `/api/v1/admin/inventory/adjustments` | 库存调整（待实现） |
 | 订单 | GET | `/api/v1/admin/orders` | 订单列表 |
-| 订单 | GET | `/api/v1/admin/orders/{order_no}` | 订单详情 |
-| 订单 | POST | `/api/v1/admin/orders/{order_no}/cancel` | 取消订单 |
+| 订单 | GET | `/api/v1/admin/orders/{order_id}` | 订单详情 |
+| 订单 | PATCH | `/api/v1/admin/orders/{order_id}/status` | 订单状态变更 |
 | 匹配池 | GET | `/api/v1/admin/matching-orders` | 匹配订单池 |
-| 匹配池 | POST | `/api/v1/admin/matching-orders/{order_no}/confirm` | 人工确认 |
+| 匹配池 | POST | `/api/v1/admin/matching-orders/{order_no}/confirm` | 人工确认（待实现） |
 | 无人机 | GET | `/api/v1/admin/drones` | 无人机列表 |
 | 无人机 | POST | `/api/v1/admin/drones` | 新增无人机 |
-| 规则 | GET | `/api/v1/admin/rules` | 规则列表 |
-| 规则 | PUT | `/api/v1/admin/rules/{rule_id}` | 更新规则 |
+| 规则 | GET | `/api/v1/admin/rules` | 规则列表（待实现） |
+| 规则 | PUT | `/api/v1/admin/rules/{rule_id}` | 更新规则（待实现） |
 | 海关 | GET | `/api/v1/admin/customs-sync-records` | 海关同步记录 |
 | 海关 | POST | `/api/v1/admin/customs-sync-records/{sync_no}/retry` | 手动重试 |
-| 对账 | GET | `/api/v1/admin/reconciliation/export` | 对账导出 |
-| 审计 | GET | `/api/v1/admin/audit-logs` | 审计日志 |
+| 对账 | GET | `/api/v1/admin/reconciliation/export` | 对账导出（待实现） |
+| 审计 | GET | `/api/v1/admin/audit-logs` | 审计日志（待实现） |
 
 ## 9. 外部系统接口契约
 

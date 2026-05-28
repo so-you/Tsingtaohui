@@ -1,7 +1,7 @@
 # 系统架构与模块设计
 
-版本：V1.1  
-日期：2026-05-28  
+版本：V1.2  
+日期：2026-05-29  
 
 ## 1. 架构目标
 
@@ -132,10 +132,13 @@
 
 | 业务域 | Controller | Service | Mapper | Entity |
 |--------|------------|---------|--------|--------|
+| 认证 | `com.tsingtaohui.controller.AuthController` | `com.tsingtaohui.service.IAuthService` / `com.tsingtaohui.service.impl.AuthServiceImpl` | `com.tsingtaohui.mapper.UserMapper` | `com.tsingtaohui.model.entity.UserEntity` |
 | 用户 | `com.tsingtaohui.controller.UserController` | `com.tsingtaohui.service.IUserService` / `com.tsingtaohui.service.impl.UserServiceImpl` | `com.tsingtaohui.mapper.UserMapper` | `com.tsingtaohui.model.entity.UserEntity` |
-| 商品 | `com.tsingtaohui.controller.ProductController` | `com.tsingtaohui.service.IProductService` / `com.tsingtaohui.service.impl.ProductServiceImpl` | `com.tsingtaohui.mapper.ProductMapper` | `com.tsingtaohui.model.entity.ProductEntity` |
+| 商品 | `com.tsingtaohui.controller.CatalogController` | `com.tsingtaohui.service.ICatalogService` / `com.tsingtaohui.service.impl.CatalogServiceImpl` | `com.tsingtaohui.mapper.ProductMapper` | `com.tsingtaohui.model.entity.ProductEntity` |
 | 订单 | `com.tsingtaohui.controller.OrderController` | `com.tsingtaohui.service.IOrderService` / `com.tsingtaohui.service.impl.OrderServiceImpl` | `com.tsingtaohui.mapper.OrderMapper` | `com.tsingtaohui.model.entity.OrderEntity` |
-| 配送任务 | `com.tsingtaohui.controller.DeliveryTaskController` | `com.tsingtaohui.service.IDeliveryTaskService` / `com.tsingtaohui.service.impl.DeliveryTaskServiceImpl` | `com.tsingtaohui.mapper.DeliveryTaskMapper` | `com.tsingtaohui.model.entity.DeliveryTaskEntity` |
+| 管理 | `com.tsingtaohui.controller.AdminController` | `com.tsingtaohui.service.IAdminService` / `com.tsingtaohui.service.impl.AdminServiceImpl` | `com.tsingtaohui.mapper.UserMapper` 等 | 多个 |
+| 仓库 | `com.tsingtaohui.controller.WarehouseController` | `com.tsingtaohui.service.IWarehouseService` / `com.tsingtaohui.service.impl.WarehouseServiceImpl` | `com.tsingtaohui.mapper.OrderMapper` 等 | 多个 |
+| 无人机 | `com.tsingtaohui.controller.DroneController` | `com.tsingtaohui.service.IDroneService` / `com.tsingtaohui.service.impl.DroneServiceImpl` | `com.tsingtaohui.mapper.DroneMapper` | `com.tsingtaohui.model.entity.DroneEntity` |
 | 海关同步 | `com.tsingtaohui.controller.CustomsController` | `com.tsingtaohui.service.ICustomsSyncService` / `com.tsingtaohui.service.impl.CustomsSyncServiceImpl` | `com.tsingtaohui.mapper.CustomsSyncRecordMapper` | `com.tsingtaohui.model.entity.CustomsSyncRecordEntity` |
 
 ## 6. 核心业务服务
@@ -274,46 +277,119 @@ backend/
     TsingtaohuiApplication.java
     controller/
       AuthController.java
-      ProductController.java
+      UserController.java
+      CatalogController.java
+      CartController.java
       OrderController.java
+      AdminController.java
       WarehouseController.java
       DroneController.java
       CustomsController.java
     service/
       IAuthService.java
+      IUserService.java
+      ICatalogService.java
       IOrderService.java
-      IInventoryService.java
+      IAdminService.java
+      IWarehouseService.java
+      IDroneService.java
+      ICustomsSyncService.java
       impl/
         AuthServiceImpl.java
+        UserServiceImpl.java
+        CatalogServiceImpl.java
         OrderServiceImpl.java
-        InventoryServiceImpl.java
+        AdminServiceImpl.java
+        WarehouseServiceImpl.java
+        DroneServiceImpl.java
+        CustomsSyncServiceImpl.java
     mapper/
       UserMapper.java
+      UserProfileMapper.java
+      UserShipMapper.java
       ProductMapper.java
+      ProductCategoryMapper.java
+      InventoryMapper.java
       OrderMapper.java
+      OrderItemMapper.java
+      PackageMapper.java
+      DroneMapper.java
       DeliveryTaskMapper.java
       CustomsSyncRecordMapper.java
     model/
       entity/
+        BaseEntity.java
         UserEntity.java
+        UserProfileEntity.java
+        UserShipEntity.java
         ProductEntity.java
+        ProductCategoryEntity.java
+        InventoryEntity.java
         OrderEntity.java
+        OrderItemEntity.java
+        PackageEntity.java
+        DroneEntity.java
         DeliveryTaskEntity.java
+        CustomsSyncRecordEntity.java
       dto/
-        CreateOrderDTO.java
+        RegisterDTO.java
+        LoginDTO.java
+        UpdateProfileDTO.java
         UpdateShipDTO.java
+        CartEstimateDTO.java
+        CreateOrderDTO.java
+        OrderItemDTO.java
+        UpdateProductDTO.java
+        UpdateStatusDTO.java
       vo/
-        OrderDetailVO.java
+        AuthVO.java
+        UserVO.java
+        UserProfileVO.java
+        ShipVO.java
+        CategoryVO.java
         ProductListVO.java
+        ProductDetailVO.java
+        OrderEstimateVO.java
+        OrderVO.java
+        OrderItemVO.java
+        AdminProfileVO.java
+        AdminUserVO.java
+        AdminProductVO.java
+        AdminInventoryVO.java
     config/
+      SecurityConfig.java
+      CorsConfig.java
+      JwtProperties.java
+      JwtSecretValidator.java
+      MyBatisPlusConfig.java
+      MyBatisPlusMetaObjectHandler.java
     common/
-    integration/
-      customs/
-      drone/
+      context/UserContextHolder.java
+      enums/ErrorCode.java
+      enums/OrderStatus.java
+      enums/TradeMode.java
+      enums/UserType.java
+      enums/CustomsSyncNode.java
+      enums/CustomsSyncStatus.java
+      exception/BusinessException.java
+      exception/GlobalExceptionHandler.java
+      model/ApiResponse.java
+      model/PageResult.java
+      model/UserContext.java
+      util/JwtUtil.java
   src/main/resources/
     application.yml
-    mapper/
     db/migration/
+      V20260528_001__create_t_user.sql
+      V20260528_002__create_t_ship_and_agent.sql
+      V20260528_003__create_t_product.sql
+      V20260528_004__create_t_inventory.sql
+      V20260528_005__create_t_order.sql
+      V20260528_006__create_t_package.sql
+      V20260528_007__create_t_drone.sql
+      V20260528_008__create_t_delivery_task.sql
+      V20260528_009__create_t_customs_sync_record.sql
+      V20260528_010__create_t_audit_log.sql
 ```
 
 ### 10.2 客户端 H5
@@ -345,18 +421,30 @@ warehouse-client/
   package.json
   pages.json
   manifest.json
+  vite.config.ts
+  tsconfig.json
+  index.html
   src/
+    main.ts
+    App.vue
     pages/
       dashboard/
       picking/
       review/
       outbound/
       inventory/
-    components/
     api/
+      warehouse.ts
     stores/
+      warehouse.ts
+    types/
+      index.ts
     i18n/
+      index.ts
+      zh-CN.ts
+      en-US.ts
     utils/
+      request.ts
 ```
 
 ### 10.4 管理端
@@ -365,14 +453,43 @@ warehouse-client/
 admin-console/
   package.json
   vite.config.ts
+  tsconfig.json
   src/
     views/
+      dashboard/
+      users/
+      products/
+      orders/
+      drones/
+      customs-sync/
+      login/
     components/
     stores/
+      auth.ts
+      user.ts
+      product.ts
+      order.ts
     api/
+      auth.ts
+      user.ts
+      product.ts
+      order.ts
+      drone.ts
+      customs.ts
     router/
+      index.ts
     layouts/
+      AdminLayout.vue
+    i18n/
+      index.ts
+      zh-CN.ts
+      en-US.ts
+    types/
+      index.ts
     utils/
+      request.ts
+    styles/
+    assets/
 ```
 
 ## 11. 部署拓扑

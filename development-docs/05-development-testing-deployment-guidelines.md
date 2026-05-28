@@ -1,7 +1,7 @@
 # 研发、测试、部署和运维规范
 
-版本：V1.1  
-日期：2026-05-28  
+版本：V1.2  
+日期：2026-05-29  
 
 ## 1. 目标
 
@@ -16,7 +16,7 @@ Tsingtaohui/
   admin-console/
   backend/
   development-docs/
-  prd-demo-v1/
+  docs/
 ```
 
 说明：
@@ -26,7 +26,7 @@ Tsingtaohui/
 3. `admin-console`：Vue 3 + Element Plus 管理端。
 4. `backend`：Spring Boot 后端。
 5. `development-docs`：研发文档。
-6. `prd-demo-v1`：旧 PRD、原 H5 demo、历史规格和演示工程备份。
+6. `docs`：产品规格说明书和其他文档。
 
 ## 3. 本地开发环境
 
@@ -90,21 +90,22 @@ mvn clean package
 
 ### 5.1 分支命名
 
-| 类型 | 示例 |
-|------|------|
-| 功能 | `feature/client-register-login` |
-| 修复 | `fix/order-stock-lock` |
-| 文档 | `docs/development-docs-v1-1` |
-| 发布 | `release/mvp-v1` |
+| 类型 | 示例 | 说明 |
+|------|------|------|
+| 阶段 | `dev/phase1-auth-user` | 按功能阶段命名 |
+| 阶段 | `dev/phase2-order` | 按功能阶段命名 |
+| 阶段 | `dev/phase3-warehouse-drone-customs` | 多模块合并分支 |
+| 修复 | `dev/phase0-fix-review` | Codex review 修复 |
+| 发布 | `release/mvp-v1` | 发布分支 |
 
 ### 5.2 提交信息
 
-使用英文祈使句：
+使用中文摘要，格式为 `类型(可选作用域): 描述`：
 
-1. `Add client registration flow`
-2. `Define order API contract`
-3. `Implement customs red-card blocking`
-4. `Document H5 UI guidelines`
+1. `feat(h5-client): 添加首页和商品列表页面`
+2. `fix: 修复 codex review 发现的 P1 问题`
+3. `docs: 更新提交规范为中文摘要`
+4. `refactor: 提取无人机调度服务`
 
 ## 6. 编码规范
 

@@ -13,7 +13,11 @@ export default {
     products: 'Product Management',
     orders: 'Order Management',
     drones: 'Drone Management',
-    customsSync: 'Customs Sync'
+    customsSync: 'Customs Sync',
+    ships: 'Ships',
+    rules: 'Rules',
+    auditLogs: 'Audit Logs',
+    reconciliation: 'Reconciliation'
   },
   common: {
     confirm: 'Confirm',
@@ -166,5 +170,67 @@ export default {
       RETRYING: 'Retrying',
       MANUAL_RESOLVED: 'Manual Resolved'
     }
+  },
+  ship: {
+    title: 'Ship Management',
+    shipsTab: 'Ships',
+    agentsTab: 'Shipping Agents',
+    shipNo: 'Ship No.',
+    shipName: 'Ship Name',
+    shipNationality: 'Nationality',
+    imo: 'IMO',
+    mmsi: 'MMSI',
+    currentBerth: 'Current Berth',
+    currentAnchorage: 'Current Anchorage',
+    locationSource: 'Location Source',
+    addShip: 'Add Ship',
+    editShip: 'Edit Ship',
+    agentNameZh: 'Chinese Name',
+    agentNameEn: 'English Name',
+    contactName: 'Contact',
+    contactPhone: 'Phone',
+    keywordPlaceholder: 'Ship no. / name / IMO'
+  },
+  rule: {
+    title: 'Rule Configuration',
+    ruleKey: 'Rule Key',
+    ruleName: 'Name',
+    ruleValue: 'Value',
+    description: 'Description',
+    status: 'Status',
+    editTitle: 'Edit Rule',
+    statuses: { ENABLED: 'Enabled', DISABLED: 'Disabled' }
+  },
+  audit: {
+    title: 'Audit Logs',
+    actorName: 'Actor',
+    module: 'Module',
+    action: 'Action',
+    targetType: 'Target Type',
+    targetId: 'Target ID',
+    clientIp: 'Client IP',
+    beforeValue: 'Before',
+    afterValue: 'After',
+    createdAt: 'Time',
+    dateRange: 'Date Range',
+    detailTitle: 'Audit Detail',
+    modules: {
+      USER: 'User',
+      PRODUCT: 'Product',
+      ORDER: 'Order',
+      SHIP: 'Ship',
+      AGENT: 'Agent',
+      RULE: 'Rule',
+      CUSTOMS: 'Customs',
+      DRONE: 'Drone'
+    }
+  },
+  reconciliation: {
+    title: 'Reconciliation Export',
+    dateRange: 'Date Range',
+    startDate: 'Start Date',
+    endDate: 'End Date',
+    exportBtn: 'Export CSV',
+    hint: 'Select a date range and export completed order data as CSV'
   }
 }

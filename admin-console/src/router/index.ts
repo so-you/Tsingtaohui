@@ -47,6 +47,30 @@ const routes = [
         name: 'CustomsSync',
         component: () => import('@/views/customs-sync/index.vue'),
         meta: { title: '海关同步' }
+      },
+      {
+        path: 'ships',
+        name: 'Ships',
+        component: () => import('@/views/ships/index.vue'),
+        meta: { title: '船舶管理' }
+      },
+      {
+        path: 'rules',
+        name: 'Rules',
+        component: () => import('@/views/rules/index.vue'),
+        meta: { title: '规则配置' }
+      },
+      {
+        path: 'audit-logs',
+        name: 'AuditLogs',
+        component: () => import('@/views/audit-logs/index.vue'),
+        meta: { title: '审计日志' }
+      },
+      {
+        path: 'reconciliation',
+        name: 'Reconciliation',
+        component: () => import('@/views/reconciliation/index.vue'),
+        meta: { title: '对账导出' }
       }
     ]
   }

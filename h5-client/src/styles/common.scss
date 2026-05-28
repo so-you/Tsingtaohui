@@ -1,21 +1,40 @@
 /* Global reset and base styles */
+@import './theme.scss';
+
 page {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 28rpx;
-  color: #333333;
-  background-color: #f7f8fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
+  font-size: $font-base;
+  color: $text-primary;
+  background-color: $bg-page;
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 view,
 text,
 input,
-button {
+button,
+image {
   box-sizing: border-box;
 }
 
+/* Safe area helpers */
+.safe-bottom {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Container */
 .container {
-  padding: 24rpx 32rpx;
+  padding: $space-md $space-lg;
+}
+
+/* Card base */
+.card {
+  background-color: $bg-card;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
 }
 
 /* Button reset */
@@ -30,4 +49,103 @@ button {
 
 button::after {
   border: none;
+}
+
+/* Skeleton shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Price text */
+.price {
+  color: $text-price;
+  font-weight: $font-weight-bold;
+}
+
+.price-original {
+  color: $text-price-original;
+  text-decoration: line-through;
+  font-weight: $font-weight-normal;
+}
+
+/* Tag / badge */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2rpx 10rpx;
+  border-radius: $radius-sm;
+  font-size: $font-xs;
+  font-weight: $font-weight-medium;
+}
+
+.tag-primary {
+  background-color: rgba(238, 77, 45, 0.08);
+  color: $brand-primary;
+}
+
+.tag-success {
+  background-color: rgba(38, 170, 153, 0.08);
+  color: $secondary-green;
+}
+
+.tag-gray {
+  background-color: $bg-input;
+  color: $text-tertiary;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $space-xl 0;
+}
+
+.empty-icon {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: $space-md;
+  opacity: 0.4;
+}
+
+.empty-title {
+  font-size: $font-md;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
+  margin-bottom: $space-xs;
+}
+
+.empty-desc {
+  font-size: $font-sm;
+  color: $text-tertiary;
+}
+
+/* Section title */
+.section-title {
+  font-size: $font-lg;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
+  margin-bottom: $space-md;
+  display: block;
+}
+
+/* Scrollbar hide */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

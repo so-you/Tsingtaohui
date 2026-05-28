@@ -3,13 +3,15 @@
     {
       "path": "pages/home/index",
       "style": {
-        "navigationBarTitleText": "首页"
+        "navigationBarTitleText": "首页",
+        "navigationStyle": "custom"
       }
     },
     {
       "path": "pages/catalog/index",
       "style": {
-        "navigationBarTitleText": "商品"
+        "navigationBarTitleText": "商品",
+        "navigationStyle": "custom"
       }
     },
     {
@@ -21,13 +23,15 @@
     {
       "path": "pages/order/index",
       "style": {
-        "navigationBarTitleText": "订单"
+        "navigationBarTitleText": "订单",
+        "navigationStyle": "custom"
       }
     },
     {
       "path": "pages/mine/index",
       "style": {
-        "navigationBarTitleText": "我的"
+        "navigationBarTitleText": "我的",
+        "navigationStyle": "custom"
       }
     },
     {
@@ -53,12 +57,13 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "青岛汇",
     "navigationBarBackgroundColor": "#FFFFFF",
-    "backgroundColor": "#F7F8FA"
+    "backgroundColor": "#F5F5F5"
   },
   "tabBar": {
-    "color": "#6B7280",
-    "selectedColor": "#1677FF",
+    "color": "#999999",
+    "selectedColor": "#EE4D2D",
     "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/home/index",

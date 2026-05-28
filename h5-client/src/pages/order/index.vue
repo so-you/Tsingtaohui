@@ -1,21 +1,33 @@
 <template>
   <view class="order-page">
-    <text class="page-title">{{ $t('order.title') }}</text>
-
-    <view class="tabs">
-      <text
-        v-for="tab in tabs"
-        :key="tab.key"
-        class="tab-item"
-        :class="{ active: activeTab === tab.key }"
-        @tap="activeTab = tab.key"
-      >
-        {{ tab.label }}
-      </text>
+    <!-- Header -->
+    <view class="order-header">
+      <text class="page-title">{{ $t('order.title') }}</text>
     </view>
 
+    <!-- Tabs -->
+    <scroll-view scroll-x class="tabs-scroll hide-scrollbar">
+      <view class="tabs">
+        <view
+          v-for="tab in tabs"
+          :key="tab.key"
+          class="tab-item"
+          :class="{ active: activeTab === tab.key }"
+          @tap="activeTab = tab.key"
+        >
+          <text class="tab-text">{{ tab.label }}</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- Order List / Empty -->
     <view class="order-list">
-      <text class="empty-text">{{ $t('order.noOrders') }}</text>
+      <AppEmpty
+        v-if="!loading"
+        :title="$t('order.noOrders')"
+        emoji="📋"
+        :description="$t('home.subtitle')"
+      />
     </view>
   </view>
 </template>
@@ -23,9 +35,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import AppEmpty from '../../components/AppEmpty.vue'
 
 const { t } = useI18n()
 const activeTab = ref('all')
+const loading = ref(false)
 
 const tabs = computed(() => [
   { key: 'all', label: t('order.all') },
@@ -37,49 +51,60 @@ const tabs = computed(() => [
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/theme.scss';
+
 .order-page {
-  padding: 24rpx 32rpx;
+  padding: $space-md $space-lg $space-xl;
+}
+
+.order-header {
+  margin-bottom: $space-md;
 }
 
 .page-title {
-  font-size: 40rpx;
-  font-weight: 700;
-  color: #1f2937;
-  display: block;
-  margin-bottom: 32rpx;
+  font-size: $font-xl;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
+}
+
+.tabs-scroll {
+  margin-bottom: $space-md;
 }
 
 .tabs {
-  display: flex;
-  gap: 24rpx;
-  margin-bottom: 32rpx;
-  overflow-x: auto;
-  white-space: nowrap;
+  display: inline-flex;
+  gap: $space-sm;
+  padding: 4rpx 0;
 }
 
 .tab-item {
-  font-size: 28rpx;
-  color: #6b7280;
-  padding: 12rpx 24rpx;
-  border-radius: 8rpx;
-  flex-shrink: 0;
+  padding: 12rpx 28rpx;
+  border-radius: $radius-pill;
+  background-color: $bg-card;
+  border: 1rpx solid $border-color;
+  transition: all $transition-fast;
 }
 
 .tab-item.active {
-  color: #1677ff;
-  background-color: #eff6ff;
-  font-weight: 600;
+  background: $brand-gradient;
+  border-color: transparent;
+}
+
+.tab-text {
+  font-size: $font-sm;
+  color: $text-secondary;
+  white-space: nowrap;
+}
+
+.tab-item.active .tab-text {
+  color: #ffffff;
+  font-weight: $font-weight-medium;
 }
 
 .order-list {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 96rpx 0;
-}
-
-.empty-text {
-  font-size: 28rpx;
-  color: #9ca3af;
+  padding: $space-xl 0;
 }
 </style>

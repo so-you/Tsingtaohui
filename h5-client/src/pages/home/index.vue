@@ -1,57 +1,117 @@
 <template>
   <view class="home-page">
+    <!-- Sticky Header with Brand -->
     <view class="home-header">
-      <text class="greeting">{{ $t('home.title') }}</text>
+      <view class="brand-row">
+        <view class="brand-badge">
+          <text class="brand-icon">🚁</text>
+          <text class="brand-name">青岛汇</text>
+        </view>
+        <view class="brand-tag">
+          <text class="tag-text">保税仓直发</text>
+        </view>
+      </view>
       <text class="subtitle">{{ $t('home.subtitle') }}</text>
     </view>
 
+    <!-- Search Bar -->
     <view class="search-bar" @tap="handleSearch">
+      <text class="search-icon">🔍</text>
       <text class="search-placeholder">{{ $t('home.search') }}</text>
-    </view>
-
-    <view class="section">
-      <text class="section-title">{{ $t('home.categories') }}</text>
-      <view class="category-grid">
-        <view
-          v-for="category in categories"
-          :key="category.id"
-          class="category-item"
-          @tap="goCategory(category.id)"
-        >
-          <view class="category-icon" />
-          <text class="category-name">{{ localName(category) }}</text>
-        </view>
-        <view v-if="!loading && categories.length === 0" class="empty-inline">
-          <text class="empty-text">{{ $t('product.noCategories') }}</text>
-        </view>
+      <view class="search-btn">
+        <text class="search-btn-text">搜索</text>
       </view>
     </view>
 
-    <view class="section">
-      <text class="section-title">{{ $t('home.recommend') }}</text>
-      <view class="product-grid">
-        <view
-          v-for="product in products"
-          :key="product.id"
-          class="product-card"
-          @tap="goProduct(product.id)"
-        >
-          <view class="product-image">
-            <image v-if="product.mainImageUrl" :src="product.mainImageUrl" mode="aspectFill" />
-            <text v-else class="image-placeholder">{{ $t('product.image') }}</text>
-          </view>
-          <text class="product-name">{{ localName(product) }}</text>
-          <text class="product-price">{{ $t('product.price', { price: product.price }) }}</text>
-          <view class="product-meta">
-            <text class="deliverable-tag" :class="{ disabled: !product.droneDeliverable }">
-              {{ product.droneDeliverable ? $t('product.droneDeliverable') : $t('product.notDroneDeliverable') }}
-            </text>
-          </view>
-        </view>
-        <view v-if="!loading && products.length === 0" class="empty-inline">
-          <text class="empty-text">{{ $t('product.noProducts') }}</text>
-        </view>
+    <!-- Banner (decorative) -->
+    <view class="banner-card">
+      <view class="banner-content">
+        <text class="banner-title">无人机极速配送</text>
+        <text class="banner-desc">30分钟送达船舶</text>
       </view>
+      <text class="banner-emoji">🚁</text>
+    </view>
+
+    <!-- Categories -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">{{ $t('home.categories') }}</text>
+        <text class="section-more" @tap="handleSearch">查看全部 ›</text>
+      </view>
+
+      <AppSkeleton :loading="loading">
+        <view class="category-grid">
+          <view
+            v-for="category in categories"
+            :key="category.id"
+            class="category-item"
+            @tap="goCategory(category.id)"
+          >
+            <view class="category-icon" :style="{ backgroundColor: categoryColor(category.id) }">
+              <text class="category-emoji">{{ categoryEmoji(category.nameZh) }}</text>
+            </view>
+            <text class="category-name">{{ localName(category) }}</text>
+          </view>
+        </view>
+      </AppSkeleton>
+
+      <AppEmpty
+        v-if="!loading && categories.length === 0"
+        :title="$t('product.noCategories')"
+        emoji="📂"
+      />
+    </view>
+
+    <!-- Recommended Products -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">{{ $t('home.recommend') }}</text>
+        <text class="section-more" @tap="handleSearch">更多 ›</text>
+      </view>
+
+      <AppSkeleton :loading="loading">
+        <view class="product-grid">
+          <view
+            v-for="product in products"
+            :key="product.id"
+            class="product-card"
+            @tap="goProduct(product.id)"
+          >
+            <view class="product-image-wrapper">
+              <image
+                v-if="product.mainImageUrl"
+                class="product-image"
+                :src="product.mainImageUrl"
+                mode="aspectFill"
+                lazy-load
+              />
+              <text v-else class="image-placeholder">{{ $t('product.image') }}</text>
+              <view v-if="product.droneDeliverable" class="product-badge">
+                <text class="badge-text">可配送</text>
+              </view>
+            </view>
+            <view class="product-body">
+              <text class="product-name">{{ localName(product) }}</text>
+              <text class="product-spec">{{ product.specification }}</text>
+              <view class="product-footer">
+                <view class="price-row">
+                  <text class="price-symbol">¥</text>
+                  <text class="price-value">{{ formatPrice(product.price) }}</text>
+                </view>
+                <view class="sales-tag">
+                  <text class="sales-text">热销</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </AppSkeleton>
+
+      <AppEmpty
+        v-if="!loading && products.length === 0"
+        :title="$t('product.noProducts')"
+        emoji="📦"
+      />
     </view>
   </view>
 </template>
@@ -60,12 +120,36 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getCategories, getProducts } from '../../api/catalog'
+import AppSkeleton from '../../components/AppSkeleton.vue'
+import AppEmpty from '../../components/AppEmpty.vue'
 import type { ICategory, IProduct } from '../../types'
 
 const { locale, t } = useI18n()
 const loading = ref(false)
 const categories = ref<ICategory[]>([])
 const products = ref<IProduct[]>([])
+
+const CATEGORY_COLORS: Record<number, string> = {
+  1: '#FFF3E0',
+  2: '#E8F5E9',
+  3: '#FCE4EC',
+  4: '#E3F2FD',
+  5: '#F3E5F5',
+  6: '#E0F7FA',
+  7: '#FFF8E1',
+  8: '#E8EAF6',
+}
+
+const CATEGORY_EMOJIS: Record<string, string> = {
+  '酒水饮料': '🍺',
+  '方便食品': '🍜',
+  '休闲零食': '🍪',
+  '日用百货': '🧴',
+  '防护用品': '😷',
+  '新鲜果蔬': '🍎',
+  '粮油调味': '🍚',
+  '数码配件': '🔌',
+}
 
 onMounted(() => {
   loadHomeData()
@@ -76,7 +160,7 @@ async function loadHomeData() {
   try {
     const [categoryList, productPage] = await Promise.all([
       getCategories(),
-      getProducts({ page: 1, page_size: 4 }),
+      getProducts({ page: 1, page_size: 6 }),
     ])
     categories.value = categoryList.slice(0, 8)
     products.value = productPage.items
@@ -89,6 +173,19 @@ async function loadHomeData() {
 
 function localName(item: ICategory | IProduct) {
   return locale.value === 'en-US' ? item.nameEn || item.nameZh : item.nameZh
+}
+
+function categoryColor(id: number) {
+  return CATEGORY_COLORS[id] || '#f0f0f0'
+}
+
+function categoryEmoji(name: string) {
+  return CATEGORY_EMOJIS[name] || '📦'
+}
+
+function formatPrice(price: string | number) {
+  const n = typeof price === 'string' ? parseFloat(price) : price
+  return Number.isFinite(n) ? n.toFixed(2) : price
 }
 
 function handleSearch() {
@@ -110,165 +207,312 @@ function goProduct(productId: number) {
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/theme.scss';
+
 .home-page {
-  padding: 24rpx 32rpx;
+  padding: $space-md $space-lg $space-xl;
 }
 
+/* Header */
 .home-header {
-  margin-bottom: 32rpx;
+  margin-bottom: $space-md;
 }
 
-.greeting {
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  margin-bottom: $space-xs;
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.brand-icon {
   font-size: 40rpx;
-  font-weight: 700;
-  color: #1f2937;
+}
+
+.brand-name {
+  font-size: $font-xl;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
+}
+
+.brand-tag {
+  padding: 4rpx 12rpx;
+  background: $brand-gradient;
+  border-radius: $radius-pill;
+}
+
+.tag-text {
+  font-size: $font-xs;
+  color: #ffffff;
+  font-weight: $font-weight-medium;
 }
 
 .subtitle {
   display: block;
-  margin-top: 8rpx;
-  font-size: 26rpx;
-  color: #6b7280;
+  font-size: $font-sm;
+  color: $text-tertiary;
 }
 
+/* Search Bar */
 .search-bar {
   display: flex;
   align-items: center;
   height: 80rpx;
-  padding: 0 32rpx;
-  background-color: #f3f4f6;
-  border-radius: 40rpx;
-  margin-bottom: 40rpx;
+  padding: 0 8rpx 0 $space-md;
+  background-color: $bg-card;
+  border-radius: $radius-pill;
+  margin-bottom: $space-md;
+  box-shadow: $shadow-sm;
+}
+
+.search-icon {
+  font-size: 28rpx;
+  margin-right: 12rpx;
+  color: $text-tertiary;
 }
 
 .search-placeholder {
-  font-size: 28rpx;
-  color: #9ca3af;
+  flex: 1;
+  font-size: $font-sm;
+  color: $text-placeholder;
 }
 
+.search-btn {
+  padding: 0 $space-md;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $brand-gradient;
+  border-radius: $radius-pill;
+}
+
+.search-btn-text {
+  font-size: $font-sm;
+  color: #ffffff;
+  font-weight: $font-weight-medium;
+}
+
+/* Banner */
+.banner-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $space-lg;
+  background: $brand-gradient;
+  border-radius: $radius-lg;
+  margin-bottom: $space-lg;
+  box-shadow: $shadow-md;
+}
+
+.banner-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.banner-title {
+  font-size: $font-lg;
+  font-weight: $font-weight-bold;
+  color: #ffffff;
+  margin-bottom: 8rpx;
+}
+
+.banner-desc {
+  font-size: $font-sm;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.banner-emoji {
+  font-size: 80rpx;
+}
+
+/* Section */
 .section {
-  margin-bottom: 40rpx;
+  margin-bottom: $space-lg;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $space-md;
 }
 
 .section-title {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 24rpx;
-  display: block;
+  font-size: $font-lg;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
 }
 
+.section-more {
+  font-size: $font-sm;
+  color: $text-tertiary;
+}
+
+/* Category Grid */
 .category-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24rpx;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $space-md $space-sm;
 }
 
 .category-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 140rpx;
 }
 
 .category-icon {
-  width: 96rpx;
-  height: 96rpx;
-  border-radius: 24rpx;
-  background-color: #e5e7eb;
-  margin-bottom: 12rpx;
-}
-
-.category-name {
-  font-size: 24rpx;
-  color: #6b7280;
-}
-
-.product-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 48rpx 0;
-}
-
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24rpx;
-}
-
-.product-card {
-  min-width: 0;
-  padding: 20rpx;
-  background-color: #ffffff;
-  border-radius: 16rpx;
-}
-
-.product-image {
-  height: 180rpx;
-  margin-bottom: 16rpx;
-  border-radius: 12rpx;
-  background-color: #f3f4f6;
+  width: 108rpx;
+  height: 108rpx;
+  border-radius: $radius-lg;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  margin-bottom: $space-xs;
+  transition: transform $transition-fast;
 }
 
-.product-image image {
+.category-item:active .category-icon {
+  transform: scale(0.95);
+}
+
+.category-emoji {
+  font-size: 48rpx;
+}
+
+.category-name {
+  font-size: $font-xs;
+  color: $text-secondary;
+  text-align: center;
+}
+
+/* Product Grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-sm;
+}
+
+.product-card {
+  background-color: $bg-card;
+  border-radius: $radius-md;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+  transition: transform $transition-fast;
+}
+
+.product-card:active {
+  transform: scale(0.98);
+}
+
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* 1:1 aspect ratio */
+  background-color: $bg-input;
+}
+
+.product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
 }
 
 .image-placeholder {
-  font-size: 24rpx;
-  color: #9ca3af;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-sm;
+  color: $text-placeholder;
+}
+
+.product-badge {
+  position: absolute;
+  top: $space-xs;
+  left: $space-xs;
+  padding: 4rpx 10rpx;
+  background: rgba(38, 170, 153, 0.9);
+  border-radius: $radius-sm;
+}
+
+.badge-text {
+  font-size: $font-xs;
+  color: #ffffff;
+  font-weight: $font-weight-medium;
+}
+
+.product-body {
+  padding: $space-sm;
 }
 
 .product-name {
   display: block;
-  min-height: 72rpx;
-  font-size: 28rpx;
-  font-weight: 600;
-  color: #1f2937;
+  font-size: $font-sm;
+  font-weight: $font-weight-medium;
+  color: $text-primary;
   line-height: 36rpx;
+  min-height: 72rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
-.product-price {
+.product-spec {
   display: block;
-  margin-top: 10rpx;
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #dc2626;
+  margin-top: 4rpx;
+  font-size: $font-xs;
+  color: $text-tertiary;
 }
 
-.product-meta {
-  margin-top: 12rpx;
-}
-
-.deliverable-tag {
-  display: inline-flex;
-  padding: 4rpx 10rpx;
-  border-radius: 8rpx;
-  background-color: #ecfdf5;
-  color: #16a34a;
-  font-size: 22rpx;
-}
-
-.deliverable-tag.disabled {
-  background-color: #f3f4f6;
-  color: #9ca3af;
-}
-
-.empty-inline {
-  grid-column: 1 / -1;
+.product-footer {
   display: flex;
-  justify-content: center;
-  padding: 48rpx 0;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $space-sm;
 }
 
-.empty-text {
-  font-size: 28rpx;
-  color: #9ca3af;
+.price-row {
+  display: flex;
+  align-items: baseline;
+}
+
+.price-symbol {
+  font-size: $font-xs;
+  color: $text-price;
+  font-weight: $font-weight-bold;
+}
+
+.price-value {
+  font-size: $font-md;
+  color: $text-price;
+  font-weight: $font-weight-bold;
+}
+
+.sales-tag {
+  padding: 2rpx 8rpx;
+  background-color: rgba(238, 77, 45, 0.08);
+  border-radius: $radius-sm;
+}
+
+.sales-text {
+  font-size: $font-xs;
+  color: $brand-primary;
+  font-weight: $font-weight-medium;
 }
 </style>

@@ -1,0 +1,71 @@
+// ============================================================
+// Design Tokens — Shopee-inspired vibrant e-commerce palette
+// ============================================================
+
+// Primary brand
+$brand-primary: #ee4d2d;
+$brand-primary-light: #ff6b4f;
+$brand-primary-dark: #d13f22;
+$brand-gradient: linear-gradient(135deg, #ee4d2d 0%, #ff733e 100%);
+
+// Secondary
+$secondary-orange: #ff8f00;
+$secondary-yellow: #ffc107;
+$secondary-green: #26aa99;
+
+// Backgrounds
+$bg-page: #f5f5f5;
+$bg-card: #ffffff;
+$bg-surface: #fafafa;
+$bg-input: #f0f0f0;
+
+// Text
+$text-primary: #222222;
+$text-secondary: #666666;
+$text-tertiary: #999999;
+$text-placeholder: #bbbbbb;
+$text-link: #1677ff;
+$text-price: #ee4d2d;
+$text-price-original: #999999;
+
+// Borders & Dividers
+$border-color: #e8e8e8;
+$divider-color: #f0f0f0;
+
+// Shadows (subtle, layered)
+$shadow-sm: 0 1rpx 4rpx rgba(0, 0, 0, 0.04);
+$shadow-md: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 4rpx 24rpx rgba(0, 0, 0, 0.08);
+$shadow-card: 0 2rpx 8rpx rgba(0, 0, 0, 0.04), 0 1rpx 2rpx rgba(0, 0, 0, 0.02);
+
+// Radius
+$radius-sm: 8rpx;
+$radius-md: 16rpx;
+$radius-lg: 24rpx;
+$radius-xl: 32rpx;
+$radius-pill: 9999rpx;
+
+// Spacing scale
+$space-xs: 8rpx;
+$space-sm: 16rpx;
+$space-md: 24rpx;
+$space-lg: 32rpx;
+$space-xl: 48rpx;
+
+// Typography
+$font-xs: 22rpx;
+$font-sm: 24rpx;
+$font-base: 28rpx;
+$font-md: 32rpx;
+$font-lg: 36rpx;
+$font-xl: 40rpx;
+$font-2xl: 48rpx;
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Animation
+$transition-fast: 150ms ease;
+$transition-base: 250ms ease;

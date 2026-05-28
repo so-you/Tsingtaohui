@@ -27,15 +27,14 @@ export interface IRegisterParams {
 }
 
 export type TOrderStatus =
-  | 'PENDING_SUBMIT'
   | 'PENDING_CONFIRM'
   | 'CONFIRMED'
   | 'WAREHOUSE_PROCESSING'
-  | 'PENDING_DISPATCH'
-  | 'DISPATCHED'
-  | 'PENDING_LOAD'
-  | 'DELIVERING'
-  | 'PENDING_RECEIVE'
+  | 'PENDING_OUTBOUND'
+  | 'OUTBOUND'
+  | 'PENDING_LOADING'
+  | 'IN_DELIVERY'
+  | 'PENDING_RECEIPT'
   | 'COMPLETED'
   | 'CANCELLED'
   | 'EXCEPTION'
@@ -90,19 +89,75 @@ export interface IShip {
 export interface IOrder {
   id: number
   orderNo: string
+  userId?: number
   orderStatus: TOrderStatus
   tradeMode: TTradeMode
-  consignee: string
+  consigneeName: string
   cabinNo: string
-  totalAmount: number
-  createdTime: string
+  contactInfo?: string
+  totalPrice: string
+  totalWeightKg: string
+  totalVolumeM3: string
+  shipNo: string
+  shipName?: string
+  shipNationality: string
+  imo?: string
+  mmsi?: string
+  shippingAgentName?: string
+  remark?: string
+  createdAt?: string
   items: IOrderItem[]
 }
 
 export interface IOrderItem {
+  id?: number
   productId: number
-  productName: string
+  skuCode: string
+  productNameZh: string
+  productNameEn?: string
   quantity: number
-  unitPrice: number
-  weight: number
+  unitPrice: string
+  unitWeightKg: string
+  unitVolumeM3: string
+  lineAmount: string
+}
+
+export interface ICartItem {
+  productId: number
+  skuCode: string
+  nameZh: string
+  nameEn?: string
+  price: string
+  quantity: number
+  weightKg?: string
+  volumeM3?: string
+  mainImageUrl?: string
+}
+
+export interface IOrderRequestItem {
+  productId: number
+  quantity: number
+}
+
+export interface IOrderEstimate {
+  totalPrice: string
+  totalWeightKg: string
+  totalVolumeM3: string
+  tradeMode: TTradeMode
+  canAutoTrade: boolean
+  reasons: string[]
+  items: IOrderItem[]
+}
+
+export interface ICreateOrderParams {
+  items: IOrderRequestItem[]
+  consigneeName: string
+  cabinNo: string
+  contactInfo?: string
+  remark?: string
+  shipNo?: string
+  shipName?: string
+  shipNationality?: string
+  imo?: string
+  mmsi?: string
 }

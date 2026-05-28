@@ -8,6 +8,7 @@ import com.tsingtaohui.mapper.ProductMapper;
 import com.tsingtaohui.mapper.UserMapper;
 import com.tsingtaohui.mapper.UserProfileMapper;
 import com.tsingtaohui.mapper.UserShipMapper;
+import com.tsingtaohui.model.dto.UpdateProductDTO;
 import com.tsingtaohui.model.entity.InventoryEntity;
 import com.tsingtaohui.model.entity.ProductEntity;
 import com.tsingtaohui.model.vo.AdminProductVO;
@@ -24,6 +25,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -98,5 +100,50 @@ class AdminServiceImplTest {
         assertThatThrownBy(() -> adminService.updateProductStatus(1L, "UNKNOWN"))
                 .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("Invalid product status");
+    }
+
+    @Test
+    void updateProductShouldPersistEditableDetailFields() {
+        ProductEntity product = new ProductEntity();
+        product.setId(1L);
+        product.setSkuCode("SKU-001");
+        product.setNameZh("旧名称");
+        product.setNameEn("Old name");
+        product.setPrice(new BigDecimal("12.50"));
+        product.setWeightKg(new BigDecimal("1.000"));
+        product.setVolumeM3(new BigDecimal("0.0020"));
+        product.setDroneDeliverable(1);
+        product.setStatus("ON_SALE");
+
+        UpdateProductDTO dto = new UpdateProductDTO();
+        dto.setCategoryId(20L);
+        dto.setNameZh("矿泉水");
+        dto.setNameEn("Water");
+        dto.setDescriptionZh("中文详情");
+        dto.setDescriptionEn("English detail");
+        dto.setMainImageUrl("https://example.test/water.png");
+        dto.setSpecification("500ml");
+        dto.setPrice(new BigDecimal("15.80"));
+        dto.setWeightKg(new BigDecimal("0.500"));
+        dto.setVolumeM3(new BigDecimal("0.0010"));
+        dto.setSource("bonded");
+        dto.setDroneDeliverable(false);
+        dto.setStatus("OFF_SALE");
+
+        when(productMapper.selectById(1L)).thenReturn(product);
+        when(inventoryMapper.selectList(ArgumentMatchers.<Wrapper<InventoryEntity>>any()))
+                .thenReturn(List.of());
+
+        AdminProductVO updated = adminService.updateProduct(1L, dto);
+
+        verify(productMapper).updateById(product);
+        assertThat(product.getCategoryId()).isEqualTo(20L);
+        assertThat(product.getDescriptionZh()).isEqualTo("中文详情");
+        assertThat(product.getMainImageUrl()).isEqualTo("https://example.test/water.png");
+        assertThat(product.getPrice()).isEqualByComparingTo("15.80");
+        assertThat(product.getDroneDeliverable()).isZero();
+        assertThat(product.getStatus()).isEqualTo("OFF_SALE");
+        assertThat(updated.getDescriptionEn()).isEqualTo("English detail");
+        assertThat(updated.getSpecification()).isEqualTo("500ml");
     }
 }

@@ -9,6 +9,10 @@ public class AdminProductVO {
     private Long categoryId;
     private String nameZh;
     private String nameEn;
+    private String descriptionZh;
+    private String descriptionEn;
+    private String mainImageUrl;
+    private String specification;
     private String price;
     private String weightKg;
     private String volumeM3;
@@ -30,6 +34,14 @@ public class AdminProductVO {
     public void setNameZh(String nameZh) { this.nameZh = nameZh; }
     public String getNameEn() { return nameEn; }
     public void setNameEn(String nameEn) { this.nameEn = nameEn; }
+    public String getDescriptionZh() { return descriptionZh; }
+    public void setDescriptionZh(String descriptionZh) { this.descriptionZh = descriptionZh; }
+    public String getDescriptionEn() { return descriptionEn; }
+    public void setDescriptionEn(String descriptionEn) { this.descriptionEn = descriptionEn; }
+    public String getMainImageUrl() { return mainImageUrl; }
+    public void setMainImageUrl(String mainImageUrl) { this.mainImageUrl = mainImageUrl; }
+    public String getSpecification() { return specification; }
+    public void setSpecification(String specification) { this.specification = specification; }
     public String getPrice() { return price; }
     public void setPrice(String price) { this.price = price; }
     public String getWeightKg() { return weightKg; }

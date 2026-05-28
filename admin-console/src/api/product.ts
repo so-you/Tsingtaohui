@@ -1,4 +1,4 @@
-import { get, patch } from '@/utils/request'
+import { get, patch, put } from '@/utils/request'
 import type { IInventoryItem, IPageParams, IPageResult, IProductItem } from '@/types'
 
 export function getProducts(params: IPageParams & { category_id?: number; status?: string }) {
@@ -7,6 +7,10 @@ export function getProducts(params: IPageParams & { category_id?: number; status
 
 export function updateProductStatus(productId: number, status: string) {
   return patch<IProductItem>(`/admin/products/${productId}/status`, { status })
+}
+
+export function updateProduct(productId: number, data: Partial<IProductItem>) {
+  return put<IProductItem>(`/admin/products/${productId}`, data as Record<string, unknown>)
 }
 
 export function getInventory(params: IPageParams & { warehouse_id?: number }) {

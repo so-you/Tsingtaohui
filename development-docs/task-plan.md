@@ -27,9 +27,9 @@
 
 | # | 任务 | 状态 | 分支 | 提交 |
 |---|------|------|------|------|
-| 1-1 | 注册/登录 API | ⏳ 待开发 | dev/phase1-auth-user | — |
-| 1-2 | 用户资料 + 船舶信息 API | ⏳ 待开发 | dev/phase1-auth-user | — |
-| 1-3 | 商品分类/列表/详情 API | ⏳ 待开发 | dev/phase1-auth-user | — |
+| 1-1 | 注册/登录 API | ✅ 完成 | dev/phase1-auth-user | b9c4810 |
+| 1-2 | 用户资料 + 船舶信息 API | ✅ 完成 | dev/phase1-auth-user | f9fcd3f |
+| 1-3 | 商品分类/列表/详情 API | ✅ 完成 | dev/phase1-auth-user | (subagent) |
 | 1-4 | H5 客户端 Uni-app 脚手架 + 注册登录页 | ⏳ 待开发 | dev/phase1-h5-client | — |
 | 1-5 | H5 客户端首页 + 商品列表 + 商品详情 | ⏳ 待开发 | dev/phase1-h5-client | — |
 | 1-6 | H5 客户端「我的」页面 + 船舶信息维护 | ⏳ 待开发 | dev/phase1-h5-client | — |

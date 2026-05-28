@@ -32,12 +32,12 @@ Tsingtaohui/
 
 | 项目 | 版本要求 |
 |------|----------|
-| Node.js | 20 LTS 或项目锁定版本 |
+| Node.js | 24.x |
 | npm | 与 Node.js 配套版本 |
 | Java | JDK 17 |
 | Maven | 3.9.x |
 | MySQL | 8.x |
-| Redis | 7.x |
+| Redis | 8.x |
 | Docker | 用于本地依赖和部署镜像 |
 
 ## 4. 开发命令

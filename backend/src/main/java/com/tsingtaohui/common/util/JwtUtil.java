@@ -26,14 +26,14 @@ public class JwtUtil {
     }
 
     public String generateAccessToken(Long userId, String username, String userType) {
-        return generateToken(userId, username, userType, jwtProperties.getAccessTokenExpiration());
+        return generateToken(userId, username, userType, "access", jwtProperties.getAccessTokenExpiration());
     }
 
     public String generateRefreshToken(Long userId, String username, String userType) {
-        return generateToken(userId, username, userType, jwtProperties.getRefreshTokenExpiration());
+        return generateToken(userId, username, userType, "refresh", jwtProperties.getRefreshTokenExpiration());
     }
 
-    private String generateToken(Long userId, String username, String userType, long expiration) {
+    private String generateToken(Long userId, String username, String userType, String tokenType, long expiration) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration);
 
@@ -41,7 +41,8 @@ public class JwtUtil {
                 .claims(Map.of(
                         "userId", userId,
                         "username", username,
-                        "userType", userType
+                        "userType", userType,
+                        "typ", tokenType
                 ))
                 .subject(username)
                 .issuedAt(now)
@@ -74,9 +75,13 @@ public class JwtUtil {
     }
 
     public boolean isTokenValid(String token) {
+        return isAccessToken(token);
+    }
+
+    public boolean isAccessToken(String token) {
         try {
-            parseToken(token);
-            return true;
+            Claims claims = parseToken(token);
+            return "access".equals(claims.get("typ", String.class));
         } catch (Exception e) {
             return false;
         }

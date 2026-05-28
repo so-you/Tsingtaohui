@@ -1,15 +1,276 @@
 <script setup lang="ts">
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { ElMessage } from 'element-plus'
+import { getInventory, getProducts, updateProductStatus } from '@/api/product'
+import type { IInventoryItem, IProductItem } from '@/types'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+const activeTab = ref('products')
+const productLoading = ref(false)
+const inventoryLoading = ref(false)
+const productRows = ref<IProductItem[]>([])
+const inventoryRows = ref<IInventoryItem[]>([])
+const productTotal = ref(0)
+const inventoryTotal = ref(0)
+
+const productQuery = reactive({
+  keyword: '',
+  status: '',
+  page: 1,
+  page_size: 10
+})
+
+const inventoryQuery = reactive({
+  keyword: '',
+  warehouseId: undefined as number | undefined,
+  page: 1,
+  page_size: 10
+})
+
+const productStatusOptions = ['ON_SALE', 'OFF_SALE']
+
+const currentProductRows = computed(() => productRows.value)
+const currentInventoryRows = computed(() => inventoryRows.value)
+
+onMounted(() => {
+  loadProducts()
+  loadInventory()
+})
+
+async function loadProducts() {
+  productLoading.value = true
+  try {
+    const res = await getProducts({
+      keyword: productQuery.keyword || undefined,
+      status: productQuery.status || undefined,
+      page: productQuery.page,
+      page_size: productQuery.page_size
+    })
+    productRows.value = res.items
+    productTotal.value = res.total
+  } finally {
+    productLoading.value = false
+  }
+}
+
+async function loadInventory() {
+  inventoryLoading.value = true
+  try {
+    const res = await getInventory({
+      keyword: inventoryQuery.keyword || undefined,
+      warehouse_id: inventoryQuery.warehouseId,
+      page: inventoryQuery.page,
+      page_size: inventoryQuery.page_size
+    })
+    inventoryRows.value = res.items
+    inventoryTotal.value = res.total
+  } finally {
+    inventoryLoading.value = false
+  }
+}
+
+function productName(row: IProductItem | IInventoryItem) {
+  if ('nameZh' in row) {
+    return locale.value === 'en-US' ? row.nameEn || row.nameZh : row.nameZh
+  }
+  return locale.value === 'en-US'
+    ? row.productNameEn || row.productNameZh || '-'
+    : row.productNameZh || row.productNameEn || '-'
+}
+
+function searchProducts() {
+  productQuery.page = 1
+  loadProducts()
+}
+
+function resetProducts() {
+  productQuery.keyword = ''
+  productQuery.status = ''
+  productQuery.page = 1
+  loadProducts()
+}
+
+function searchInventory() {
+  inventoryQuery.page = 1
+  loadInventory()
+}
+
+function resetInventory() {
+  inventoryQuery.keyword = ''
+  inventoryQuery.warehouseId = undefined
+  inventoryQuery.page = 1
+  loadInventory()
+}
+
+async function handleProductStatus(row: IProductItem, status: string) {
+  if (row.status === status) return
+  await updateProductStatus(row.id, status)
+  ElMessage.success(t('common.success'))
+  loadProducts()
+}
+
+function productStatusTag(status?: string) {
+  return status === 'ON_SALE' ? 'success' : 'info'
+}
 </script>
 
 <template>
   <div class="products-page">
     <h2 class="page-title">{{ t('menu.products') }}</h2>
-    <el-card shadow="never">
-      <el-empty description="Coming soon" />
-    </el-card>
+
+    <el-tabs v-model="activeTab" class="product-tabs">
+      <el-tab-pane :label="t('product.productsTab')" name="products">
+        <el-card shadow="never" class="search-card">
+          <el-form :model="productQuery" inline>
+            <el-form-item :label="t('product.keyword')">
+              <el-input
+                v-model="productQuery.keyword"
+                :placeholder="t('product.keywordPlaceholder')"
+                clearable
+                style="width: 240px"
+                @keyup.enter="searchProducts"
+              />
+            </el-form-item>
+            <el-form-item :label="t('product.status')">
+              <el-select v-model="productQuery.status" clearable style="width: 150px">
+                <el-option
+                  v-for="item in productStatusOptions"
+                  :key="item"
+                  :label="t(`product.${item.toLowerCase()}`)"
+                  :value="item"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="searchProducts">{{ t('common.search') }}</el-button>
+              <el-button @click="resetProducts">{{ t('common.reset') }}</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+
+        <el-card shadow="never">
+          <el-table v-loading="productLoading" :data="currentProductRows" stripe>
+            <el-table-column prop="skuCode" :label="t('product.skuCode')" min-width="150" />
+            <el-table-column :label="t('product.name')" min-width="180">
+              <template #default="{ row }">{{ productName(row) }}</template>
+            </el-table-column>
+            <el-table-column prop="price" :label="t('product.price')" min-width="110" />
+            <el-table-column :label="t('product.weight')" min-width="110">
+              <template #default="{ row }">{{ row.weightKg || '-' }}</template>
+            </el-table-column>
+            <el-table-column :label="t('product.volume')" min-width="110">
+              <template #default="{ row }">{{ row.volumeM3 || '-' }}</template>
+            </el-table-column>
+            <el-table-column prop="availableQty" :label="t('inventory.availableQty')" min-width="110" />
+            <el-table-column prop="lockedQty" :label="t('inventory.lockedQty')" min-width="110" />
+            <el-table-column :label="t('product.droneDeliverable')" min-width="130">
+              <template #default="{ row }">
+                <el-tag :type="row.droneDeliverable ? 'success' : 'info'">
+                  {{ row.droneDeliverable ? t('common.yes') : t('common.no') }}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="status" :label="t('product.status')" min-width="120">
+              <template #default="{ row }">
+                <el-tag :type="productStatusTag(row.status)">
+                  {{ t(`product.${row.status.toLowerCase()}`) }}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column :label="t('user.actions')" fixed="right" width="140">
+              <template #default="{ row }">
+                <el-button
+                  v-if="row.status !== 'ON_SALE'"
+                  type="success"
+                  link
+                  size="small"
+                  @click="handleProductStatus(row, 'ON_SALE')"
+                >
+                  {{ t('product.onSaleAction') }}
+                </el-button>
+                <el-button
+                  v-if="row.status === 'ON_SALE'"
+                  type="warning"
+                  link
+                  size="small"
+                  @click="handleProductStatus(row, 'OFF_SALE')"
+                >
+                  {{ t('product.offSaleAction') }}
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+
+          <div class="pagination-row">
+            <el-pagination
+              background
+              layout="total, prev, pager, next"
+              :page-size="productQuery.page_size"
+              :current-page="productQuery.page"
+              :total="productTotal"
+              @current-change="(page: number) => { productQuery.page = page; loadProducts() }"
+            />
+          </div>
+        </el-card>
+      </el-tab-pane>
+
+      <el-tab-pane :label="t('inventory.title')" name="inventory">
+        <el-card shadow="never" class="search-card">
+          <el-form :model="inventoryQuery" inline>
+            <el-form-item :label="t('product.skuCode')">
+              <el-input
+                v-model="inventoryQuery.keyword"
+                :placeholder="t('product.skuCode')"
+                clearable
+                style="width: 220px"
+                @keyup.enter="searchInventory"
+              />
+            </el-form-item>
+            <el-form-item :label="t('inventory.warehouseId')">
+              <el-input-number
+                v-model="inventoryQuery.warehouseId"
+                :min="1"
+                controls-position="right"
+                style="width: 160px"
+              />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="searchInventory">{{ t('common.search') }}</el-button>
+              <el-button @click="resetInventory">{{ t('common.reset') }}</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+
+        <el-card shadow="never">
+          <el-table v-loading="inventoryLoading" :data="currentInventoryRows" stripe>
+            <el-table-column prop="warehouseId" :label="t('inventory.warehouseId')" min-width="120" />
+            <el-table-column prop="locationCode" :label="t('inventory.locationCode')" min-width="140" />
+            <el-table-column prop="skuCode" :label="t('product.skuCode')" min-width="150" />
+            <el-table-column :label="t('product.name')" min-width="180">
+              <template #default="{ row }">{{ productName(row) }}</template>
+            </el-table-column>
+            <el-table-column prop="batchNo" :label="t('inventory.batchNo')" min-width="140" />
+            <el-table-column prop="availableQty" :label="t('inventory.availableQty')" min-width="110" />
+            <el-table-column prop="lockedQty" :label="t('inventory.lockedQty')" min-width="110" />
+            <el-table-column prop="outboundQty" :label="t('inventory.outboundQty')" min-width="110" />
+            <el-table-column prop="updatedAt" :label="t('common.updatedAt')" min-width="170" />
+          </el-table>
+
+          <div class="pagination-row">
+            <el-pagination
+              background
+              layout="total, prev, pager, next"
+              :page-size="inventoryQuery.page_size"
+              :current-page="inventoryQuery.page"
+              :total="inventoryTotal"
+              @current-change="(page: number) => { inventoryQuery.page = page; loadInventory() }"
+            />
+          </div>
+        </el-card>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -22,5 +283,19 @@ const { t } = useI18n()
   margin: 0 0 20px;
   font-size: 20px;
   color: #303133;
+}
+
+.product-tabs {
+  background: transparent;
+}
+
+.search-card {
+  margin-bottom: 16px;
+}
+
+.pagination-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
 }
 </style>

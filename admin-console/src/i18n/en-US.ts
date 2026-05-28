@@ -27,18 +27,54 @@ export default {
     languageZh: '中文',
     languageEn: 'English',
     logout: 'Logout',
-    welcome: 'Welcome back'
+    welcome: 'Welcome back',
+    yes: 'Yes',
+    no: 'No',
+    createdAt: 'Created At',
+    updatedAt: 'Updated At'
   },
   user: {
     title: 'User Management',
     username: 'Username',
+    displayName: 'Display Name',
     userType: 'User Type',
     status: 'Status',
     enabled: 'Enabled',
     disabled: 'Disabled',
+    locked: 'Locked',
+    shipNo: 'Ship No.',
+    shipNationality: 'Ship Nationality',
+    imo: 'IMO',
+    mmsi: 'MMSI',
     actions: 'Actions',
     enableAction: 'Enable',
-    disableAction: 'Disable'
+    disableAction: 'Disable',
+    lockAction: 'Lock'
+  },
+  product: {
+    productsTab: 'Products',
+    keyword: 'Keyword',
+    keywordPlaceholder: 'Product name / SKU',
+    skuCode: 'SKU Code',
+    name: 'Product Name',
+    price: 'Price',
+    weight: 'Weight(kg)',
+    volume: 'Volume(m³)',
+    status: 'Status',
+    droneDeliverable: 'Drone Delivery',
+    on_sale: 'On Sale',
+    off_sale: 'Off Sale',
+    onSaleAction: 'Put On Sale',
+    offSaleAction: 'Take Off Sale'
+  },
+  inventory: {
+    title: 'Inventory',
+    warehouseId: 'Warehouse ID',
+    locationCode: 'Location',
+    batchNo: 'Batch No.',
+    availableQty: 'Available',
+    lockedQty: 'Locked',
+    outboundQty: 'Outbound'
   },
   dashboard: {
     totalUsers: 'Total Users',

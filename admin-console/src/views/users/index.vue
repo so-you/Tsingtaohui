@@ -1,33 +1,78 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { ElMessage } from 'element-plus'
+import { getUsers, updateUserStatus } from '@/api/user'
+import type { IUserInfo } from '@/types'
 
 const { t } = useI18n()
 
-const searchKeyword = ref('')
+const loading = ref(false)
+const tableData = ref<IUserInfo[]>([])
+const total = ref(0)
 
-interface ITableRow {
-  id: number
-  username: string
-  userType: string
-  status: string
-  createdAt: string
+const query = reactive({
+  keyword: '',
+  user_type: '',
+  status: '',
+  page: 1,
+  page_size: 10
+})
+
+const userTypeOptions = ['CUSTOMER', 'WAREHOUSE_OPERATOR', 'ADMIN', 'OPERATOR', 'DRONE_DISPATCHER', 'FINANCE']
+const statusOptions = ['ENABLED', 'DISABLED', 'LOCKED']
+
+onMounted(() => {
+  loadUsers()
+})
+
+async function loadUsers() {
+  loading.value = true
+  try {
+    const res = await getUsers({
+      keyword: query.keyword || undefined,
+      user_type: query.user_type || undefined,
+      status: query.status || undefined,
+      page: query.page,
+      page_size: query.page_size
+    })
+    tableData.value = res.items
+    total.value = res.total
+  } finally {
+    loading.value = false
+  }
 }
 
-const tableData = ref<ITableRow[]>([
-  { id: 1, username: 'captain_zhang', userType: 'crew', status: 'enabled', createdAt: '2026-05-20' },
-  { id: 2, username: 'sailor_li', userType: 'crew', status: 'enabled', createdAt: '2026-05-21' },
-  { id: 3, username: 'agent_wang', userType: 'agent', status: 'disabled', createdAt: '2026-05-22' },
-  { id: 4, username: 'crew_chen', userType: 'crew', status: 'enabled', createdAt: '2026-05-23' },
-  { id: 5, username: 'manager_zhao', userType: 'admin', status: 'enabled', createdAt: '2026-05-24' }
-])
-
 function handleSearch() {
-  // TODO: connect to API
+  query.page = 1
+  loadUsers()
 }
 
 function handleReset() {
-  searchKeyword.value = ''
+  query.keyword = ''
+  query.user_type = ''
+  query.status = ''
+  query.page = 1
+  loadUsers()
+}
+
+async function handleStatus(row: IUserInfo, status: string) {
+  if (!row.id || row.status === status) return
+  await updateUserStatus(row.id, status)
+  ElMessage.success(t('common.success'))
+  loadUsers()
+}
+
+function handlePageChange(page: number) {
+  query.page = page
+  loadUsers()
+}
+
+function statusTag(status?: string) {
+  if (status === 'ENABLED') return 'success'
+  if (status === 'DISABLED') return 'info'
+  if (status === 'LOCKED') return 'danger'
+  return 'warning'
 }
 </script>
 
@@ -36,41 +81,104 @@ function handleReset() {
     <h2 class="page-title">{{ t('user.title') }}</h2>
 
     <el-card shadow="never" class="search-card">
-      <el-row :gutter="16" align="middle">
-        <el-col :span="8">
+      <el-form :model="query" inline>
+        <el-form-item :label="t('user.username')">
           <el-input
-            v-model="searchKeyword"
+            v-model="query.keyword"
             :placeholder="t('user.username')"
             clearable
+            style="width: 220px"
+            @keyup.enter="handleSearch"
           />
-        </el-col>
-        <el-col :span="16">
+        </el-form-item>
+        <el-form-item :label="t('user.userType')">
+          <el-select v-model="query.user_type" clearable style="width: 190px">
+            <el-option
+              v-for="item in userTypeOptions"
+              :key="item"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="t('user.status')">
+          <el-select v-model="query.status" clearable style="width: 150px">
+            <el-option
+              v-for="item in statusOptions"
+              :key="item"
+              :label="t(`user.${item.toLowerCase()}`)"
+              :value="item"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
           <el-button type="primary" @click="handleSearch">{{ t('common.search') }}</el-button>
           <el-button @click="handleReset">{{ t('common.reset') }}</el-button>
-        </el-col>
-      </el-row>
+        </el-form-item>
+      </el-form>
     </el-card>
 
     <el-card shadow="never" class="table-card">
-      <el-table :data="tableData" stripe>
-        <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="username" :label="t('user.username')" />
-        <el-table-column prop="userType" :label="t('user.userType')" />
-        <el-table-column prop="status" :label="t('user.status')">
+      <el-table v-loading="loading" :data="tableData" stripe>
+        <el-table-column prop="id" label="ID" min-width="170" />
+        <el-table-column prop="username" :label="t('user.username')" min-width="150" />
+        <el-table-column prop="displayName" :label="t('user.displayName')" min-width="140" />
+        <el-table-column prop="userType" :label="t('user.userType')" min-width="150" />
+        <el-table-column prop="status" :label="t('user.status')" min-width="110">
           <template #default="{ row }">
-            <el-tag :type="row.status === 'enabled' ? 'success' : 'danger'">
-              {{ row.status === 'enabled' ? t('user.enabled') : t('user.disabled') }}
+            <el-tag :type="statusTag(row.status)">
+              {{ row.status ? t(`user.${row.status.toLowerCase()}`) : '-' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="Created At" />
-        <el-table-column :label="t('user.actions')" width="200">
-          <template #default>
-            <el-button type="primary" link size="small">{{ t('common.edit') }}</el-button>
-            <el-button type="danger" link size="small">{{ t('common.delete') }}</el-button>
+        <el-table-column prop="shipNo" :label="t('user.shipNo')" min-width="140" />
+        <el-table-column prop="shipNationality" :label="t('user.shipNationality')" min-width="130" />
+        <el-table-column prop="imo" :label="t('user.imo')" min-width="130" />
+        <el-table-column prop="mmsi" :label="t('user.mmsi')" min-width="130" />
+        <el-table-column prop="createdAt" :label="t('common.createdAt')" min-width="170" />
+        <el-table-column :label="t('user.actions')" fixed="right" width="190">
+          <template #default="{ row }">
+            <el-button
+              v-if="row.status !== 'ENABLED'"
+              type="success"
+              link
+              size="small"
+              @click="handleStatus(row, 'ENABLED')"
+            >
+              {{ t('user.enableAction') }}
+            </el-button>
+            <el-button
+              v-if="row.status === 'ENABLED'"
+              type="warning"
+              link
+              size="small"
+              @click="handleStatus(row, 'DISABLED')"
+            >
+              {{ t('user.disableAction') }}
+            </el-button>
+            <el-button
+              v-if="row.status !== 'LOCKED'"
+              type="danger"
+              link
+              size="small"
+              @click="handleStatus(row, 'LOCKED')"
+            >
+              {{ t('user.lockAction') }}
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
+
+      <div class="pagination-row">
+        <el-pagination
+          background
+          layout="total, prev, pager, next"
+          :page-size="query.page_size"
+          :current-page="query.page"
+          :total="total"
+          @current-change="handlePageChange"
+        />
+      </div>
     </el-card>
   </div>
 </template>
@@ -92,5 +200,11 @@ function handleReset() {
 
 .table-card {
   margin-bottom: 16px;
+}
+
+.pagination-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
 }
 </style>

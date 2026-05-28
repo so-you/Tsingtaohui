@@ -318,7 +318,7 @@ POST /webhook/drone-callback     # 无人机状态回调（由无人机系统调
 
 ## 提交规范 (Commit Style)
 
-使用简洁的祈使句式英文摘要：
+使用简洁的祈使句式中文摘要：
 
 ```
 feat: add product list page for h5-client
@@ -327,6 +327,7 @@ docs: update customs integration spec
 refactor: extract drone dispatch service
 chore: upgrade Element Plus to 2.x
 ```
+以上为示例，请使用中文
 
 ### Commit 类型
 

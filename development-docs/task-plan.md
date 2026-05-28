@@ -2,7 +2,7 @@
 
 版本：V1.0
 日期：2026-05-28
-分支策略：每阶段新建分支 → 开发 → 测试 → 提交 → 合并 main → /codex review → 修复 → push
+分支策略：每阶段新建分支 → 开发 → 测试 → 提交 → /codex review → 修复 → 测试 → 合并 main → push
 
 ## 阶段 0：工程基础设施（已完成 ✅）
 
@@ -30,9 +30,9 @@
 | 1-1 | 注册/登录 API | ✅ 完成 | dev/phase1-auth-user | b9c4810 |
 | 1-2 | 用户资料 + 船舶信息 API | ✅ 完成 | dev/phase1-auth-user | f9fcd3f |
 | 1-3 | 商品分类/列表/详情 API | ✅ 完成 | dev/phase1-auth-user | (subagent) |
-| 1-4 | H5 客户端 Uni-app 脚手架 + 注册登录页 | ⏳ 待开发 | dev/phase1-h5-client | — |
-| 1-5 | H5 客户端首页 + 商品列表 + 商品详情 | ⏳ 待开发 | dev/phase1-h5-client | — |
-| 1-6 | H5 客户端「我的」页面 + 船舶信息维护 | ⏳ 待开发 | dev/phase1-h5-client | — |
+| 1-4 | H5 客户端 Uni-app 脚手架 + 注册登录页 | ✅ 完成 | dev/phase1-h5-client | ffb006e, 5a32a8b |
+| 1-5 | H5 客户端首页 + 商品列表 + 商品详情 | ✅ 完成 | dev/phase1-h5-client | 5a32a8b |
+| 1-6 | H5 客户端「我的」页面 + 船舶信息维护 | ✅ 完成 | dev/phase1-h5-client | 5a32a8b |
 | 1-7 | Admin Console 脚手架 + 登录/用户管理 | ⏳ 待开发 | dev/phase1-admin | — |
 | 1-8 | Admin 商品管理 + 库存管理 | ⏳ 待开发 | dev/phase1-admin | — |
 
@@ -74,8 +74,9 @@
 3. `mvn compile` / `npm run build` 验证编译
 4. `mvn test` / `npm run test` 运行测试
 5. `git commit` 提交代码
-6. `git checkout main && git merge dev/phaseN-xxx --no-ff` 合并到 main
-7. `/codex review` 进行 PR 代码审查
-8. 修复 review 发现的问题
-9. `git push` 推送到远程
-10. 更新本文档任务状态
+6. `/codex review` 进行 PR 代码审查
+7. 修复 review 发现的问题
+8. 编写测试用例，并完成所有测试和修复
+9. `git checkout main && git merge dev/phaseN-xxx --no-ff` 合并到 main
+10. `git push` 推送到远程
+11. 更新本文档任务状态

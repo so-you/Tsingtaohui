@@ -1,7 +1,10 @@
-node_modules/
-dist/
-coverage/
-.superpowers/
-.worktrees/
+# Demo backup generated artifacts and local state
+/prd-demo-v1/node_modules/
+/prd-demo-v1/dist/
+/prd-demo-v1/coverage/
+/prd-demo-v1/.superpowers/
+/prd-demo-v1/.worktrees/
+
+# Local OS and log files
 .DS_Store
 *.log

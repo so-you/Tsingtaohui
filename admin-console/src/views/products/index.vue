@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 import { getInventory, getProducts, updateProduct, updateProductStatus } from '@/api/product'
 import type { IInventoryItem, IProductItem } from '@/types'
+import { Search, Refresh, Picture } from '@element-plus/icons-vue'
 
 const { t, locale } = useI18n()
 
@@ -181,9 +182,15 @@ function productStatusTag(status?: string) {
 
 <template>
   <div class="products-page">
-    <h2 class="page-title">{{ t('menu.products') }}</h2>
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">{{ t('menu.products') }}</h2>
+        <p class="page-subtitle">管理商品信息、库存和上架状态</p>
+      </div>
+    </div>
 
-    <el-tabs v-model="activeTab" class="product-tabs">
+    <el-tabs v-model="activeTab" class="product-tabs" type="border-card">
       <el-tab-pane :label="t('product.productsTab')" name="products">
         <el-card shadow="never" class="search-card">
           <el-form :model="productQuery" inline>
@@ -193,6 +200,7 @@ function productStatusTag(status?: string) {
                 :placeholder="t('product.keywordPlaceholder')"
                 clearable
                 style="width: 240px"
+                :prefix-icon="Search"
                 @keyup.enter="searchProducts"
               />
             </el-form-item>
@@ -207,37 +215,58 @@ function productStatusTag(status?: string) {
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="searchProducts">{{ t('common.search') }}</el-button>
-              <el-button @click="resetProducts">{{ t('common.reset') }}</el-button>
+              <el-button type="primary" :icon="Search" @click="searchProducts">{{ t('common.search') }}</el-button>
+              <el-button :icon="Refresh" @click="resetProducts">{{ t('common.reset') }}</el-button>
             </el-form-item>
           </el-form>
         </el-card>
 
         <el-card shadow="never">
           <el-table v-loading="productLoading" :data="currentProductRows" stripe>
-            <el-table-column prop="skuCode" :label="t('product.skuCode')" min-width="150" />
-            <el-table-column :label="t('product.name')" min-width="180">
-              <template #default="{ row }">{{ productName(row) }}</template>
+            <el-table-column :label="t('product.name')" min-width="200">
+              <template #default="{ row }">
+                <div class="product-cell">
+                  <div class="product-thumb">
+                    <el-image
+                      v-if="row.mainImageUrl"
+                      :src="row.mainImageUrl"
+                      fit="cover"
+                      style="width: 48px; height: 48px; border-radius: 6px;"
+                    />
+                    <div v-else class="thumb-placeholder">
+                      <el-icon><Picture /></el-icon>
+                    </div>
+                  </div>
+                  <div class="product-info">
+                    <div class="product-name">{{ productName(row) }}</div>
+                    <div class="product-sku">{{ row.skuCode }}</div>
+                  </div>
+                </div>
+              </template>
             </el-table-column>
-            <el-table-column prop="price" :label="t('product.price')" min-width="110" />
+            <el-table-column prop="price" :label="t('product.price')" min-width="110">
+              <template #default="{ row }">
+                <span class="price">¥{{ row.price }}</span>
+              </template>
+            </el-table-column>
             <el-table-column :label="t('product.weight')" min-width="110">
-              <template #default="{ row }">{{ row.weightKg || '-' }}</template>
+              <template #default="{ row }">{{ row.weightKg || '-' }} kg</template>
             </el-table-column>
             <el-table-column :label="t('product.volume')" min-width="110">
-              <template #default="{ row }">{{ row.volumeM3 || '-' }}</template>
+              <template #default="{ row }">{{ row.volumeM3 || '-' }} m³</template>
             </el-table-column>
             <el-table-column prop="availableQty" :label="t('inventory.availableQty')" min-width="110" />
             <el-table-column prop="lockedQty" :label="t('inventory.lockedQty')" min-width="110" />
             <el-table-column :label="t('product.droneDeliverable')" min-width="130">
               <template #default="{ row }">
-                <el-tag :type="row.droneDeliverable ? 'success' : 'info'">
+                <el-tag :type="row.droneDeliverable ? 'success' : 'info'" size="small" effect="light">
                   {{ row.droneDeliverable ? t('common.yes') : t('common.no') }}
                 </el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="status" :label="t('product.status')" min-width="120">
               <template #default="{ row }">
-                <el-tag :type="productStatusTag(row.status)">
+                <el-tag :type="productStatusTag(row.status)" size="small" effect="light">
                   {{ t(`product.${row.status.toLowerCase()}`) }}
                 </el-tag>
               </template>
@@ -291,6 +320,7 @@ function productStatusTag(status?: string) {
                 :placeholder="t('product.skuCode')"
                 clearable
                 style="width: 220px"
+                :prefix-icon="Search"
                 @keyup.enter="searchInventory"
               />
             </el-form-item>
@@ -303,8 +333,8 @@ function productStatusTag(status?: string) {
               />
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="searchInventory">{{ t('common.search') }}</el-button>
-              <el-button @click="resetInventory">{{ t('common.reset') }}</el-button>
+              <el-button type="primary" :icon="Search" @click="searchInventory">{{ t('common.search') }}</el-button>
+              <el-button :icon="Refresh" @click="resetInventory">{{ t('common.reset') }}</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -318,8 +348,16 @@ function productStatusTag(status?: string) {
               <template #default="{ row }">{{ productName(row) }}</template>
             </el-table-column>
             <el-table-column prop="batchNo" :label="t('inventory.batchNo')" min-width="140" />
-            <el-table-column prop="availableQty" :label="t('inventory.availableQty')" min-width="110" />
-            <el-table-column prop="lockedQty" :label="t('inventory.lockedQty')" min-width="110" />
+            <el-table-column prop="availableQty" :label="t('inventory.availableQty')" min-width="110">
+              <template #default="{ row }">
+                <span class="qty-available">{{ row.availableQty }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="lockedQty" :label="t('inventory.lockedQty')" min-width="110">
+              <template #default="{ row }">
+                <span class="qty-locked">{{ row.lockedQty }}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="outboundQty" :label="t('inventory.outboundQty')" min-width="110" />
             <el-table-column prop="updatedAt" :label="t('common.updatedAt')" min-width="170" />
           </el-table>
@@ -338,7 +376,7 @@ function productStatusTag(status?: string) {
       </el-tab-pane>
     </el-tabs>
 
-    <el-dialog v-model="productDialogVisible" :title="t('product.editTitle')" width="720px">
+    <el-dialog v-model="productDialogVisible" :title="t('product.editTitle')" width="720px" destroy-on-close>
       <el-form :model="productForm" label-width="130px">
         <el-row :gutter="16">
           <el-col :span="12">
@@ -429,21 +467,91 @@ function productStatusTag(status?: string) {
 
 <style scoped>
 .products-page {
-  padding: 20px;
+  padding: 0;
+}
+
+.page-header {
+  margin-bottom: 20px;
 }
 
 .page-title {
-  margin: 0 0 20px;
-  font-size: 20px;
-  color: #303133;
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.page-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #999;
 }
 
 .product-tabs {
   background: transparent;
 }
 
+.product-tabs :deep(.el-tabs__header) {
+  margin-bottom: 16px;
+}
+
 .search-card {
   margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.product-thumb {
+  flex-shrink: 0;
+}
+
+.thumb-placeholder {
+  width: 48px;
+  height: 48px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+
+.product-sku {
+  font-size: 12px;
+  color: #999;
+  font-family: 'SF Mono', monospace;
+}
+
+.price {
+  font-weight: 600;
+  color: #f5222d;
+}
+
+.qty-available {
+  color: #52c41a;
+  font-weight: 600;
+}
+
+.qty-locked {
+  color: #fa8c16;
+  font-weight: 600;
 }
 
 .pagination-row {

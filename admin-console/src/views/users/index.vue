@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 import { getUsers, updateUserStatus } from '@/api/user'
 import type { IUserInfo } from '@/types'
+import { Search, Refresh, User } from '@element-plus/icons-vue'
 
 const { t } = useI18n()
 
@@ -74,12 +75,35 @@ function statusTag(status?: string) {
   if (status === 'LOCKED') return 'danger'
   return 'warning'
 }
+
+function userTypeTag(type?: string) {
+  const colors: Record<string, string> = {
+    'ADMIN': 'danger',
+    'OPERATOR': 'warning',
+    'CUSTOMER': 'success',
+    'WAREHOUSE_OPERATOR': 'primary',
+    'DRONE_DISPATCHER': 'info',
+    'FINANCE': 'info'
+  }
+  return colors[type || ''] || 'info'
+}
+
+function avatarLetter(name?: string) {
+  return name ? name.charAt(0).toUpperCase() : '?'
+}
 </script>
 
 <template>
   <div class="users-page">
-    <h2 class="page-title">{{ t('user.title') }}</h2>
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">{{ t('user.title') }}</h2>
+        <p class="page-subtitle">管理平台用户账号和权限</p>
+      </div>
+    </div>
 
+    <!-- Search Card -->
     <el-card shadow="never" class="search-card">
       <el-form :model="query" inline>
         <el-form-item :label="t('user.username')">
@@ -88,6 +112,7 @@ function statusTag(status?: string) {
             :placeholder="t('user.username')"
             clearable
             style="width: 220px"
+            :prefix-icon="Search"
             @keyup.enter="handleSearch"
           />
         </el-form-item>
@@ -112,21 +137,38 @@ function statusTag(status?: string) {
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSearch">{{ t('common.search') }}</el-button>
-          <el-button @click="handleReset">{{ t('common.reset') }}</el-button>
+          <el-button type="primary" :icon="Search" @click="handleSearch">{{ t('common.search') }}</el-button>
+          <el-button :icon="Refresh" @click="handleReset">{{ t('common.reset') }}</el-button>
         </el-form-item>
       </el-form>
     </el-card>
 
+    <!-- Table Card -->
     <el-card shadow="never" class="table-card">
       <el-table v-loading="loading" :data="tableData" stripe>
-        <el-table-column prop="id" label="ID" min-width="170" />
-        <el-table-column prop="username" :label="t('user.username')" min-width="150" />
-        <el-table-column prop="displayName" :label="t('user.displayName')" min-width="140" />
-        <el-table-column prop="userType" :label="t('user.userType')" min-width="150" />
-        <el-table-column prop="status" :label="t('user.status')" min-width="110">
+        <el-table-column label="用户" min-width="180">
           <template #default="{ row }">
-            <el-tag :type="statusTag(row.status)">
+            <div class="user-cell">
+              <el-avatar :size="36" class="user-avatar">
+                {{ avatarLetter(row.displayName || row.username) }}
+              </el-avatar>
+              <div class="user-info">
+                <div class="user-name">{{ row.displayName || row.username }}</div>
+                <div class="user-username">{{ row.username }}</div>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column :label="t('user.userType')" min-width="150">
+          <template #default="{ row }">
+            <el-tag :type="userTypeTag(row.userType)" size="small" effect="light">
+              {{ row.userType }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column :label="t('user.status')" min-width="110">
+          <template #default="{ row }">
+            <el-tag :type="statusTag(row.status)" size="small" effect="light">
               {{ row.status ? t(`user.${row.status.toLowerCase()}`) : '-' }}
             </el-tag>
           </template>
@@ -185,21 +227,62 @@ function statusTag(status?: string) {
 
 <style scoped>
 .users-page {
-  padding: 20px;
+  padding: 0;
+}
+
+.page-header {
+  margin-bottom: 20px;
 }
 
 .page-title {
-  margin: 0 0 20px;
-  font-size: 20px;
-  color: #303133;
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.page-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #999;
 }
 
 .search-card {
   margin-bottom: 16px;
+  border-radius: 8px;
 }
 
 .table-card {
-  margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  background: #1677ff;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.user-username {
+  font-size: 12px;
+  color: #999;
 }
 
 .pagination-row {

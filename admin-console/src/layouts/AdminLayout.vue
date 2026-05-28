@@ -8,7 +8,10 @@ import {
   User,
   Goods,
   List,
-  SwitchButton
+  SwitchButton,
+  Fold,
+  Expand,
+  ArrowDown
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -20,6 +23,14 @@ const isCollapse = ref(false)
 
 const activeMenu = computed(() => {
   return route.path
+})
+
+const breadcrumb = computed(() => {
+  const matched = route.matched
+  return matched.map(m => ({
+    title: m.meta.title as string || m.name as string,
+    path: m.path
+  })).filter(b => b.title)
 })
 
 function handleSelect(path: string) {
@@ -36,19 +47,24 @@ function handleLogout() {
   router.push('/login')
 }
 
-const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '220px'))
+const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '240px'))
 </script>
 
 <template>
   <el-container class="admin-layout">
+    <!-- Sidebar -->
     <el-aside :width="sidebarWidth" class="sidebar">
       <div class="logo">
-        <h1 v-show="!isCollapse">青岛汇</h1>
-        <h1 v-show="isCollapse">青</h1>
+        <div class="logo-icon">
+          <el-icon :size="28"><Odometer /></el-icon>
+        </div>
+        <h1 v-show="!isCollapse" class="logo-text">青岛汇</h1>
       </div>
+
       <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
+        :collapse-transition="false"
         router
         class="sidebar-menu"
         @select="handleSelect"
@@ -70,23 +86,41 @@ const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '220px'))
           <template #title>{{ t('menu.orders') }}</template>
         </el-menu-item>
       </el-menu>
+
+      <div class="sidebar-footer" v-show="!isCollapse">
+        <p class="version">v1.0.0</p>
+      </div>
     </el-aside>
 
-    <el-container>
+    <el-container class="main-wrapper">
+      <!-- Header -->
       <el-header class="header">
         <div class="header-left">
-          <el-icon
-            class="collapse-btn"
-            @click="isCollapse = !isCollapse"
-          >
-            <span class="collapse-icon">{{ isCollapse ? '&#9776;' : '&#9776;' }}</span>
-          </el-icon>
+          <div class="collapse-btn" @click="isCollapse = !isCollapse">
+            <el-icon :size="18">
+              <Fold v-if="!isCollapse" />
+              <Expand v-else />
+            </el-icon>
+          </div>
+
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{ path: '/dashboard' }">
+              {{ t('menu.dashboard') }}
+            </el-breadcrumb-item>
+            <el-breadcrumb-item v-for="(item, index) in breadcrumb" :key="index">
+              {{ item.title }}
+            </el-breadcrumb-item>
+          </el-breadcrumb>
         </div>
+
         <div class="header-right">
-          <el-dropdown @command="handleLanguage">
-            <span class="lang-trigger">
-              {{ locale === 'zh-CN' ? t('common.languageZh') : t('common.languageEn') }}
-              <el-icon class="el-icon--right"><arrow-down /></el-icon>
+          <el-dropdown @command="handleLanguage" class="lang-dropdown">
+            <span class="header-trigger">
+              <el-icon :size="16"><Globe /></el-icon>
+              <span class="trigger-text">
+                {{ locale === 'zh-CN' ? t('common.languageZh') : t('common.languageEn') }}
+              </span>
+              <el-icon :size="12"><ArrowDown /></el-icon>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
@@ -96,11 +130,17 @@ const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '220px'))
             </template>
           </el-dropdown>
 
+          <el-divider direction="vertical" class="header-divider" />
+
           <el-dropdown @command="handleLogout">
-            <span class="user-trigger">
-              <el-icon><User /></el-icon>
-              {{ userStore.userInfo?.nickname || 'Admin' }}
-              <el-icon class="el-icon--right"><arrow-down /></el-icon>
+            <span class="header-trigger">
+              <el-avatar :size="28" class="user-avatar">
+                {{ userStore.userInfo?.username?.charAt(0).toUpperCase() || 'A' }}
+              </el-avatar>
+              <span class="trigger-text user-name">
+                {{ userStore.userInfo?.username || 'Admin' }}
+              </span>
+              <el-icon :size="12"><ArrowDown /></el-icon>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
@@ -114,6 +154,7 @@ const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '220px'))
         </div>
       </el-header>
 
+      <!-- Main Content -->
       <el-main class="main-content">
         <router-view />
       </el-main>
@@ -124,86 +165,173 @@ const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '220px'))
 <style scoped>
 .admin-layout {
   height: 100vh;
+  background: #f0f2f5;
 }
 
+/* Sidebar */
 .sidebar {
-  background-color: #304156;
+  background: #001529;
   transition: width 0.3s;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
-  height: 60px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: #1677ff;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
 }
 
-.logo h1 {
+.logo-text {
   margin: 0;
   font-size: 18px;
+  font-weight: 600;
+  color: #fff;
   white-space: nowrap;
+  letter-spacing: 1px;
 }
 
 .sidebar-menu {
+  flex: 1;
   border-right: none;
-  background-color: #304156;
+  background: #001529;
+  padding: 8px 0;
 }
 
-.sidebar-menu .el-menu-item {
-  color: #bfcbd9;
+.sidebar-menu :deep(.el-menu-item) {
+  color: rgba(255, 255, 255, 0.65);
+  height: 48px;
+  line-height: 48px;
+  margin: 4px 8px;
+  border-radius: 6px;
 }
 
-.sidebar-menu .el-menu-item:hover {
-  background-color: #263445;
+.sidebar-menu :deep(.el-menu-item:hover) {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
 }
 
-.sidebar-menu .el-menu-item.is-active {
-  color: #409eff;
-  background-color: #263445;
+.sidebar-menu :deep(.el-menu-item.is-active) {
+  color: #fff;
+  background: #1677ff;
 }
 
+.sidebar-menu :deep(.el-icon) {
+  color: inherit;
+}
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.version {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Header */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #e6e6e6;
+  height: 56px;
+  padding: 0 24px;
   background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
 }
 
 .header-left {
   display: flex;
   align-items: center;
+  gap: 20px;
 }
 
 .collapse-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 20px;
+  color: #666;
+  transition: all 0.2s;
 }
 
-.collapse-icon {
-  font-size: 20px;
+.collapse-btn:hover {
+  background: #f5f5f5;
+  color: #333;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 4px;
 }
 
-.lang-trigger,
-.user-trigger {
+.header-trigger {
   display: flex;
   align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.header-trigger:hover {
+  background: #f5f5f5;
+}
+
+.trigger-text {
+  font-size: 14px;
+}
+
+.user-name {
+  font-weight: 500;
   color: #333;
 }
 
+.user-avatar {
+  background: #1677ff;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.header-divider {
+  height: 20px;
+  margin: 0 8px;
+}
+
+/* Main Content */
 .main-content {
-  background-color: #f0f2f5;
-  min-height: calc(100vh - 60px);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.main-wrapper {
+  background: #f0f2f5;
 }
 </style>

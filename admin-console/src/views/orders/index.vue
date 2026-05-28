@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 import { getMatchingOrders, getOrders, updateOrderStatus } from '@/api/order'
 import type { IOrder, TOrderStatus, TTradeMode } from '@/types'
+import { Search, Refresh, Warning, CircleCheck, Timer, Van } from '@element-plus/icons-vue'
 
 const { t } = useI18n()
 
@@ -89,11 +90,21 @@ async function handleStatus(row: IOrder, status: TOrderStatus) {
   loadRows()
 }
 
-function statusTag(status: TOrderStatus) {
-  if (status === 'COMPLETED') return 'success'
-  if (status === 'EXCEPTION' || status === 'CANCELLED') return 'danger'
-  if (status === 'PENDING_CONFIRM' || status === 'PENDING_RECEIPT') return 'warning'
-  return 'primary'
+function statusConfig(status: TOrderStatus) {
+  const map: Record<string, { type: string, label: string, icon: any, color: string }> = {
+    'PENDING_CONFIRM': { type: 'warning', label: '待确认', icon: Timer, color: '#faad14' },
+    'CONFIRMED': { type: 'info', label: '已确认', icon: CircleCheck, color: '#1677ff' },
+    'WAREHOUSE_PROCESSING': { type: 'primary', label: '仓库处理', icon: Timer, color: '#1677ff' },
+    'PENDING_OUTBOUND': { type: 'warning', label: '待出库', icon: Timer, color: '#faad14' },
+    'OUTBOUND': { type: 'info', label: '已出库', icon: CircleCheck, color: '#52c41a' },
+    'PENDING_LOADING': { type: 'warning', label: '待装载', icon: Timer, color: '#faad14' },
+    'IN_DELIVERY': { type: 'primary', label: '配送中', icon: Van, color: '#1677ff' },
+    'PENDING_RECEIPT': { type: 'warning', label: '待签收', icon: Timer, color: '#faad14' },
+    'COMPLETED': { type: 'success', label: '已完成', icon: CircleCheck, color: '#52c41a' },
+    'CANCELLED': { type: 'info', label: '已取消', icon: CircleCheck, color: '#999' },
+    'EXCEPTION': { type: 'danger', label: '异常', icon: Warning, color: '#ff4d4f' }
+  }
+  return map[status] || { type: 'info', label: status, icon: CircleCheck, color: '#999' }
 }
 
 function tradeModeTag(mode: TTradeMode) {
@@ -107,9 +118,15 @@ function terminal(status: TOrderStatus) {
 
 <template>
   <div class="orders-page">
-    <h2 class="page-title">{{ t('menu.orders') }}</h2>
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">{{ t('menu.orders') }}</h2>
+        <p class="page-subtitle">管理订单状态、处理匹配订单和异常订单</p>
+      </div>
+    </div>
 
-    <el-tabs v-model="activeTab" @tab-change="switchTab">
+    <el-tabs v-model="activeTab" @tab-change="switchTab" type="border-card" class="order-tabs">
       <el-tab-pane :label="t('order.ordersTab')" name="orders" />
       <el-tab-pane :label="t('order.matchingTab')" name="matching" />
     </el-tabs>
@@ -122,6 +139,7 @@ function terminal(status: TOrderStatus) {
             :placeholder="t('order.keywordPlaceholder')"
             clearable
             style="width: 240px"
+            :prefix-icon="Search"
             @keyup.enter="searchOrders"
           />
         </el-form-item>
@@ -146,30 +164,44 @@ function terminal(status: TOrderStatus) {
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="searchOrders">{{ t('common.search') }}</el-button>
-          <el-button @click="resetOrders">{{ t('common.reset') }}</el-button>
+          <el-button type="primary" :icon="Search" @click="searchOrders">{{ t('common.search') }}</el-button>
+          <el-button :icon="Refresh" @click="resetOrders">{{ t('common.reset') }}</el-button>
         </el-form-item>
       </el-form>
     </el-card>
 
     <el-card shadow="never">
       <el-table v-loading="loading" :data="currentRows" stripe>
-        <el-table-column prop="orderNo" :label="t('order.orderNo')" min-width="180" />
+        <el-table-column prop="orderNo" :label="t('order.orderNo')" min-width="180">
+          <template #default="{ row }">
+            <span class="order-no">{{ row.orderNo }}</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="t('order.tradeMode')" min-width="130">
           <template #default="{ row }">
-            <el-tag :type="tradeModeTag(row.tradeMode)">
+            <el-tag :type="tradeModeTag(row.tradeMode)" size="small" effect="light">
               {{ t(`order.tradeModes.${row.tradeMode}`) }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column :label="t('order.status')" min-width="150">
+        <el-table-column :label="t('order.status')" min-width="140">
           <template #default="{ row }">
-            <el-tag :type="statusTag(row.orderStatus)">
-              {{ t(`order.statuses.${row.orderStatus}`) }}
-            </el-tag>
+            <div class="status-cell">
+              <div class="status-dot" :style="{ background: statusConfig(row.orderStatus).color }" />
+              <el-tag :type="statusConfig(row.orderStatus).type" size="small" effect="light">
+                <el-icon :size="12">
+                  <component :is="statusConfig(row.orderStatus).icon" />
+                </el-icon>
+                {{ t(`order.statuses.${row.orderStatus}`) }}
+              </el-tag>
+            </div>
           </template>
         </el-table-column>
-        <el-table-column prop="totalPrice" :label="t('order.totalPrice')" min-width="110" />
+        <el-table-column prop="totalPrice" :label="t('order.totalPrice')" min-width="110">
+          <template #default="{ row }">
+            <span class="price">¥{{ row.totalPrice }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="shipNo" :label="t('user.shipNo')" min-width="130" />
         <el-table-column prop="shipNationality" :label="t('user.shipNationality')" min-width="120" />
         <el-table-column prop="consigneeName" :label="t('order.consigneeName')" min-width="140" />
@@ -226,17 +258,68 @@ function terminal(status: TOrderStatus) {
 
 <style scoped>
 .orders-page {
-  padding: 20px;
+  padding: 0;
+}
+
+.page-header {
+  margin-bottom: 20px;
 }
 
 .page-title {
-  margin: 0 0 20px;
-  font-size: 20px;
-  color: #303133;
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.page-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #999;
+}
+
+.order-tabs {
+  margin-bottom: 16px;
+}
+
+.order-tabs :deep(.el-tabs__header) {
+  margin-bottom: 16px;
 }
 
 .search-card {
   margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+.order-no {
+  font-family: 'SF Mono', monospace;
+  font-size: 13px;
+  color: #1677ff;
+  font-weight: 500;
+}
+
+.price {
+  font-weight: 600;
+  color: #f5222d;
+}
+
+.status-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+:deep(.el-tag) {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .pagination-row {

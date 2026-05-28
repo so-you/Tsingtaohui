@@ -75,15 +75,8 @@ export const useUserStore = defineStore(
             // ignore storage errors
           }
         },
-        removeItem: (key: string) => {
-          try {
-            localStorage.removeItem(key)
-          } catch {
-            // ignore
-          }
-        },
       },
-      paths: ['token'],
+      paths: ['token', 'userInfo'],
     },
   },
 )

@@ -3,10 +3,16 @@ export interface IUserInfo {
   username: string
   userType: string
   preferredLanguage: string
+  displayName?: string
+  contactPhone?: string
+  email?: string
   shipNo?: string
+  shipName?: string
+  shipNationality?: string
   nationality?: string
   imo?: string
   mmsi?: string
+  ships?: IShip[]
 }
 
 export interface ILoginParams {
@@ -38,16 +44,47 @@ export type TTradeMode = 'AUTO_TRADE' | 'MATCHING_ORDER'
 
 export interface IProduct {
   id: number
-  sku: string
-  name: string
+  skuCode: string
+  nameZh: string
   nameEn?: string
-  price: number
-  weight: number
-  volume: number
-  stock: number
+  price: string
+  weightKg?: string
+  volumeM3?: string
+  availableQty: number
   droneDeliverable: boolean
-  imageUrl?: string
+  mainImageUrl?: string
   categoryId?: number
+  descriptionZh?: string
+  descriptionEn?: string
+  specification?: string
+  source?: string
+  status?: string
+}
+
+export interface ICategory {
+  id: number
+  parentId?: number | null
+  nameZh: string
+  nameEn: string
+  sortOrder?: number
+  children?: ICategory[]
+}
+
+export interface IPageResult<T> {
+  items: T[]
+  page: number
+  pageSize: number
+  total: number
+}
+
+export interface IShip {
+  id?: number
+  shipNo: string
+  shipName?: string
+  shipNationality: string
+  imo?: string
+  mmsi?: string
+  isDefault?: boolean
 }
 
 export interface IOrder {

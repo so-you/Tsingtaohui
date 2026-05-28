@@ -39,8 +39,10 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '../../stores/user'
 
+const { t } = useI18n()
 const userStore = useUserStore()
 const loading = ref(false)
 
@@ -51,21 +53,24 @@ const form = reactive({
 
 async function handleLogin() {
   if (!form.username.trim()) {
-    uni.showToast({ title: 'auth.usernameRequired', icon: 'none' })
+    uni.showToast({ title: t('auth.usernameRequired'), icon: 'none' })
     return
   }
   if (!form.password) {
-    uni.showToast({ title: 'auth.passwordRequired', icon: 'none' })
+    uni.showToast({ title: t('auth.passwordRequired'), icon: 'none' })
     return
   }
 
   loading.value = true
   try {
     await userStore.login(form.username.trim(), form.password)
-    uni.showToast({ title: 'loginSuccess', icon: 'success' })
+    uni.showToast({ title: t('auth.loginSuccess'), icon: 'success' })
     uni.reLaunch({ url: '/pages/home/index' })
   } catch (err: unknown) {
-    const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'common.error'
+    const message =
+      (err as { message?: string; response?: { data?: { message?: string } } })?.message ||
+      (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+      t('common.error')
     uni.showToast({ title: message, icon: 'none' })
   } finally {
     loading.value = false

@@ -31,9 +31,21 @@ http.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-// Response interceptor: handle 401
+// Response interceptor: unwrap ApiResponse, handle 401
 http.interceptors.response.use(
-  (response: AxiosResponse) => response,
+  (response: AxiosResponse) => {
+    const body = response.data
+    if (body && typeof body === 'object' && 'code' in body) {
+      if (body.code === '0') {
+        return body.data
+      } else {
+        const err = new Error(body.message || 'Request failed')
+        ;(err as any).code = body.code
+        return Promise.reject(err)
+      }
+    }
+    return response.data
+  },
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('user')
@@ -44,19 +56,19 @@ http.interceptors.response.use(
 )
 
 export function get<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
-  return http.get<T, T>(url, config)
+  return http.get(url, config) as Promise<T>
 }
 
 export function post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-  return http.post<T, T>(url, data, config)
+  return http.post(url, data, config) as Promise<T>
 }
 
 export function put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-  return http.put<T, T>(url, data, config)
+  return http.put(url, data, config) as Promise<T>
 }
 
 export function del<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
-  return http.delete<T, T>(url, config)
+  return http.delete(url, config) as Promise<T>
 }
 
 export default http

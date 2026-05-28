@@ -1,5 +1,5 @@
 export interface IApiResponse<T = unknown> {
-  code: number
+  code: string | number
   message: string
   data: T
 }

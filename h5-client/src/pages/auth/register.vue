@@ -52,8 +52,10 @@
 
 <script setup lang="ts">
 import { reactive, ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '../../stores/user'
 
+const { t } = useI18n()
 const userStore = useUserStore()
 const loading = ref(false)
 
@@ -65,29 +67,29 @@ const form = reactive({
 
 const passwordHint = computed(() => {
   if (!form.password) return ''
-  if (form.password.length < 8) return 'auth.passwordMin'
+  if (form.password.length < 8) return t('auth.passwordMin')
   const hasLetter = /[a-zA-Z]/.test(form.password)
   const hasNumber = /[0-9]/.test(form.password)
-  if (!hasLetter || !hasNumber) return 'auth.passwordMin'
-  if (form.confirmPassword && form.password !== form.confirmPassword) return 'auth.confirmPassword'
+  if (!hasLetter || !hasNumber) return t('auth.passwordMin')
+  if (form.confirmPassword && form.password !== form.confirmPassword) return t('auth.passwordMismatch')
   return ''
 })
 
 function validateForm(): boolean {
   if (!form.username.trim()) {
-    uni.showToast({ title: 'auth.usernameRequired', icon: 'none' })
+    uni.showToast({ title: t('auth.usernameRequired'), icon: 'none' })
     return false
   }
   if (!form.password) {
-    uni.showToast({ title: 'auth.passwordRequired', icon: 'none' })
+    uni.showToast({ title: t('auth.passwordRequired'), icon: 'none' })
     return false
   }
   if (form.password.length < 8 || !/[a-zA-Z]/.test(form.password) || !/[0-9]/.test(form.password)) {
-    uni.showToast({ title: 'auth.passwordMin', icon: 'none' })
+    uni.showToast({ title: t('auth.passwordMin'), icon: 'none' })
     return false
   }
   if (form.password !== form.confirmPassword) {
-    uni.showToast({ title: 'auth.confirmPassword', icon: 'none' })
+    uni.showToast({ title: t('auth.passwordMismatch'), icon: 'none' })
     return false
   }
   return true
@@ -99,10 +101,13 @@ async function handleRegister() {
   loading.value = true
   try {
     await userStore.register(form.username.trim(), form.password)
-    uni.showToast({ title: 'registerSuccess', icon: 'success' })
+    uni.showToast({ title: t('auth.registerSuccess'), icon: 'success' })
     uni.reLaunch({ url: '/pages/home/index' })
   } catch (err: unknown) {
-    const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'common.error'
+    const message =
+      (err as { message?: string; response?: { data?: { message?: string } } })?.message ||
+      (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+      t('common.error')
     uni.showToast({ title: message, icon: 'none' })
   } finally {
     loading.value = false

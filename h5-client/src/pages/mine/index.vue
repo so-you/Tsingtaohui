@@ -7,9 +7,18 @@
           <text class="avatar-text">{{ avatarLetter }}</text>
         </view>
         <view class="profile-info">
-          <text class="username">{{ userStore.userInfo?.username || '--' }}</text>
-          <text class="user-type">{{ userStore.userInfo?.userType || '' }}</text>
+          <text class="username">{{ displayName }}</text>
+          <text class="user-type">{{ currentShipLabel }}</text>
         </view>
+      </view>
+
+      <view class="ship-card" @tap="goShipInfo">
+        <view class="ship-card-header">
+          <text class="ship-card-title">{{ $t('mine.shipInfo') }}</text>
+          <text class="menu-arrow">></text>
+        </view>
+        <text class="ship-card-name">{{ currentShipName }}</text>
+        <text v-if="currentShipMeta" class="ship-card-meta">{{ currentShipMeta }}</text>
       </view>
 
       <view class="menu-section">
@@ -57,19 +66,62 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '../../stores/user'
+import type { IShip } from '../../types'
 
 const { locale, t } = useI18n()
 const userStore = useUserStore()
 
 const avatarLetter = computed(() => {
-  const name = userStore.userInfo?.username
+  const name = displayName.value
   return name ? name.charAt(0).toUpperCase() : '?'
+})
+
+const displayName = computed(() => {
+  return userStore.userInfo?.displayName || userStore.userInfo?.username || '--'
+})
+
+const currentShip = computed<IShip | null>(() => {
+  const userInfo = userStore.userInfo
+  if (!userInfo) return null
+  const ship = userInfo.ships?.find((item) => item.isDefault) || userInfo.ships?.[0]
+  if (ship) return ship
+  if (!userInfo.shipNo && !userInfo.shipNationality) return null
+  return {
+    shipNo: userInfo.shipNo || '',
+    shipName: userInfo.shipName || '',
+    shipNationality: userInfo.shipNationality || userInfo.nationality || '',
+    imo: userInfo.imo || '',
+    mmsi: userInfo.mmsi || '',
+  }
+})
+
+const currentShipName = computed(() => {
+  return currentShip.value?.shipName || currentShip.value?.shipNo || t('mine.noShip')
+})
+
+const currentShipLabel = computed(() => {
+  return currentShip.value?.shipNo || userStore.userInfo?.userType || ''
+})
+
+const currentShipMeta = computed(() => {
+  const ship = currentShip.value
+  if (!ship) return ''
+  return [ship.shipNationality, ship.imo ? `IMO ${ship.imo}` : '', ship.mmsi ? `MMSI ${ship.mmsi}` : '']
+    .filter(Boolean)
+    .join(' / ')
 })
 
 const currentLangLabel = computed(() => {
   return locale.value === 'zh-CN' ? t('common.languageZh') : t('common.languageEn')
+})
+
+onShow(() => {
+  if (userStore.isLoggedIn) {
+    userStore.fetchProfile().catch(() => undefined)
+  }
 })
 
 function toggleLanguage() {
@@ -83,14 +135,13 @@ function toggleLanguage() {
 }
 
 function goScanReceipt() {
-  // TODO: implement scan receipt
   uni.scanCode({
     scanType: ['qrCode'],
     success: (res) => {
-      console.log('Scan result:', res.result)
+      uni.showToast({ title: res.result ? t('mine.scanSuccess') : t('common.success'), icon: 'success' })
     },
     fail: () => {
-      uni.showToast({ title: 'Scan not supported', icon: 'none' })
+      uni.showToast({ title: t('mine.scanNotSupported'), icon: 'none' })
     },
   })
 }
@@ -100,11 +151,11 @@ function goMyOrders() {
 }
 
 function goShipInfo() {
-  // TODO: navigate to ship info page
+  uni.navigateTo({ url: '/pages/mine/ship' })
 }
 
 function goProfile() {
-  // TODO: navigate to profile page
+  uni.showToast({ title: t('mine.profileComingSoon'), icon: 'none' })
 }
 
 function handleLogout() {
@@ -177,6 +228,40 @@ function goRegister() {
 .user-type {
   font-size: 26rpx;
   color: #9ca3af;
+}
+
+.ship-card {
+  margin: 0 32rpx 24rpx;
+  padding: 28rpx 32rpx;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+}
+
+.ship-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18rpx;
+}
+
+.ship-card-title {
+  font-size: 26rpx;
+  color: #6b7280;
+}
+
+.ship-card-name {
+  display: block;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #111827;
+}
+
+.ship-card-meta {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  line-height: 34rpx;
+  color: #6b7280;
 }
 
 .menu-section {

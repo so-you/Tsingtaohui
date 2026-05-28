@@ -1,0 +1,83 @@
+export default {
+  dashboard: {
+    title: '工作台',
+    pendingPick: '待拣货',
+    pendingReview: '待复核',
+    pendingOutbound: '待出库',
+    exceptionOrders: '异常订单',
+    scanInput: '扫码输入',
+    scanHint: '扫描或输入条码后按回车',
+    language: '语言'
+  },
+  picking: {
+    title: '拣货任务',
+    orderNo: '订单号',
+    product: '商品',
+    quantity: '数量',
+    location: '库位',
+    batch: '批次',
+    priority: '优先级',
+    expectedTime: '期望送达',
+    scanToConfirm: '扫码确认',
+    scanSuccess: '拣货确认成功',
+    scanMismatch: '商品不匹配',
+    scanDuplicate: '已扫过此商品',
+    noTasks: '暂无拣货任务',
+    status: '状态'
+  },
+  review: {
+    title: '复核打包',
+    orderNo: '订单号',
+    expectedQty: '应扫数量',
+    scannedQty: '已扫数量',
+    missing: '缺少商品',
+    extra: '多扫商品',
+    scanProduct: '扫码商品',
+    pack: '打包',
+    packageGenerated: '包裹已生成',
+    packageNo: '包裹编号',
+    scanSuccess: '复核成功',
+    scanMismatch: '商品不匹配',
+    noTasks: '暂无复核任务'
+  },
+  outbound: {
+    title: '出库交接',
+    orderNo: '订单号',
+    packageNo: '包裹编号',
+    weight: '重量',
+    customsStatus: '海关同步',
+    customsBlocked: '海关红牌拦截，不允许出库',
+    customsOk: '海关同步成功',
+    confirmOutbound: '确认出库',
+    outboundSuccess: '出库成功',
+    noTasks: '暂无出库任务',
+    blocked: '已拦截'
+  },
+  inventory: {
+    title: '库存查询',
+    skuCode: 'SKU编码',
+    location: '库位',
+    batch: '批次',
+    available: '可用库存',
+    locked: '锁定库存',
+    total: '合计',
+    noResults: '暂无库存记录',
+    search: '搜索SKU'
+  },
+  common: {
+    confirm: '确定',
+    cancel: '取消',
+    loading: '加载中...',
+    error: '请求失败',
+    success: '操作成功',
+    languageZh: '中文',
+    languageEn: 'English',
+    retry: '重试',
+    back: '返回',
+    logout: '退出登录',
+    login: '登录',
+    username: '用户名',
+    password: '密码',
+    loginRequired: '请先登录'
+  }
+}

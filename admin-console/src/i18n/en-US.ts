@@ -11,7 +11,9 @@ export default {
     dashboard: 'Dashboard',
     users: 'User Management',
     products: 'Product Management',
-    orders: 'Order Management'
+    orders: 'Order Management',
+    drones: 'Drone Management',
+    customsSync: 'Customs Sync'
   },
   common: {
     confirm: 'Confirm',
@@ -124,5 +126,45 @@ export default {
     totalOrders: 'Total Orders',
     activeDeliveries: 'Active Deliveries',
     pendingMatches: 'Pending Matches'
+  },
+  drone: {
+    title: 'Drone Management',
+    droneCode: 'Code',
+    model: 'Model',
+    flightNo: 'Flight No.',
+    maxPayloadKg: 'Max Payload(kg)',
+    maxVolumeM3: 'Max Volume(m³)',
+    maxRangeKm: 'Range(km)',
+    deliverableCategories: 'Deliverable Categories',
+    status: 'Status',
+    addDrone: 'Add Drone',
+    statuses: {
+      AVAILABLE: 'Available',
+      DISPATCHED: 'Dispatched',
+      MAINTENANCE: 'Maintenance',
+      OFFLINE: 'Offline'
+    }
+  },
+  customs: {
+    title: 'Customs Sync Management',
+    syncNo: 'Sync No.',
+    orderId: 'Order No.',
+    nodeType: 'Sync Node',
+    level: 'Level',
+    status: 'Status',
+    retryCount: 'Retries',
+    retryAction: 'Retry',
+    levels: {
+      RED: 'Red Card',
+      YELLOW: 'Yellow Card'
+    },
+    statuses: {
+      SYNC_NONE: 'Not Synced',
+      SYNCING: 'Syncing',
+      SYNC_SUCCESS: 'Success',
+      SYNC_FAILED: 'Failed',
+      RETRYING: 'Retrying',
+      MANUAL_RESOLVED: 'Manual Resolved'
+    }
   }
 }

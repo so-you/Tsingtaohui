@@ -1,0 +1,83 @@
+export default {
+  dashboard: {
+    title: 'Dashboard',
+    pendingPick: 'Pending Pick',
+    pendingReview: 'Pending Review',
+    pendingOutbound: 'Pending Outbound',
+    exceptionOrders: 'Exceptions',
+    scanInput: 'Scan Input',
+    scanHint: 'Scan barcode or type and press Enter',
+    language: 'Language'
+  },
+  picking: {
+    title: 'Picking Tasks',
+    orderNo: 'Order No.',
+    product: 'Product',
+    quantity: 'Qty',
+    location: 'Location',
+    batch: 'Batch',
+    priority: 'Priority',
+    expectedTime: 'Expected Delivery',
+    scanToConfirm: 'Scan to Confirm',
+    scanSuccess: 'Pick confirmed',
+    scanMismatch: 'Product mismatch',
+    scanDuplicate: 'Already scanned',
+    noTasks: 'No picking tasks',
+    status: 'Status'
+  },
+  review: {
+    title: 'Review & Pack',
+    orderNo: 'Order No.',
+    expectedQty: 'Expected',
+    scannedQty: 'Scanned',
+    missing: 'Missing',
+    extra: 'Extra',
+    scanProduct: 'Scan Product',
+    pack: 'Pack',
+    packageGenerated: 'Package generated',
+    packageNo: 'Package No.',
+    scanSuccess: 'Review confirmed',
+    scanMismatch: 'Product mismatch',
+    noTasks: 'No review tasks'
+  },
+  outbound: {
+    title: 'Outbound',
+    orderNo: 'Order No.',
+    packageNo: 'Package No.',
+    weight: 'Weight',
+    customsStatus: 'Customs Sync',
+    customsBlocked: 'Customs red-card blocked, outbound not allowed',
+    customsOk: 'Customs sync OK',
+    confirmOutbound: 'Confirm Outbound',
+    outboundSuccess: 'Outbound confirmed',
+    noTasks: 'No outbound tasks',
+    blocked: 'Blocked'
+  },
+  inventory: {
+    title: 'Inventory',
+    skuCode: 'SKU Code',
+    location: 'Location',
+    batch: 'Batch',
+    available: 'Available',
+    locked: 'Locked',
+    total: 'Total',
+    noResults: 'No inventory records',
+    search: 'Search SKU'
+  },
+  common: {
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    loading: 'Loading...',
+    error: 'Request failed',
+    success: 'Success',
+    languageZh: '中文',
+    languageEn: 'English',
+    retry: 'Retry',
+    back: 'Back',
+    logout: 'Logout',
+    login: 'Login',
+    username: 'Username',
+    password: 'Password',
+    loginRequired: 'Please login first'
+  }
+}

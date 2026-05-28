@@ -11,7 +11,9 @@ import {
   SwitchButton,
   Fold,
   Expand,
-  ArrowDown
+  ArrowDown,
+  Position,
+  DocumentChecked
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -84,6 +86,14 @@ const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '240px'))
         <el-menu-item index="/orders">
           <el-icon><List /></el-icon>
           <template #title>{{ t('menu.orders') }}</template>
+        </el-menu-item>
+        <el-menu-item index="/drones">
+          <el-icon><Position /></el-icon>
+          <template #title>{{ t('menu.drones') }}</template>
+        </el-menu-item>
+        <el-menu-item index="/customs-sync">
+          <el-icon><DocumentChecked /></el-icon>
+          <template #title>{{ t('menu.customsSync') }}</template>
         </el-menu-item>
       </el-menu>
 

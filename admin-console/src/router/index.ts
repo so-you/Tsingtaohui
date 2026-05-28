@@ -35,6 +35,18 @@ const routes = [
         name: 'Orders',
         component: () => import('@/views/orders/index.vue'),
         meta: { title: '订单管理' }
+      },
+      {
+        path: 'drones',
+        name: 'Drones',
+        component: () => import('@/views/drones/index.vue'),
+        meta: { title: '无人机管理' }
+      },
+      {
+        path: 'customs-sync',
+        name: 'CustomsSync',
+        component: () => import('@/views/customs-sync/index.vue'),
+        meta: { title: '海关同步' }
       }
     ]
   }

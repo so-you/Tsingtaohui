@@ -26,7 +26,17 @@ const stats = ref([
   { key: 'pendingMatches', value: 0, icon: Connection, color: '#f5222d', bg: '#fff1f0', trend: '-2%' }
 ])
 
-const recentOrders = ref([])
+interface RecentOrder {
+  orderNo: string
+  orderStatus: string
+  totalPrice: string
+  shipNo: string
+  consigneeName: string
+  createdAt: string
+  tradeMode: string
+}
+
+const recentOrders = ref<RecentOrder[]>([])
 const loading = ref(false)
 
 onMounted(async () => {
@@ -46,7 +56,15 @@ async function loadDashboardData() {
     stats.value[2].value = 23
     stats.value[3].value = 8
 
-    recentOrders.value = ordersRes.items || []
+    recentOrders.value = (ordersRes.items || []).map((o: any) => ({
+      orderNo: o.orderNo || '',
+      orderStatus: o.orderStatus || '',
+      totalPrice: o.totalPrice || '',
+      shipNo: o.shipNo || '',
+      consigneeName: o.consigneeName || '',
+      createdAt: o.createdAt || '',
+      tradeMode: o.tradeMode || '',
+    }))
   } catch {
     // Use demo data
     stats.value[0].value = 1284

@@ -1,0 +1,54 @@
+{
+  "pages": [
+    {
+      "path": "pages/dashboard/index",
+      "style": { "navigationBarTitleText": "工作台" }
+    },
+    {
+      "path": "pages/picking/index",
+      "style": { "navigationBarTitleText": "拣货" }
+    },
+    {
+      "path": "pages/review/index",
+      "style": { "navigationBarTitleText": "复核打包" }
+    },
+    {
+      "path": "pages/outbound/index",
+      "style": { "navigationBarTitleText": "出库" }
+    },
+    {
+      "path": "pages/inventory/index",
+      "style": { "navigationBarTitleText": "库存" }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "青岛汇仓库",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#F7F8FA"
+  },
+  "tabBar": {
+    "color": "#6B7280",
+    "selectedColor": "#1677FF",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/dashboard/index",
+        "text": "工作台"
+      },
+      {
+        "pagePath": "pages/picking/index",
+        "text": "拣货"
+      },
+      {
+        "pagePath": "pages/review/index",
+        "text": "复核"
+      },
+      {
+        "pagePath": "pages/outbound/index",
+        "text": "出库"
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+/* Global reset and base styles */
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 28rpx;
+  color: #333333;
+  background-color: #f7f8fa;
+  box-sizing: border-box;
+}
+
+view,
+text,
+input,
+button {
+  box-sizing: border-box;
+}
+
+.container {
+  padding: 24rpx 32rpx;
+}
+
+/* Button reset */
+button {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  line-height: inherit;
+  font-size: inherit;
+}
+
+button::after {
+  border: none;
+}

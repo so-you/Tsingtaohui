@@ -66,12 +66,19 @@
 
 | # | 任务 | 状态 | 分支 | 提交 |
 |---|------|------|------|------|
-| 4-1 | 审计日志 + Admin 审计查询 | ⏳ 待开发 | dev/phase4-ops | — |
-| 4-2 | 对账导出 | ⏳ 待开发 | dev/phase4-ops | — |
-| 4-3 | 规则配置 API + Admin 规则页 | ⏳ 待开发 | dev/phase4-ops | — |
-| 4-4 | 船舶/船代管理 API + Admin 页面 | ⏳ 待开发 | dev/phase4-ops | — |
+| 4-1 | 审计日志 + Admin 审计查询 | ✅ 完成 | worktree-phase4-ops | 68c803f |
+| 4-2 | 对账导出 | ✅ 完成 | worktree-phase4-ops | 68c803f |
+| 4-3 | 规则配置 API + Admin 规则页 | ✅ 完成 | worktree-phase4-ops | 68c803f |
+| 4-4 | 船舶/船代管理 API + Admin 页面 | ✅ 完成 | worktree-phase4-ops | 68c803f |
 | 4-5 | 全端中英文文案补全 + 响应式适配 | ⏳ 待开发 | dev/phase4-polish | — |
 | 4-6 | 端到端验收测试 | ⏳ 待开发 | dev/phase4-e2e | — |
+
+### 阶段 4 验证摘要
+- 后端：编译通过、单元测试通过
+- 前端：Admin Console 生产构建通过
+- 新增 8 个 Admin 端点：船舶 CRUD、船代列表、规则列表/更新、审计日志查询、对账 CSV 导出
+- 新增 2 个 Flyway 迁移：t_rule_config 建表 + 种子数据（4 条默认规则）
+- Admin 侧边栏新增 4 个菜单项，中英文 i18n 完整覆盖
 
 ## 每阶段执行流程
 

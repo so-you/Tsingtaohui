@@ -80,6 +80,9 @@ public class OrderController {
         if (order == null) {
             throw new BusinessException(ErrorCode.VALIDATION_ERROR.getCode(), "Order not found");
         }
+        if (!order.getUserId().equals(UserContextHolder.getUserId())) {
+            throw new BusinessException(ErrorCode.VALIDATION_ERROR.getCode(), "You can only confirm your own orders");
+        }
         if (!OrderStatus.PENDING_RECEIPT.name().equals(order.getOrderStatus())) {
             throw new BusinessException(ErrorCode.ORDER_STATUS_INVALID.getCode(),
                     ErrorCode.ORDER_STATUS_INVALID.getMessageZh());

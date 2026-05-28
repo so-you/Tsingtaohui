@@ -16,6 +16,7 @@ import com.tsingtaohui.model.entity.OrderEntity;
 import com.tsingtaohui.model.entity.OrderItemEntity;
 import com.tsingtaohui.model.entity.PackageEntity;
 import com.tsingtaohui.service.ICustomsSyncService;
+import com.tsingtaohui.service.IDroneService;
 import com.tsingtaohui.service.IWarehouseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,17 +46,20 @@ public class WarehouseServiceImpl implements IWarehouseService {
     private final InventoryMapper inventoryMapper;
     private final PackageMapper packageMapper;
     private final ICustomsSyncService customsSyncService;
+    private final IDroneService droneService;
 
     public WarehouseServiceImpl(OrderMapper orderMapper,
                                 OrderItemMapper orderItemMapper,
                                 InventoryMapper inventoryMapper,
                                 PackageMapper packageMapper,
-                                ICustomsSyncService customsSyncService) {
+                                ICustomsSyncService customsSyncService,
+                                IDroneService droneService) {
         this.orderMapper = orderMapper;
         this.orderItemMapper = orderItemMapper;
         this.inventoryMapper = inventoryMapper;
         this.packageMapper = packageMapper;
         this.customsSyncService = customsSyncService;
+        this.droneService = droneService;
     }
 
     @Override
@@ -132,8 +136,8 @@ public class WarehouseServiceImpl implements IWarehouseService {
                     ErrorCode.WAREHOUSE_SCAN_MISMATCH.getMessageZh());
         }
 
-        // Mark as picking in progress
-        order.setWarehouseStatus(WAREHOUSE_STATUS_PICKING);
+        // Mark as picked (ready for review)
+        order.setWarehouseStatus(WAREHOUSE_STATUS_PICKED);
         orderMapper.updateById(order);
     }
 
@@ -277,6 +281,22 @@ public class WarehouseServiceImpl implements IWarehouseService {
             }
         }
 
+        // Dispatch drone delivery task
+        PackageEntity pkg = packageMapper.selectOne(
+                new LambdaQueryWrapper<PackageEntity>().eq(PackageEntity::getOrderId, order.getId())
+        );
+        if (pkg != null) {
+            try {
+                droneService.matchAndCreateTask(
+                        order.getId(), pkg.getPackageNo(),
+                        order.getTotalWeightKg() != null ? order.getTotalWeightKg() : BigDecimal.ZERO,
+                        order.getTotalVolumeM3() != null ? order.getTotalVolumeM3() : BigDecimal.ZERO
+                );
+            } catch (BusinessException e) {
+                // Drone unavailable — order remains outbound, operator can retry later
+            }
+        }
+
         Map<String, Object> result = new HashMap<>();
         result.put("blocked", false);
         result.put("orderId", order.getId());
@@ -313,6 +333,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
     private Map<String, Object> toTaskMap(OrderEntity order) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", order.getId());
+        map.put("taskId", order.getId());
         map.put("orderNo", order.getOrderNo());
         map.put("orderStatus", order.getOrderStatus());
         map.put("warehouseStatus", order.getWarehouseStatus());

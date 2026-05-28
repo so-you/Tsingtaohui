@@ -31,18 +31,7 @@ public class CustomsController {
 
     @PostMapping("/{syncNo}/retry")
     public ApiResponse<Void> retrySync(@PathVariable String syncNo) {
-        // For simplicity, parse syncNo as a lookup key. In practice, might use the syncNo field.
-        // The service expects a database ID, but the API path uses syncNo.
-        // We'll accept the ID via syncNo parameter for MVP.
-        Long id;
-        try {
-            id = Long.parseLong(syncNo);
-        } catch (NumberFormatException e) {
-            // If not a numeric ID, try to find by syncNo field - but for MVP simplicity,
-            // we'll just return an error
-            return ApiResponse.error("VALIDATION_ERROR", "Invalid sync record ID");
-        }
-        customsSyncService.retrySync(id);
+        customsSyncService.retrySyncBySyncNo(syncNo);
         return ApiResponse.ok(null);
     }
 }

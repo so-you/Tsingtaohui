@@ -12,4 +12,6 @@ public interface ICustomsSyncService {
     PageResult<Map<String, Object>> getSyncRecords(int page, int pageSize);
 
     void retrySync(Long id);
+
+    void retrySyncBySyncNo(String syncNo);
 }

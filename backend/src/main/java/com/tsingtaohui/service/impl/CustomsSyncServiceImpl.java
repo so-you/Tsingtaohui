@@ -97,8 +97,11 @@ public class CustomsSyncServiceImpl implements ICustomsSyncService {
         map.put("orderId", record.getOrderId());
         map.put("orderNo", record.getOrderNo());
         map.put("syncNode", record.getSyncNode());
+        map.put("nodeType", record.getSyncNode());
         map.put("syncLevel", record.getSyncLevel());
+        map.put("level", record.getSyncLevel());
         map.put("syncStatus", record.getSyncStatus());
+        map.put("status", record.getSyncStatus());
         map.put("failureReason", record.getFailureReason());
         map.put("retryCount", record.getRetryCount());
         map.put("nextRetryAt", record.getNextRetryAt());
@@ -122,5 +125,16 @@ public class CustomsSyncServiceImpl implements ICustomsSyncService {
 
     private int nullToZero(Integer value) {
         return value == null ? 0 : value;
+    }
+
+    @Override
+    public void retrySyncBySyncNo(String syncNo) {
+        CustomsSyncRecordEntity record = customsSyncRecordMapper.selectOne(
+                new LambdaQueryWrapper<CustomsSyncRecordEntity>().eq(CustomsSyncRecordEntity::getSyncNo, syncNo)
+        );
+        if (record == null) {
+            throw new BusinessException(ErrorCode.VALIDATION_ERROR.getCode(), "Sync record not found: " + syncNo);
+        }
+        retrySync(record.getId());
     }
 }

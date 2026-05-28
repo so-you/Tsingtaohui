@@ -75,7 +75,13 @@ public class DroneServiceImpl implements IDroneService {
         if (droneData.get("maxRangeKm") != null) {
             drone.setMaxRangeKm(new BigDecimal(droneData.get("maxRangeKm").toString()));
         }
-        drone.setDeliverableCategories((String) droneData.get("deliverableCategories"));
+        Object categories = droneData.get("deliverableCategories");
+        if (categories instanceof List) {
+            drone.setDeliverableCategories(String.join(",", ((List<?>) categories).stream()
+                    .map(Object::toString).toList()));
+        } else if (categories instanceof String) {
+            drone.setDeliverableCategories((String) categories);
+        }
         drone.setStatus(DRONE_STATUS_AVAILABLE);
         droneMapper.insert(drone);
     }

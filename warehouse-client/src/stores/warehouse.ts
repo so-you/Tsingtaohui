@@ -29,7 +29,7 @@ export const useWarehouseStore = defineStore('warehouse', () => {
     loading.value = true
     try {
       const res = await warehouseApi.getPickingTasks()
-      pickingTasks.value = res.list
+      pickingTasks.value = res.items
     } finally {
       loading.value = false
     }
@@ -45,7 +45,7 @@ export const useWarehouseStore = defineStore('warehouse', () => {
     loading.value = true
     try {
       const res = await warehouseApi.getReviewTasks()
-      reviewTasks.value = res.list
+      reviewTasks.value = res.items
     } finally {
       loading.value = false
     }
@@ -67,7 +67,7 @@ export const useWarehouseStore = defineStore('warehouse', () => {
     loading.value = true
     try {
       const res = await warehouseApi.getOutboundTasks()
-      outboundTasks.value = res.list
+      outboundTasks.value = res.items
     } finally {
       loading.value = false
     }
@@ -83,7 +83,7 @@ export const useWarehouseStore = defineStore('warehouse', () => {
     loading.value = true
     try {
       const res = await warehouseApi.getInventory()
-      inventoryItems.value = res.list
+      inventoryItems.value = res.items
     } finally {
       loading.value = false
     }

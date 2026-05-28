@@ -37,6 +37,7 @@ async function handleLogin() {
     loading.value = true
     try {
       await userStore.login(loginForm.username, loginForm.password)
+      await userStore.fetchProfile()
       ElMessage.success(t('common.success'))
       router.push('/dashboard')
     } catch {

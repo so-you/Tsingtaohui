@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException e, HttpServletRequest request) {
         String requestId = generateRequestId();
         log.warn("Business error [{}] {}: {}", requestId, e.getErrorCode(), e.getMessage());
-        return ResponseEntity.ok(ApiResponse.error(e.getErrorCode(), e.getMessage(), requestId));
+        return ResponseEntity.badRequest().body(ApiResponse.error(e.getErrorCode(), e.getMessage(), requestId));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -3,6 +3,7 @@ package com.tsingtaohui.config;
 import com.tsingtaohui.common.context.UserContextHolder;
 import com.tsingtaohui.common.model.UserContext;
 import com.tsingtaohui.common.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,10 +21,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -31,9 +33,11 @@ import java.util.Collections;
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
+    private final CorsConfigurationSource corsConfigurationSource;
 
-    public SecurityConfig(JwtUtil jwtUtil) {
+    public SecurityConfig(JwtUtil jwtUtil, CorsConfigurationSource corsConfigurationSource) {
         this.jwtUtil = jwtUtil;
+        this.corsConfigurationSource = corsConfigurationSource;
     }
 
     @Bean
@@ -45,6 +49,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(this.corsConfigurationSource))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
@@ -70,17 +75,26 @@ public class SecurityConfig {
             String header = request.getHeader("Authorization");
             if (header != null && header.startsWith("Bearer ")) {
                 String token = header.substring(7);
-                if (jwtUtil.isTokenValid(token)) {
-                    Long userId = jwtUtil.getUserId(token);
-                    String username = jwtUtil.getUsername(token);
-                    String userType = jwtUtil.getUserType(token);
+                if (jwtUtil.isAccessToken(token)) {
+                    Claims claims = jwtUtil.parseToken(token);
+                    Long userId = claims.get("userId", Long.class);
+                    String username = claims.getSubject();
+                    String userType = claims.get("userType", String.class);
 
                     UserContextHolder.set(new UserContext(userId, username, userType));
 
+                    String role = "ROLE_" + userType;
                     UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
+                            new UsernamePasswordAuthenticationToken(username, null, List.of(
+                                    new org.springframework.security.core.authority.SimpleGrantedAuthority(role)
+                            ));
                     org.springframework.security.core.context.SecurityContextHolder.getContext()
                             .setAuthentication(authentication);
+                } else if (!token.isEmpty()) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json;charset=UTF-8");
+                    response.getWriter().write("{\"code\":\"AUTH_002\",\"message\":\"Invalid or expired token\"}");
+                    return;
                 }
             }
 

@@ -101,7 +101,7 @@
 
 ## 5. 后端模块设计
 
-一期后端采用一个 Spring Boot 应用，内部按业务域拆分 package 和模块。模块之间通过服务接口调用，不直接跨模块操作数据库表。
+一期后端采用一个 Spring Boot 应用，包结构和类命名必须与 `CLAUDE.md` 保持一致：根包为 `com.tsingtaohui`，按 `controller`、`service`、`mapper`、`model`、`config`、`common`、`integration` 分层组织；业务模块通过类名、子包或服务接口表达边界。模块之间通过 Service 接口调用，不直接跨模块操作数据库表。
 
 | 模块 | 职责 |
 |------|------|
@@ -118,6 +118,25 @@
 | audit | 操作日志、状态变更日志、审计查询 |
 | i18n | 字典、枚举显示名和后端错误码多语言 |
 | file | 图片、出库单、导出文件 |
+
+后端命名规则：
+
+1. Controller 使用 `XxxController`，例如 `OrderController`。
+2. Service 接口使用 `IXxxService`，实现类使用 `XxxServiceImpl`。
+3. Mapper 使用 `XxxMapper`。
+4. Entity 使用 `XxxEntity`，DTO 使用 `XxxDTO`，VO 使用 `XxxVO`。
+5. REST API 路径使用 kebab-case 和复数形式，例如 `/api/v1/delivery-tasks`。
+6. 数据库字段使用 snake_case。
+
+后端类与包映射示例：
+
+| 业务域 | Controller | Service | Mapper | Entity |
+|--------|------------|---------|--------|--------|
+| 用户 | `com.tsingtaohui.controller.UserController` | `com.tsingtaohui.service.IUserService` / `com.tsingtaohui.service.impl.UserServiceImpl` | `com.tsingtaohui.mapper.UserMapper` | `com.tsingtaohui.model.entity.UserEntity` |
+| 商品 | `com.tsingtaohui.controller.ProductController` | `com.tsingtaohui.service.IProductService` / `com.tsingtaohui.service.impl.ProductServiceImpl` | `com.tsingtaohui.mapper.ProductMapper` | `com.tsingtaohui.model.entity.ProductEntity` |
+| 订单 | `com.tsingtaohui.controller.OrderController` | `com.tsingtaohui.service.IOrderService` / `com.tsingtaohui.service.impl.OrderServiceImpl` | `com.tsingtaohui.mapper.OrderMapper` | `com.tsingtaohui.model.entity.OrderEntity` |
+| 配送任务 | `com.tsingtaohui.controller.DeliveryTaskController` | `com.tsingtaohui.service.IDeliveryTaskService` / `com.tsingtaohui.service.impl.DeliveryTaskServiceImpl` | `com.tsingtaohui.mapper.DeliveryTaskMapper` | `com.tsingtaohui.model.entity.DeliveryTaskEntity` |
+| 海关同步 | `com.tsingtaohui.controller.CustomsController` | `com.tsingtaohui.service.ICustomsSyncService` / `com.tsingtaohui.service.impl.CustomsSyncServiceImpl` | `com.tsingtaohui.mapper.CustomsSyncRecordMapper` | `com.tsingtaohui.model.entity.CustomsSyncRecordEntity` |
 
 ## 6. 核心业务服务
 
@@ -250,31 +269,60 @@
 ```text
 backend/
   pom.xml
+  Dockerfile
   src/main/java/com/tsingtaohui/
     TsingtaohuiApplication.java
+    controller/
+      AuthController.java
+      ProductController.java
+      OrderController.java
+      WarehouseController.java
+      DroneController.java
+      CustomsController.java
+    service/
+      IAuthService.java
+      IOrderService.java
+      IInventoryService.java
+      impl/
+        AuthServiceImpl.java
+        OrderServiceImpl.java
+        InventoryServiceImpl.java
+    mapper/
+      UserMapper.java
+      ProductMapper.java
+      OrderMapper.java
+      DeliveryTaskMapper.java
+      CustomsSyncRecordMapper.java
+    model/
+      entity/
+        UserEntity.java
+        ProductEntity.java
+        OrderEntity.java
+        DeliveryTaskEntity.java
+      dto/
+        CreateOrderDTO.java
+        UpdateShipDTO.java
+      vo/
+        OrderDetailVO.java
+        ProductListVO.java
+    config/
     common/
-    auth/
-    user/
-    ship/
-    catalog/
-    inventory/
-    order/
-    warehouse/
-    drone/
-    customs/
-    rules/
-    audit/
-    file/
+    integration/
+      customs/
+      drone/
   src/main/resources/
     application.yml
+    mapper/
     db/migration/
 ```
 
 ### 10.2 客户端 H5
 
 ```text
-client-h5/
+h5-client/
   package.json
+  pages.json
+  manifest.json
   src/
     pages/
       home/
@@ -283,18 +331,20 @@ client-h5/
       mine/
       auth/
     components/
-    services/
+    api/
     stores/
     i18n/
-    styles/
-    types/
+    utils/
+    static/
 ```
 
 ### 10.3 仓库端 H5
 
 ```text
-warehouse-h5/
+warehouse-client/
   package.json
+  pages.json
+  manifest.json
   src/
     pages/
       dashboard/
@@ -303,27 +353,26 @@ warehouse-h5/
       outbound/
       inventory/
     components/
-    services/
+    api/
     stores/
     i18n/
-    styles/
-    types/
+    utils/
 ```
 
 ### 10.4 管理端
 
 ```text
-admin-web/
+admin-console/
   package.json
+  vite.config.ts
   src/
     views/
     components/
-    api/
     stores/
+    api/
     router/
-    i18n/
-    styles/
-    types/
+    layouts/
+    utils/
 ```
 
 ## 11. 部署拓扑

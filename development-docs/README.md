@@ -6,7 +6,9 @@
 
 ## 1. 文档目的
 
-本目录用于承接 `docs/superpowers/specs/` 中的产品规格，并按最新功能调整整理为软件研发可执行文档。文档覆盖需求、架构、数据模型、接口、UI 规范、研发流程、测试验收、部署运维和安全合规约束。
+本目录用于承接 `prd-demo-v1/docs/superpowers/specs/` 中的产品规格，并按最新功能调整整理为软件研发执行文档。文档覆盖需求、架构、数据模型、接口、UI 规范、研发流程、测试验收、部署运维和安全合规约束。
+
+`CLAUDE.md` 是全仓库 AI 编码助手和工程约束的主要指导文档。本目录文档是研发落地说明，必须继承 `CLAUDE.md` 中的目录结构、命名规范、技术栈和提交规范；如二者出现冲突，以 `CLAUDE.md` 为准，并同步修订本目录文档。
 
 ## 2. 最新功能调整
 
@@ -34,9 +36,9 @@
 
 本文档集基于以下输入整理：
 
-1. `docs/superpowers/specs/2026-05-22-bonded-warehouse-ship-drone-delivery-product-spec.md`
-2. `docs/superpowers/specs/2026-05-22-bonded-warehouse-ship-drone-delivery-product-spec-glm.md`
-3. `docs/superpowers/specs/2026-05-23-h5-client-mvp-design.md`
+1. `prd-demo-v1/docs/superpowers/specs/2026-05-22-bonded-warehouse-ship-drone-delivery-product-spec.md`
+2. `prd-demo-v1/docs/superpowers/specs/2026-05-22-bonded-warehouse-ship-drone-delivery-product-spec-glm.md`
+3. `prd-demo-v1/docs/superpowers/specs/2026-05-23-h5-client-mvp-design.md`
 4. 2026-05-28 用户补充的功能和技术栈调整
 
 ## 5. 一期不开发范围
@@ -51,7 +53,8 @@
 
 ## 6. 研发使用方式
 
-1. 产品、研发和测试以 `01` 文档作为需求验收基线。
-2. 后端和数据库设计以 `03` 文档作为接口和表结构基线。
-3. 前端、交互和视觉以 `04` 文档作为 UI 组件和页面规范基线。
-4. 项目排期、分支、质量门禁、部署和运维以 `05` 文档作为工程执行基线。
+1. `CLAUDE.md` 作为仓库级工程规范和 AI 工作规范的最高优先级文档。
+2. 产品、研发和测试以 `01` 文档作为需求验收基线。
+3. 后端和数据库设计以 `03` 文档作为接口和表结构基线，但命名规范必须服从 `CLAUDE.md`。
+4. 前端、交互和视觉以 `04` 文档作为 UI 组件和页面规范基线。
+5. 项目排期、分支、质量门禁、部署和运维以 `05` 文档作为工程执行基线。

@@ -11,22 +11,22 @@
 
 ```text
 Tsingtaohui/
-  client-h5/
-  warehouse-h5/
-  admin-web/
+  h5-client/
+  warehouse-client/
+  admin-console/
   backend/
   development-docs/
-  docs/
+  prd-demo-v1/
 ```
 
 说明：
 
-1. `client-h5`：Uni-app 客户端。
-2. `warehouse-h5`：Uni-app 仓库端。
-3. `admin-web`：Vue 3 + Element Plus 管理端。
+1. `h5-client`：Uni-app H5 客户端。
+2. `warehouse-client`：Uni-app 仓库端。
+3. `admin-console`：Vue 3 + Element Plus 管理端。
 4. `backend`：Spring Boot 后端。
 5. `development-docs`：研发文档。
-6. `docs`：产品规格和计划文档。
+6. `prd-demo-v1`：旧 PRD、原 H5 demo、历史规格和演示工程备份。
 
 ## 3. 本地开发环境
 
@@ -47,7 +47,7 @@ Tsingtaohui/
 ### 4.1 客户端 H5
 
 ```bash
-cd client-h5
+cd h5-client
 npm install
 npm run dev:h5
 npm run lint
@@ -58,7 +58,7 @@ npm run build:h5
 ### 4.2 仓库端 H5
 
 ```bash
-cd warehouse-h5
+cd warehouse-client
 npm install
 npm run dev:h5
 npm run lint
@@ -69,7 +69,7 @@ npm run build:h5
 ### 4.3 管理端
 
 ```bash
-cd admin-web
+cd admin-console
 npm install
 npm run dev
 npm run lint
@@ -229,13 +229,14 @@ mvn clean package
 3. 禁止手工修改测试和生产库结构。
 4. 字段删除需要先下线业务引用，再执行数据库变更。
 5. 枚举新增必须兼容旧数据。
+6. 迁移脚本中的新表必须使用 `t_` 前缀、snake_case 和单数形式。
 
 迁移文件命名建议：
 
 ```text
-V20260528_001__create_user_tables.sql
-V20260528_002__create_catalog_tables.sql
-V20260528_003__create_order_tables.sql
+V20260528_001__create_t_user.sql
+V20260528_002__create_t_product.sql
+V20260528_003__create_t_order.sql
 ```
 
 ## 10. 安全规范

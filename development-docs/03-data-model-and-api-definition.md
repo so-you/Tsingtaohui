@@ -12,6 +12,10 @@
 5. 金额字段使用 `DECIMAL(12,2)`。
 6. 重量、体积、距离使用 `DECIMAL`，避免浮点误差。
 7. 枚举字段存储稳定英文编码，前端根据多语言字典渲染。
+8. 表名必须使用 `t_` 前缀、snake_case 和单数形式，例如 `t_order`、`t_product`、`t_delivery_task`。
+9. 字段名必须使用 snake_case，例如 `order_id`、`created_at`、`ship_no`。
+10. 索引命名使用 `idx_表名_字段名`，唯一索引使用 `uk_表名_字段名`，外键命名使用 `fk_表名_关联表名`。命名中的表名省略 `t_` 前缀，例如 `idx_order_ship_no`。
+11. 禁止使用技术实现前缀、无 `t_` 前缀表名、复数表名或按页面/分层命名的表名。
 
 ## 2. 通用字段和响应格式
 
@@ -113,7 +117,7 @@
 
 ## 4. 数据表定义
 
-### 4.1 用户表 `sys_user`
+### 4.1 用户表 `t_user`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -127,10 +131,10 @@
 
 索引：
 
-1. `uk_sys_user_username` 唯一索引：`username`。
-2. `idx_sys_user_type_status` 普通索引：`user_type, status`。
+1. `uk_user_username` 唯一索引：`username`。
+2. `idx_user_type_status` 普通索引：`user_type, status`。
 
-### 4.2 用户资料表 `user_profile`
+### 4.2 用户资料表 `t_user_profile`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -145,7 +149,7 @@
 
 1. `uk_user_profile_user_id` 唯一索引：`user_id`。
 
-### 4.3 用户船舶信息表 `user_ship`
+### 4.3 用户船舶信息表 `t_user_ship`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -163,7 +167,7 @@
 1. `idx_user_ship_user_id` 普通索引：`user_id`。
 2. `idx_user_ship_imo_mmsi` 普通索引：`imo, mmsi`。
 
-### 4.4 船舶主数据表 `ship`
+### 4.4 船舶主数据表 `t_ship`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -178,7 +182,7 @@
 | target_gps | VARCHAR(128) | 否 | 目标 GPS |
 | location_source | VARCHAR(32) | 否 | USER_INPUT、ADMIN、SHIPXY、MARINE_TRAFFIC、QR_CODE |
 
-### 4.5 船舶代理人表 `shipping_agent`
+### 4.5 船舶代理人表 `t_shipping_agent`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -189,7 +193,7 @@
 | contact_phone | VARCHAR(64) | 否 | 联系电话 |
 | status | VARCHAR(32) | 是 | ENABLED、DISABLED |
 
-### 4.6 商品分类表 `product_category`
+### 4.6 商品分类表 `t_product_category`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -200,7 +204,7 @@
 | sort_order | INT | 是 | 排序 |
 | status | VARCHAR(32) | 是 | ENABLED、DISABLED |
 
-### 4.7 商品表 `product`
+### 4.7 商品表 `t_product`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -221,7 +225,7 @@
 | drone_deliverable | TINYINT | 是 | 是否可无人机配送 |
 | status | VARCHAR(32) | 是 | ON_SALE、OFF_SALE |
 
-### 4.8 库存表 `inventory`
+### 4.8 库存表 `t_inventory`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -239,7 +243,7 @@
 
 1. `uk_inventory_stock_unit` 唯一索引：`warehouse_id, location_code, sku_code, batch_no`。
 
-### 4.9 订单表 `order_header`
+### 4.9 订单表 `t_order`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -270,7 +274,7 @@
 | shipping_agent_name | VARCHAR(128) | 是 | 船舶代理人名称 |
 | completed_at | DATETIME | 否 | 完成时间 |
 
-### 4.10 订单明细表 `order_item`
+### 4.10 订单明细表 `t_order_item`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -287,7 +291,7 @@
 | unit_volume_m3 | DECIMAL(10,4) | 是 | 单位体积 |
 | line_amount | DECIMAL(12,2) | 是 | 行金额 |
 
-### 4.11 包裹表 `package`
+### 4.11 包裹表 `t_package`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -299,7 +303,7 @@
 | actual_volume_m3 | DECIMAL(10,4) | 否 | 实际体积 |
 | package_status | VARCHAR(32) | 是 | CREATED、REVIEWED、OUTBOUND、DELIVERED |
 
-### 4.12 无人机表 `drone`
+### 4.12 无人机表 `t_drone`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -313,7 +317,7 @@
 | deliverable_categories | VARCHAR(512) | 否 | 可配送品类 |
 | status | VARCHAR(32) | 是 | AVAILABLE、IN_MISSION、MAINTENANCE、DISABLED |
 
-### 4.13 配送任务表 `delivery_task`
+### 4.13 配送任务表 `t_delivery_task`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -331,7 +335,7 @@
 | estimated_arrival | DATETIME | 否 | 预计送达 |
 | actual_arrival | DATETIME | 否 | 实际送达 |
 
-### 4.14 海关同步记录表 `customs_sync_record`
+### 4.14 海关同步记录表 `t_customs_sync_record`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -348,7 +352,7 @@
 | retry_count | INT | 是 | 重试次数 |
 | next_retry_at | DATETIME | 否 | 下次重试时间 |
 
-### 4.15 审计日志表 `audit_log`
+### 4.15 审计日志表 `t_audit_log`
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
@@ -753,4 +757,3 @@
 ```
 
 红牌节点同步失败时，调用方必须得到明确阻塞结果，且业务状态不可继续流转。
-

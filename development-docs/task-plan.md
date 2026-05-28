@@ -33,8 +33,8 @@
 | 1-4 | H5 客户端 Uni-app 脚手架 + 注册登录页 | ✅ 完成 | dev/phase1-h5-client | ffb006e, 5a32a8b |
 | 1-5 | H5 客户端首页 + 商品列表 + 商品详情 | ✅ 完成 | dev/phase1-h5-client | 5a32a8b |
 | 1-6 | H5 客户端「我的」页面 + 船舶信息维护 | ✅ 完成 | dev/phase1-h5-client | 5a32a8b |
-| 1-7 | Admin Console 脚手架 + 登录/用户管理 | ⏳ 待开发 | dev/phase1-admin | — |
-| 1-8 | Admin 商品管理 + 库存管理 | ⏳ 待开发 | dev/phase1-admin | — |
+| 1-7 | Admin Console 脚手架 + 登录/用户管理 | ✅ 完成 | dev/phase1-admin | f3c5d09 |
+| 1-8 | Admin 商品管理 + 库存管理 | ✅ 完成 | dev/phase1-admin | f3c5d09 |
 
 ## 阶段 2：订单 + 购物车（核心交易闭环）
 

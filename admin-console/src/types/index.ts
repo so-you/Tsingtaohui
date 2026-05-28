@@ -184,3 +184,59 @@ export interface IOrder {
   completedAt?: string
   items?: IOrderItem[]
 }
+
+// Ship types
+export interface IShip {
+  id: number
+  shipNo: string
+  shipName?: string
+  shipNationality: string
+  imo?: string
+  mmsi?: string
+  currentBerth?: string
+  currentAnchorage?: string
+  targetGps?: string
+  locationSource?: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface IShippingAgent {
+  id: number
+  agentNameZh: string
+  agentNameEn?: string
+  contactName?: string
+  contactPhone?: string
+  status: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+// Rule config types
+export interface IRuleConfig {
+  id: number
+  ruleKey: string
+  ruleNameZh: string
+  ruleNameEn?: string
+  ruleValue: string
+  description?: string
+  status: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+// Audit log types
+export interface IAuditLog {
+  id: number
+  actorId?: number
+  actorName?: string
+  module: string
+  action: string
+  targetType: string
+  targetId: string
+  beforeValue?: string
+  afterValue?: string
+  clientIp?: string
+  userAgent?: string
+  createdAt?: string
+}

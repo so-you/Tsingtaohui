@@ -13,7 +13,11 @@ export default {
     products: '商品管理',
     orders: '订单管理',
     drones: '无人机管理',
-    customsSync: '海关同步'
+    customsSync: '海关同步',
+    ships: '船舶管理',
+    rules: '规则配置',
+    auditLogs: '审计日志',
+    reconciliation: '对账导出'
   },
   common: {
     confirm: '确定',
@@ -166,5 +170,67 @@ export default {
       RETRYING: '重试中',
       MANUAL_RESOLVED: '人工解决'
     }
+  },
+  ship: {
+    title: '船舶管理',
+    shipsTab: '船舶列表',
+    agentsTab: '船代列表',
+    shipNo: '船号',
+    shipName: '船名',
+    shipNationality: '船籍',
+    imo: 'IMO',
+    mmsi: 'MMSI',
+    currentBerth: '当前泊位',
+    currentAnchorage: '当前锚地',
+    locationSource: '位置来源',
+    addShip: '新增船舶',
+    editShip: '编辑船舶',
+    agentNameZh: '中文名称',
+    agentNameEn: '英文名称',
+    contactName: '联系人',
+    contactPhone: '联系电话',
+    keywordPlaceholder: '船号/船名/IMO'
+  },
+  rule: {
+    title: '规则配置',
+    ruleKey: '规则键',
+    ruleName: '规则名称',
+    ruleValue: '规则值',
+    description: '说明',
+    status: '状态',
+    editTitle: '编辑规则',
+    statuses: { ENABLED: '启用', DISABLED: '禁用' }
+  },
+  audit: {
+    title: '审计日志',
+    actorName: '操作人',
+    module: '模块',
+    action: '操作',
+    targetType: '对象类型',
+    targetId: '对象ID',
+    clientIp: 'IP地址',
+    beforeValue: '变更前',
+    afterValue: '变更后',
+    createdAt: '操作时间',
+    dateRange: '时间范围',
+    detailTitle: '审计详情',
+    modules: {
+      USER: '用户',
+      PRODUCT: '商品',
+      ORDER: '订单',
+      SHIP: '船舶',
+      AGENT: '船代',
+      RULE: '规则',
+      CUSTOMS: '海关',
+      DRONE: '无人机'
+    }
+  },
+  reconciliation: {
+    title: '对账导出',
+    dateRange: '日期范围',
+    startDate: '开始日期',
+    endDate: '结束日期',
+    exportBtn: '导出 CSV',
+    hint: '选择日期范围后点击导出，将下载包含已完成订单的对账数据'
   }
 }

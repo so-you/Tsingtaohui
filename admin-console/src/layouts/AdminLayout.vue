@@ -13,7 +13,11 @@ import {
   Expand,
   ArrowDown,
   Position,
-  DocumentChecked
+  DocumentChecked,
+  Memo,
+  Download,
+  Setting,
+  Van
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -94,6 +98,22 @@ const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '240px'))
         <el-menu-item index="/customs-sync">
           <el-icon><DocumentChecked /></el-icon>
           <template #title>{{ t('menu.customsSync') }}</template>
+        </el-menu-item>
+        <el-menu-item index="/ships">
+          <el-icon><Van /></el-icon>
+          <template #title>{{ t('menu.ships') }}</template>
+        </el-menu-item>
+        <el-menu-item index="/rules">
+          <el-icon><Setting /></el-icon>
+          <template #title>{{ t('menu.rules') }}</template>
+        </el-menu-item>
+        <el-menu-item index="/audit-logs">
+          <el-icon><Memo /></el-icon>
+          <template #title>{{ t('menu.auditLogs') }}</template>
+        </el-menu-item>
+        <el-menu-item index="/reconciliation">
+          <el-icon><Download /></el-icon>
+          <template #title>{{ t('menu.reconciliation') }}</template>
         </el-menu-item>
       </el-menu>
 

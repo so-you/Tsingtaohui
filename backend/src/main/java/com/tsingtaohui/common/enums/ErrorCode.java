@@ -14,6 +14,10 @@ public enum ErrorCode {
     DRONE_UNAVAILABLE("DRONE_001", "无可用无人机", "No available drones"),
     WAREHOUSE_SCAN_MISMATCH("WAREHOUSE_001", "扫码结果不匹配", "Scan result mismatch"),
 
+    SHIP_NOT_FOUND("SHIP_001", "船舶不存在", "Ship not found"),
+    RULE_NOT_FOUND("RULE_001", "规则不存在", "Rule not found"),
+    RULE_STATUS_INVALID("RULE_002", "无效的规则状态", "Invalid rule status"),
+
     VALIDATION_ERROR("VALIDATION_ERROR", "参数校验失败", "Validation failed"),
     INTERNAL_ERROR("INTERNAL_ERROR", "服务器内部错误", "Internal server error");
 

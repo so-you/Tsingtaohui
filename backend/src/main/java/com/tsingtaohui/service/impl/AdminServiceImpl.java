@@ -10,6 +10,7 @@ import com.tsingtaohui.mapper.ProductMapper;
 import com.tsingtaohui.mapper.UserMapper;
 import com.tsingtaohui.mapper.UserProfileMapper;
 import com.tsingtaohui.mapper.UserShipMapper;
+import com.tsingtaohui.model.dto.UpdateProductDTO;
 import com.tsingtaohui.model.entity.InventoryEntity;
 import com.tsingtaohui.model.entity.ProductEntity;
 import com.tsingtaohui.model.entity.UserEntity;
@@ -165,6 +166,41 @@ public class AdminServiceImpl implements IAdminService {
     }
 
     @Override
+    public AdminProductVO updateProduct(Long productId, UpdateProductDTO dto) {
+        ProductEntity product = productMapper.selectById(productId);
+        if (product == null) {
+            throw new BusinessException(ErrorCode.VALIDATION_ERROR.getCode(), "Product not found");
+        }
+        if (StringUtils.hasText(dto.getStatus()) && !PRODUCT_STATUSES.contains(dto.getStatus())) {
+            throw new BusinessException(ErrorCode.VALIDATION_ERROR.getCode(), "Invalid product status");
+        }
+
+        if (dto.getCategoryId() != null) {
+            product.setCategoryId(dto.getCategoryId());
+        }
+        product.setNameZh(dto.getNameZh());
+        product.setNameEn(dto.getNameEn());
+        product.setDescriptionZh(dto.getDescriptionZh());
+        product.setDescriptionEn(dto.getDescriptionEn());
+        product.setMainImageUrl(dto.getMainImageUrl());
+        product.setSpecification(dto.getSpecification());
+        product.setPrice(dto.getPrice());
+        product.setWeightKg(dto.getWeightKg());
+        product.setVolumeM3(dto.getVolumeM3());
+        product.setSource(dto.getSource());
+        if (dto.getDroneDeliverable() != null) {
+            product.setDroneDeliverable(Boolean.TRUE.equals(dto.getDroneDeliverable()) ? 1 : 0);
+        }
+        if (StringUtils.hasText(dto.getStatus())) {
+            product.setStatus(dto.getStatus());
+        }
+
+        productMapper.updateById(product);
+        Map<String, InventorySummary> inventory = loadInventorySummary(List.of(product));
+        return toAdminProductVO(product, inventory.get(product.getSkuCode()));
+    }
+
+    @Override
     public PageResult<AdminInventoryVO> getInventory(String keyword, Long warehouseId, int page, int pageSize) {
         LambdaQueryWrapper<InventoryEntity> wrapper = new LambdaQueryWrapper<>();
         if (StringUtils.hasText(keyword)) {
@@ -281,6 +317,10 @@ public class AdminServiceImpl implements IAdminService {
         vo.setCategoryId(product.getCategoryId());
         vo.setNameZh(product.getNameZh());
         vo.setNameEn(product.getNameEn());
+        vo.setDescriptionZh(product.getDescriptionZh());
+        vo.setDescriptionEn(product.getDescriptionEn());
+        vo.setMainImageUrl(product.getMainImageUrl());
+        vo.setSpecification(product.getSpecification());
         vo.setPrice(product.getPrice() != null ? product.getPrice().toPlainString() : "0");
         vo.setWeightKg(product.getWeightKg() != null ? product.getWeightKg().toPlainString() : null);
         vo.setVolumeM3(product.getVolumeM3() != null ? product.getVolumeM3().toPlainString() : null);

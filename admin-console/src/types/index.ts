@@ -55,6 +55,10 @@ export interface IProductItem {
   categoryId: number
   nameZh: string
   nameEn: string
+  descriptionZh?: string
+  descriptionEn?: string
+  mainImageUrl?: string
+  specification?: string
   price: string
   weightKg?: string
   volumeM3?: string
@@ -79,4 +83,56 @@ export interface IInventoryItem {
   lockedQty: number
   outboundQty: number
   updatedAt?: string
+}
+
+export type TOrderStatus =
+  | 'PENDING_CONFIRM'
+  | 'CONFIRMED'
+  | 'WAREHOUSE_PROCESSING'
+  | 'PENDING_OUTBOUND'
+  | 'OUTBOUND'
+  | 'PENDING_LOADING'
+  | 'IN_DELIVERY'
+  | 'PENDING_RECEIPT'
+  | 'COMPLETED'
+  | 'CANCELLED'
+  | 'EXCEPTION'
+
+export type TTradeMode = 'AUTO_TRADE' | 'MATCHING_ORDER'
+
+export interface IOrderItem {
+  id?: number
+  productId: number
+  skuCode: string
+  productNameZh: string
+  productNameEn?: string
+  unitPrice: string
+  quantity: number
+  unitWeightKg: string
+  unitVolumeM3: string
+  lineAmount: string
+}
+
+export interface IOrder {
+  id: number
+  orderNo: string
+  userId: number
+  totalPrice: string
+  totalWeightKg: string
+  totalVolumeM3: string
+  tradeMode: TTradeMode
+  orderStatus: TOrderStatus
+  consigneeName: string
+  cabinNo: string
+  contactInfo?: string
+  shipNo: string
+  shipName?: string
+  shipNationality: string
+  imo?: string
+  mmsi?: string
+  shippingAgentName?: string
+  remark?: string
+  createdAt?: string
+  completedAt?: string
+  items?: IOrderItem[]
 }

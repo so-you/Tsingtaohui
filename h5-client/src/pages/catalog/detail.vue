@@ -50,9 +50,11 @@ import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
 import { getProductDetail } from '../../api/catalog'
+import { useCartStore } from '../../stores/cart'
 import type { IProduct } from '../../types'
 
 const { locale, t } = useI18n()
+const cartStore = useCartStore()
 const loading = ref(false)
 const product = ref<IProduct | null>(null)
 
@@ -87,11 +89,15 @@ async function loadProduct(productId: number) {
 }
 
 function addToCart() {
+  if (!product.value) return
+  cartStore.addProduct(product.value, 1)
   uni.showToast({ title: t('product.added'), icon: 'success' })
 }
 
 function buyNow() {
-  uni.showToast({ title: t('product.buyNowComing'), icon: 'none' })
+  if (!product.value) return
+  cartStore.addProduct(product.value, 1)
+  uni.navigateTo({ url: '/pages/cart/index' })
 }
 </script>
 

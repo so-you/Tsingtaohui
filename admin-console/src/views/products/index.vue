@@ -2,7 +2,7 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
-import { getInventory, getProducts, updateProductStatus } from '@/api/product'
+import { getInventory, getProducts, updateProduct, updateProductStatus } from '@/api/product'
 import type { IInventoryItem, IProductItem } from '@/types'
 
 const { t, locale } = useI18n()
@@ -14,6 +14,9 @@ const productRows = ref<IProductItem[]>([])
 const inventoryRows = ref<IInventoryItem[]>([])
 const productTotal = ref(0)
 const inventoryTotal = ref(0)
+const productDialogVisible = ref(false)
+const productSaving = ref(false)
+const editingProductId = ref<number | null>(null)
 
 const productQuery = reactive({
   keyword: '',
@@ -30,6 +33,21 @@ const inventoryQuery = reactive({
 })
 
 const productStatusOptions = ['ON_SALE', 'OFF_SALE']
+const productForm = reactive({
+  categoryId: undefined as number | undefined,
+  nameZh: '',
+  nameEn: '',
+  descriptionZh: '',
+  descriptionEn: '',
+  mainImageUrl: '',
+  specification: '',
+  price: '',
+  weightKg: '',
+  volumeM3: '',
+  source: '',
+  droneDeliverable: true,
+  status: 'ON_SALE'
+})
 
 const currentProductRows = computed(() => productRows.value)
 const currentInventoryRows = computed(() => inventoryRows.value)
@@ -111,6 +129,51 @@ async function handleProductStatus(row: IProductItem, status: string) {
   loadProducts()
 }
 
+function openProductEdit(row: IProductItem) {
+  editingProductId.value = row.id
+  productForm.categoryId = row.categoryId
+  productForm.nameZh = row.nameZh
+  productForm.nameEn = row.nameEn
+  productForm.descriptionZh = row.descriptionZh || ''
+  productForm.descriptionEn = row.descriptionEn || ''
+  productForm.mainImageUrl = row.mainImageUrl || ''
+  productForm.specification = row.specification || ''
+  productForm.price = row.price
+  productForm.weightKg = row.weightKg || ''
+  productForm.volumeM3 = row.volumeM3 || ''
+  productForm.source = row.source || ''
+  productForm.droneDeliverable = row.droneDeliverable
+  productForm.status = row.status
+  productDialogVisible.value = true
+}
+
+async function saveProduct() {
+  if (!editingProductId.value) return
+  productSaving.value = true
+  try {
+    await updateProduct(editingProductId.value, {
+      categoryId: productForm.categoryId,
+      nameZh: productForm.nameZh,
+      nameEn: productForm.nameEn,
+      descriptionZh: productForm.descriptionZh,
+      descriptionEn: productForm.descriptionEn,
+      mainImageUrl: productForm.mainImageUrl,
+      specification: productForm.specification,
+      price: productForm.price,
+      weightKg: productForm.weightKg,
+      volumeM3: productForm.volumeM3,
+      source: productForm.source,
+      droneDeliverable: productForm.droneDeliverable,
+      status: productForm.status
+    })
+    ElMessage.success(t('common.success'))
+    productDialogVisible.value = false
+    loadProducts()
+  } finally {
+    productSaving.value = false
+  }
+}
+
 function productStatusTag(status?: string) {
   return status === 'ON_SALE' ? 'success' : 'info'
 }
@@ -179,8 +242,11 @@ function productStatusTag(status?: string) {
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column :label="t('user.actions')" fixed="right" width="140">
+            <el-table-column :label="t('user.actions')" fixed="right" width="210">
               <template #default="{ row }">
+                <el-button type="primary" link size="small" @click="openProductEdit(row)">
+                  {{ t('common.edit') }}
+                </el-button>
                 <el-button
                   v-if="row.status !== 'ON_SALE'"
                   type="success"
@@ -271,6 +337,93 @@ function productStatusTag(status?: string) {
         </el-card>
       </el-tab-pane>
     </el-tabs>
+
+    <el-dialog v-model="productDialogVisible" :title="t('product.editTitle')" width="720px">
+      <el-form :model="productForm" label-width="130px">
+        <el-row :gutter="16">
+          <el-col :span="12">
+            <el-form-item :label="t('product.categoryId')">
+              <el-input-number v-model="productForm.categoryId" :min="1" controls-position="right" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="t('product.status')">
+              <el-select v-model="productForm.status" style="width: 100%">
+                <el-option
+                  v-for="item in productStatusOptions"
+                  :key="item"
+                  :label="t(`product.${item.toLowerCase()}`)"
+                  :value="item"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="16">
+          <el-col :span="12">
+            <el-form-item :label="t('product.nameZh')">
+              <el-input v-model="productForm.nameZh" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="t('product.nameEn')">
+              <el-input v-model="productForm.nameEn" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="16">
+          <el-col :span="8">
+            <el-form-item :label="t('product.price')">
+              <el-input v-model="productForm.price" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="t('product.weight')">
+              <el-input v-model="productForm.weightKg" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="t('product.volume')">
+              <el-input v-model="productForm.volumeM3" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="16">
+          <el-col :span="12">
+            <el-form-item :label="t('product.specification')">
+              <el-input v-model="productForm.specification" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="t('product.source')">
+              <el-input v-model="productForm.source" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item :label="t('product.mainImageUrl')">
+          <el-input v-model="productForm.mainImageUrl" />
+        </el-form-item>
+        <el-row :gutter="16">
+          <el-col :span="12">
+            <el-form-item :label="t('product.descriptionZh')">
+              <el-input v-model="productForm.descriptionZh" type="textarea" :rows="4" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="t('product.descriptionEn')">
+              <el-input v-model="productForm.descriptionEn" type="textarea" :rows="4" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item :label="t('product.droneDeliverable')">
+          <el-switch v-model="productForm.droneDeliverable" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="productDialogVisible = false">{{ t('common.cancel') }}</el-button>
+        <el-button type="primary" :loading="productSaving" @click="saveProduct">{{ t('common.save') }}</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 

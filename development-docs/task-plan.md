@@ -12,6 +12,16 @@
 | 0-2 | 数据库建表 Flyway 迁移脚本（15 张表） | ✅ 完成 | dev/init-project | ba95e78 |
 | 0-3 | Redis + JWT 鉴权配置 | ✅ 完成 | dev/init-project | ba95e78 |
 | 0-4 | 后端多语言错误码支持 | ✅ 完成 | dev/init-project | ba95e78 |
+| 0-fix | Codex review 修复（Critical/High） | ✅ 完成 | dev/phase0-fix-review | 42b16db |
+
+### Codex Review 修复摘要
+- Critical: access/refresh token 类型区分
+- Critical: JWT secret 启动校验
+- High: JWT 授予 ROLE_xxx 权限
+- High: 启用 CORS
+- High: invalid token 返回 401
+- High: DB 凭证改用环境变量
+- Medium: business exception 返回 400
 
 ## 阶段 1：核心用户 + 商品模块
 

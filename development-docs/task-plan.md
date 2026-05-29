@@ -80,6 +80,23 @@
 - 新增 2 个 Flyway 迁移：t_rule_config 建表 + 种子数据（4 条默认规则）
 - Admin 侧边栏新增 4 个菜单项，中英文 i18n 完整覆盖
 
+## 阶段 5：仓库端 H5 整体重写
+
+| # | 任务 | 状态 | 分支 | 提交 |
+|---|------|------|------|------|
+| 5-1 | 设计系统（SCSS 设计令牌 + 仓库端色彩主题 + 公共样式） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
+| 5-2 | 通用组件（ScanInput / StatusTag / TaskCard / EmptyState） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
+| 5-3 | Mock 数据模块（dashboard / picking / review / outbound / inventory） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
+| 5-4 | 登录页（WH-001） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
+| 5-5 | 工作台重写（WH-002）+ 底部导航 | ⏳ 待开发 | feat/warehouse-client-optimization | — |
+| 5-6 | 拣货页重写（WH-003） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
+| 5-7 | 复核打包页重写（WH-004） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
+| 5-8 | 出库页重写（WH-005） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
+| 5-9 | 库存查询页重写（WH-007） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
+| 5-10 | 扫码设备兼容（WH-006）+ 中英文补全（WH-008） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
+
+设计文档：`docs/superpowers/specs/2026-05-29-warehouse-client-redesign.md`
+
 ## 每阶段执行流程
 
 1. 从 main 新建分支 `dev/phaseN-xxx`

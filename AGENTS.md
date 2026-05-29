@@ -59,11 +59,15 @@ Tsingtaohui/
 │
 ├── warehouse-client/           # Uni-app 仓库端
 │   ├── src/
-│   │   ├── pages/
-│   │   ├── components/
-│   │   ├── stores/
-│   │   ├── api/
-│   │   └── utils/
+│   │   ├── pages/              # 页面（login / dashboard / picking / review / outbound / inventory）
+│   │   ├── components/         # 通用组件（ScanInput / StatusTag / TaskCard / EmptyState）
+│   │   ├── styles/             # 设计令牌 + 仓库端色彩主题 + 公共样式
+│   │   ├── mock/               # Mock 数据模块（开发环境自动加载）
+│   │   ├── stores/             # Pinia stores
+│   │   ├── api/                # API 请求
+│   │   ├── i18n/               # 国际化资源
+│   │   ├── utils/              # 工具函数（含 scanner.ts 扫码设备处理）
+│   │   └── types/              # TypeScript 类型定义
 │   ├── pages.json
 │   └── manifest.json
 │
@@ -98,8 +102,10 @@ Tsingtaohui/
 │   └── Dockerfile
 │
 ├── development-docs/           # 开发文档
-├── docs/superpowers/specs/     # 产品规格说明书
-│   └── 2026-05-22-bonded-warehouse-ship-drone-delivery-product-spec.md
+├── docs/superpowers/specs/     # 产品规格说明书与设计文档
+│   ├── 2026-05-22-bonded-warehouse-ship-drone-delivery-product-spec.md
+│   └── 2026-05-29-warehouse-client-redesign.md
+├── docs/superpowers/plans/     # 实现计划
 │
 ├── CLAUDE.md                   # 本文件 — AI 编码指导
 ├── AGENTS.md                   # Codex 编码指导
@@ -178,9 +184,12 @@ cd backend
 #### 2. 仓库端（保税仓操作端）
 
 - **框架**: Uni-app (Vue3)，与 H5 客户端同技术栈
+- **UI 风格**: 与 h5-client 共享设计令牌（间距、圆角、阴影、字体），仓库端使用独立蓝色主题（主色 #2563EB）
 - **设备适配**: 必须支持 PDA 手持终端、蓝牙指环扫描器、物理条码枪（键盘模拟输入）
-- **核心功能**: 拣货、验货、打包、出库
+- **核心功能**: 登录、工作台、拣货、复核打包、出库交接、库存查询
+- **底部导航**: 工作台 (Dashboard) / 拣货 (Picking) / 复核 (Review) / 出库 (Outbound)
 - **交互设计**: 以扫码驱动工作流，最小化手动输入
+- **Mock 数据**: 开发环境通过 `VITE_USE_MOCK=true` 启用内置 mock 数据
 
 #### 3. 管理端 (Admin Console)
 

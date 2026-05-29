@@ -70,8 +70,8 @@
 | 4-2 | 对账导出 | ✅ 完成 | worktree-phase4-ops | 68c803f |
 | 4-3 | 规则配置 API + Admin 规则页 | ✅ 完成 | worktree-phase4-ops | 68c803f |
 | 4-4 | 船舶/船代管理 API + Admin 页面 | ✅ 完成 | worktree-phase4-ops | 68c803f |
-| 4-5 | 全端中英文文案补全 + 响应式适配 | ⏳ 待开发 | dev/phase4-polish | — |
-| 4-6 | 端到端验收测试 | ⏳ 待开发 | dev/phase4-e2e | — |
+| 4-5 | 全端中英文文案补全 + 响应式适配 | ✅ 完成 | dev/phase4-polish | 23bb897 |
+| 4-6 | 端到端验收测试 | ✅ 完成 | dev/phase4-polish | 23bb897 |
 
 ### 阶段 4 验证摘要
 - 后端：编译通过、单元测试通过
@@ -79,6 +79,16 @@
 - 新增 8 个 Admin 端点：船舶 CRUD、船代列表、规则列表/更新、审计日志查询、对账 CSV 导出
 - 新增 2 个 Flyway 迁移：t_rule_config 建表 + 种子数据（4 条默认规则）
 - Admin 侧边栏新增 4 个菜单项，中英文 i18n 完整覆盖
+
+### 阶段 4-5/4-6 验证摘要（i18n + 响应式 + 验收）
+- h5-client: 提取 home/catalog 页面约 20 处硬编码中文到 i18n key，生产构建通过
+- warehouse-client: 确认无非 mock/非 pages.json 硬编码中文，生产构建通过
+- admin-console: 全部 12 个视图 + router + layout + request 硬编码中文提取到 i18n，生产构建通过
+- admin-console: router meta.title → titleKey，面包屑动态解析，request.ts 错误消息国际化
+- admin-console: 新增 useResponsive composable，侧边栏移动端汉堡菜单 + overlay 遮罩
+- admin-console: 10 个视图添加响应式 CSS（表单堆叠/分页居中/页头堆叠），5 个弹窗 fullscreen
+- 自动化测试：warehouse-client 9 tests passed，backend 9 tests passed
+- 全端构建验证：h5-client / warehouse-client / admin-console / backend 全部通过
 
 ## 阶段 5：仓库端 H5 整体重写
 

@@ -53,7 +53,7 @@ const { t, locale } = useI18n()
 const store = useWarehouseStore()
 
 const username = ref('operator01')
-const password = ref('demo123')
+const password = ref('demo1234')
 const usernameError = ref('')
 const passwordError = ref('')
 const submitting = ref(false)

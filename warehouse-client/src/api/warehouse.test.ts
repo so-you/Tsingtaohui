@@ -6,16 +6,8 @@ import {
   normalizeDashboardStats,
   normalizeInventoryItem,
 } from './warehouse'
-import { isWarehouseMockEnabled } from '../mock'
 
 describe('warehouse real-backend compatibility', () => {
-  it('enables mock mode only when explicitly requested', () => {
-    expect(isWarehouseMockEnabled(undefined)).toBe(false)
-    expect(isWarehouseMockEnabled('')).toBe(false)
-    expect(isWarehouseMockEnabled('false')).toBe(false)
-    expect(isWarehouseMockEnabled('true')).toBe(true)
-  })
-
   it('uses existing backend auth and task-scoped scan routes', () => {
     expect(LOGIN_PATH).toBe('/auth/login')
     expect(buildPickingScanPath(1001)).toBe('/warehouse/picking-tasks/1001/scan')

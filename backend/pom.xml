@@ -18,7 +18,7 @@
     <description>Qingdao Port Drone Smart Logistics Platform - Backend Service</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <jjwt.version>0.12.6</jjwt.version>
         <flyway.version>10.21.0</flyway.version>

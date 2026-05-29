@@ -4,7 +4,7 @@ export default {
     subtitle: 'Bonded warehouse scanning console',
     usernamePlaceholder: 'Warehouse account',
     passwordPlaceholder: 'Password',
-    demoHint: 'Demo mode: any account and password can sign in',
+    demoHint: 'Login: operator01 / demo1234',
     usernameRequired: 'Enter warehouse account',
     passwordRequired: 'Enter password',
     submit: 'Sign In',

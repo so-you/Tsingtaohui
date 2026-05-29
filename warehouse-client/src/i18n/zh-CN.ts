@@ -4,7 +4,7 @@ export default {
     subtitle: '保税仓扫码作业工作台',
     usernamePlaceholder: '请输入仓库账号',
     passwordPlaceholder: '请输入密码',
-    demoHint: '示例模式：任意账号和密码均可登录',
+    demoHint: '登录账号: operator01  密码: demo1234',
     usernameRequired: '请输入仓库账号',
     passwordRequired: '请输入密码',
     submit: '登录',

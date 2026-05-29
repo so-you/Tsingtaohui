@@ -12,13 +12,13 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
-    @Value("${tsingtaohui.cors.allowed-origins:http://localhost:5173,http://localhost:3000}")
+    @Value("${tsingtaohui.cors.allowed-origins:http://localhost:*}")
     private String allowedOrigins;
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(allowedOrigins.split(",")));
+        config.setAllowedOriginPatterns(List.of(allowedOrigins.split(",")));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));

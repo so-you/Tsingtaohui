@@ -91,20 +91,21 @@ async function handleStatus(row: IOrder, status: TOrderStatus) {
 }
 
 function statusConfig(status: TOrderStatus) {
-  const map: Record<string, { type: string, label: string, icon: any, color: string }> = {
-    'PENDING_CONFIRM': { type: 'warning', label: '待确认', icon: Timer, color: '#faad14' },
-    'CONFIRMED': { type: 'info', label: '已确认', icon: CircleCheck, color: '#1677ff' },
-    'WAREHOUSE_PROCESSING': { type: 'primary', label: '仓库处理', icon: Timer, color: '#1677ff' },
-    'PENDING_OUTBOUND': { type: 'warning', label: '待出库', icon: Timer, color: '#faad14' },
-    'OUTBOUND': { type: 'info', label: '已出库', icon: CircleCheck, color: '#52c41a' },
-    'PENDING_LOADING': { type: 'warning', label: '待装载', icon: Timer, color: '#faad14' },
-    'IN_DELIVERY': { type: 'primary', label: '配送中', icon: Van, color: '#1677ff' },
-    'PENDING_RECEIPT': { type: 'warning', label: '待签收', icon: Timer, color: '#faad14' },
-    'COMPLETED': { type: 'success', label: '已完成', icon: CircleCheck, color: '#52c41a' },
-    'CANCELLED': { type: 'info', label: '已取消', icon: CircleCheck, color: '#999' },
-    'EXCEPTION': { type: 'danger', label: '异常', icon: Warning, color: '#ff4d4f' }
+  const map: Record<string, { type: string, icon: any, color: string }> = {
+    'PENDING_CONFIRM': { type: 'warning', icon: Timer, color: '#faad14' },
+    'CONFIRMED': { type: 'info', icon: CircleCheck, color: '#1677ff' },
+    'WAREHOUSE_PROCESSING': { type: 'primary', icon: Timer, color: '#1677ff' },
+    'PENDING_OUTBOUND': { type: 'warning', icon: Timer, color: '#faad14' },
+    'OUTBOUND': { type: 'info', icon: CircleCheck, color: '#52c41a' },
+    'PENDING_LOADING': { type: 'warning', icon: Timer, color: '#faad14' },
+    'IN_DELIVERY': { type: 'primary', icon: Van, color: '#1677ff' },
+    'PENDING_RECEIPT': { type: 'warning', icon: Timer, color: '#faad14' },
+    'COMPLETED': { type: 'success', icon: CircleCheck, color: '#52c41a' },
+    'CANCELLED': { type: 'info', icon: CircleCheck, color: '#999' },
+    'EXCEPTION': { type: 'danger', icon: Warning, color: '#ff4d4f' }
   }
-  return map[status] || { type: 'info', label: status, icon: CircleCheck, color: '#999' }
+  const entry = map[status] || { type: 'info', icon: CircleCheck, color: '#999' }
+  return { ...entry, label: t(`order.statuses.${status}`) || status }
 }
 
 function tradeModeTag(mode: TTradeMode) {
@@ -122,7 +123,7 @@ function terminal(status: TOrderStatus) {
     <div class="page-header">
       <div>
         <h2 class="page-title">{{ t('menu.orders') }}</h2>
-        <p class="page-subtitle">管理订单状态、处理匹配订单和异常订单</p>
+        <p class="page-subtitle">{{ t('order.pageSubtitle') }}</p>
       </div>
     </div>
 
@@ -326,5 +327,26 @@ function terminal(status: TOrderStatus) {
   display: flex;
   justify-content: flex-end;
   margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .search-card :deep(.el-form--inline .el-form-item) {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  .search-card :deep(.el-form--inline .el-form-item .el-input),
+  .search-card :deep(.el-form--inline .el-form-item .el-select) {
+    width: 100% !important;
+  }
+  .pagination-row {
+    justify-content: center;
+  }
 }
 </style>

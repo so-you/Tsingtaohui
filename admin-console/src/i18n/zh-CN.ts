@@ -5,7 +5,19 @@ export default {
     password: '密码',
     loginBtn: '登录',
     usernameRequired: '请输入用户名',
-    passwordRequired: '请输入密码'
+    passwordRequired: '请输入密码',
+    brandName: '青岛汇',
+    brandTagline: '保税仓无人机配送管理平台',
+    subtitle: '欢迎回来，请登录您的账号',
+    copyright: '© 2026 青岛汇 Tsingtaohui. All rights reserved.',
+    demoAccount: '演示账号: admin2 / admin123',
+    feature1Title: '船舶配送管理',
+    feature1Desc: '实时追踪订单配送状态',
+    feature2Title: '无人机调度',
+    feature2Desc: '智能匹配最优配送方案',
+    feature3Title: '海关数据同步',
+    feature3Desc: '自动化合规数据上报',
+    tokenExpired: '登录已过期，请重新登录',
   },
   menu: {
     dashboard: '运营仪表盘',
@@ -30,6 +42,7 @@ export default {
     export: '导出',
     success: '操作成功',
     error: '操作失败',
+    networkError: '网络请求失败',
     languageZh: '中文',
     languageEn: 'English',
     logout: '退出登录',
@@ -55,7 +68,9 @@ export default {
     actions: '操作',
     enableAction: '启用',
     disableAction: '停用',
-    lockAction: '锁定'
+    lockAction: '锁定',
+    pageSubtitle: '管理平台用户账号和权限',
+    userColumn: '用户',
   },
   product: {
     productsTab: '商品列表',
@@ -80,7 +95,8 @@ export default {
     on_sale: '上架',
     off_sale: '下架',
     onSaleAction: '上架',
-    offSaleAction: '下架'
+    offSaleAction: '下架',
+    pageSubtitle: '管理商品信息、库存和上架状态',
   },
   order: {
     ordersTab: '订单列表',
@@ -98,6 +114,7 @@ export default {
     confirmAction: '确认',
     exceptionAction: '异常',
     cancelAction: '取消',
+    pageSubtitle: '管理订单状态、处理匹配订单和异常订单',
     tradeModes: {
       AUTO_TRADE: '自动交易',
       MATCHING_ORDER: '匹配订单'
@@ -129,7 +146,32 @@ export default {
     totalUsers: '总用户数',
     totalOrders: '总订单数',
     activeDeliveries: '配送中',
-    pendingMatches: '待撮合'
+    pendingMatches: '待撮合',
+    subtitle: '实时监控平台运营数据',
+    refresh: '刷新数据',
+    lastWeek: '较上周',
+    recentOrders: '最近订单',
+    viewAll: '查看全部',
+    orderNo: '订单号',
+    orderStatus: '状态',
+    amount: '金额',
+    shipNo: '船号',
+    consignee: '收货人',
+    orderTime: '下单时间',
+    quickActions: '快捷操作',
+    pendingItems: '待处理事项',
+    actionOrdersTitle: '订单管理',
+    actionOrdersDesc: '处理待确认和异常订单',
+    actionUsersTitle: '用户管理',
+    actionUsersDesc: '查看和管理用户信息',
+    actionProductsTitle: '商品管理',
+    actionProductsDesc: '管理商品和库存',
+    alertPendingOrders: '{count} 个订单待确认',
+    alertPendingOrdersTime: '30 分钟内',
+    alertDeliveryException: '{count} 个配送异常',
+    alertDeliveryExceptionDesc: '无人机故障',
+    alertNewUsers: '{count} 个新用户注册',
+    alertNewUsersTime: '今日',
   },
   drone: {
     title: '无人机管理',
@@ -142,6 +184,25 @@ export default {
     deliverableCategories: '可配送品类',
     status: '状态',
     addDrone: '添加无人机',
+    pageSubtitle: '管理无人机设备信息、状态监控与调度记录',
+    keywordLabel: '关键词',
+    keywordPlaceholder: '编码 / 型号 / 航班号',
+    droneCodeLabel: '无人机编码',
+    droneCodePlaceholder: '如 DRONE-001',
+    modelPlaceholder: '如 DJI M600',
+    flightNoPlaceholder: '如 FL-20260001',
+    categoryPlaceholder: '输入品类名称',
+    addCategory: '添加',
+    addSuccess: '添加成功',
+    validation: {
+      droneCode: '请输入无人机编码',
+      model: '请输入型号',
+      flightNo: '请输入航班号',
+      maxPayload: '请输入最大载重',
+      maxVolume: '请输入最大体积',
+      maxRange: '请输入最大航程',
+      status: '请选择状态',
+    },
     statuses: {
       AVAILABLE: '可用',
       DISPATCHED: '已调度',
@@ -158,6 +219,13 @@ export default {
     status: '状态',
     retryCount: '重试次数',
     retryAction: '重试',
+    pageSubtitle: '监控海关数据同步状态、处理失败记录和重试操作',
+    keywordLabel: '关键词',
+    keywordPlaceholder: '同步编号 / 订单号',
+    retryConfirmTitle: '重试确认',
+    retryConfirmMessage: '确认重试同步记录 {syncNo}？',
+    retryConfirmBtn: '确认重试',
+    retryTriggered: '已触发重试',
     levels: {
       RED: '红牌',
       YELLOW: '黄牌'
@@ -189,7 +257,9 @@ export default {
     agentNameEn: '英文名称',
     contactName: '联系人',
     contactPhone: '联系电话',
-    keywordPlaceholder: '船号/船名/IMO'
+    keywordPlaceholder: '船号/船名/IMO',
+    shipsSubtitle: '管理船舶主数据信息',
+    agentsSubtitle: '查看船舶代理人列表',
   },
   rule: {
     title: '规则配置',
@@ -199,7 +269,9 @@ export default {
     description: '说明',
     status: '状态',
     editTitle: '编辑规则',
-    statuses: { ENABLED: '启用', DISABLED: '禁用' }
+    statuses: { ENABLED: '启用', DISABLED: '禁用' },
+    pageSubtitle: '管理平台运营规则和配置参数',
+    searchPlaceholder: '规则键/名称',
   },
   audit: {
     title: '审计日志',
@@ -214,6 +286,7 @@ export default {
     createdAt: '操作时间',
     dateRange: '时间范围',
     detailTitle: '审计详情',
+    pageSubtitle: '查看系统操作审计日志，追溯变更记录',
     modules: {
       USER: '用户',
       PRODUCT: '商品',
@@ -232,5 +305,20 @@ export default {
     endDate: '结束日期',
     exportBtn: '导出 CSV',
     hint: '选择日期范围后点击导出，将下载包含已完成订单的对账数据'
-  }
+  },
+  route: {
+    dashboard: '运营仪表盘',
+    users: '用户管理',
+    products: '商品管理',
+    orders: '订单管理',
+    drones: '无人机管理',
+    customsSync: '海关同步',
+    ships: '船舶管理',
+    rules: '规则配置',
+    auditLogs: '审计日志',
+    reconciliation: '对账导出',
+  },
+  layout: {
+    brandName: '青岛汇',
+  },
 }

@@ -85,20 +85,21 @@ async function loadDashboardData() {
 }
 
 function statusTag(status: string) {
-  const map: Record<string, { type: string, label: string, icon: any }> = {
-    'PENDING_CONFIRM': { type: 'warning', label: '待确认', icon: Timer },
-    'CONFIRMED': { type: 'info', label: '已确认', icon: CircleCheck },
-    'WAREHOUSE_PROCESSING': { type: 'primary', label: '仓库处理', icon: Timer },
-    'PENDING_OUTBOUND': { type: 'warning', label: '待出库', icon: Timer },
-    'OUTBOUND': { type: 'info', label: '已出库', icon: CircleCheck },
-    'PENDING_LOADING': { type: 'warning', label: '待装载', icon: Timer },
-    'IN_DELIVERY': { type: 'primary', label: '配送中', icon: Van },
-    'PENDING_RECEIPT': { type: 'warning', label: '待签收', icon: Timer },
-    'COMPLETED': { type: 'success', label: '已完成', icon: CircleCheck },
-    'CANCELLED': { type: 'info', label: '已取消', icon: CircleCheck },
-    'EXCEPTION': { type: 'danger', label: '异常', icon: Warning }
+  const map: Record<string, { type: string, icon: any }> = {
+    'PENDING_CONFIRM': { type: 'warning', icon: Timer },
+    'CONFIRMED': { type: 'info', icon: CircleCheck },
+    'WAREHOUSE_PROCESSING': { type: 'primary', icon: Timer },
+    'PENDING_OUTBOUND': { type: 'warning', icon: Timer },
+    'OUTBOUND': { type: 'info', icon: CircleCheck },
+    'PENDING_LOADING': { type: 'warning', icon: Timer },
+    'IN_DELIVERY': { type: 'primary', icon: Van },
+    'PENDING_RECEIPT': { type: 'warning', icon: Timer },
+    'COMPLETED': { type: 'success', icon: CircleCheck },
+    'CANCELLED': { type: 'info', icon: CircleCheck },
+    'EXCEPTION': { type: 'danger', icon: Warning }
   }
-  return map[status] || { type: 'info', label: status, icon: CircleCheck }
+  const entry = map[status] || { type: 'info', icon: CircleCheck }
+  return { ...entry, label: t(`order.statuses.${status}`) || status }
 }
 
 function goToOrders() {
@@ -116,12 +117,12 @@ function goToUsers() {
     <div class="page-header">
       <div>
         <h2 class="page-title">{{ t('menu.dashboard') }}</h2>
-        <p class="page-subtitle">实时监控平台运营数据</p>
+        <p class="page-subtitle">{{ t('dashboard.subtitle') }}</p>
       </div>
       <div class="header-actions">
         <el-button type="primary" @click="loadDashboardData" :loading="loading">
           <el-icon><Refresh /></el-icon>
-          刷新数据
+          {{ t('dashboard.refresh') }}
         </el-button>
       </div>
     </div>
@@ -153,7 +154,7 @@ function goToUsers() {
             <span class="stat-trend" :class="{ up: stat.trend.startsWith('+') }">
               {{ stat.trend }}
             </span>
-            <span class="stat-period">较上周</span>
+            <span class="stat-period">{{ t('dashboard.lastWeek') }}</span>
           </div>
         </div>
       </el-col>
@@ -168,22 +169,22 @@ function goToUsers() {
             <div class="panel-header">
               <div class="panel-title">
                 <el-icon><List /></el-icon>
-                <span>最近订单</span>
+                <span>{{ t('dashboard.recentOrders') }}</span>
               </div>
               <el-button type="primary" link @click="goToOrders">
-                查看全部
+                {{ t('dashboard.viewAll') }}
                 <el-icon><ArrowRight /></el-icon>
               </el-button>
             </div>
           </template>
 
           <el-table :data="recentOrders" style="width: 100%" size="small">
-            <el-table-column prop="orderNo" label="订单号" min-width="160">
+            <el-table-column prop="orderNo" :label="t('dashboard.orderNo')" min-width="160">
               <template #default="{ row }">
                 <span class="order-no">{{ row.orderNo }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="状态" width="100">
+            <el-table-column :label="t('dashboard.orderStatus')" width="100">
               <template #default="{ row }">
                 <el-tag :type="statusTag(row.orderStatus).type" size="small" effect="light">
                   <el-icon :size="12">
@@ -193,14 +194,14 @@ function goToUsers() {
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="totalPrice" label="金额" width="100">
+            <el-table-column prop="totalPrice" :label="t('dashboard.amount')" width="100">
               <template #default="{ row }">
                 <span class="price">¥{{ row.totalPrice }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="shipNo" label="船号" width="100" />
-            <el-table-column prop="consigneeName" label="收货人" width="90" />
-            <el-table-column prop="createdAt" label="下单时间" min-width="150" />
+            <el-table-column prop="shipNo" :label="t('dashboard.shipNo')" width="100" />
+            <el-table-column prop="consigneeName" :label="t('dashboard.consignee')" width="90" />
+            <el-table-column prop="createdAt" :label="t('dashboard.orderTime')" min-width="150" />
           </el-table>
         </el-card>
       </el-col>
@@ -212,7 +213,7 @@ function goToUsers() {
             <div class="panel-header">
               <div class="panel-title">
                 <el-icon><TrendCharts /></el-icon>
-                <span>快捷操作</span>
+                <span>{{ t('dashboard.quickActions') }}</span>
               </div>
             </div>
           </template>
@@ -223,8 +224,8 @@ function goToUsers() {
                 <el-icon><List /></el-icon>
               </div>
               <div class="action-info">
-                <div class="action-title">订单管理</div>
-                <div class="action-desc">处理待确认和异常订单</div>
+                <div class="action-title">{{ t('dashboard.actionOrdersTitle') }}</div>
+                <div class="action-desc">{{ t('dashboard.actionOrdersDesc') }}</div>
               </div>
               <el-icon><ArrowRight /></el-icon>
             </div>
@@ -234,8 +235,8 @@ function goToUsers() {
                 <el-icon><User /></el-icon>
               </div>
               <div class="action-info">
-                <div class="action-title">用户管理</div>
-                <div class="action-desc">查看和管理用户信息</div>
+                <div class="action-title">{{ t('dashboard.actionUsersTitle') }}</div>
+                <div class="action-desc">{{ t('dashboard.actionUsersDesc') }}</div>
               </div>
               <el-icon><ArrowRight /></el-icon>
             </div>
@@ -245,8 +246,8 @@ function goToUsers() {
                 <el-icon><Goods /></el-icon>
               </div>
               <div class="action-info">
-                <div class="action-title">商品管理</div>
-                <div class="action-desc">管理商品和库存</div>
+                <div class="action-title">{{ t('dashboard.actionProductsTitle') }}</div>
+                <div class="action-desc">{{ t('dashboard.actionProductsDesc') }}</div>
               </div>
               <el-icon><ArrowRight /></el-icon>
             </div>
@@ -258,7 +259,7 @@ function goToUsers() {
             <div class="panel-header">
               <div class="panel-title">
                 <el-icon><Warning /></el-icon>
-                <span>待处理事项</span>
+                <span>{{ t('dashboard.pendingItems') }}</span>
               </div>
             </div>
           </template>
@@ -267,22 +268,22 @@ function goToUsers() {
             <div class="alert-item alert-warning">
               <div class="alert-dot" style="background: #faad14;" />
               <div class="alert-content">
-                <div class="alert-title">3 个订单待确认</div>
-                <div class="alert-time">30 分钟内</div>
+                <div class="alert-title">{{ t('dashboard.alertPendingOrders', { count: 3 }) }}</div>
+                <div class="alert-time">{{ t('dashboard.alertPendingOrdersTime') }}</div>
               </div>
             </div>
             <div class="alert-item alert-danger">
               <div class="alert-dot" style="background: #ff4d4f;" />
               <div class="alert-content">
-                <div class="alert-title">1 个配送异常</div>
-                <div class="alert-time">无人机故障</div>
+                <div class="alert-title">{{ t('dashboard.alertDeliveryException', { count: 1 }) }}</div>
+                <div class="alert-time">{{ t('dashboard.alertDeliveryExceptionDesc') }}</div>
               </div>
             </div>
             <div class="alert-item alert-info">
               <div class="alert-dot" style="background: #1677ff;" />
               <div class="alert-content">
-                <div class="alert-title">5 个新用户注册</div>
-                <div class="alert-time">今日</div>
+                <div class="alert-title">{{ t('dashboard.alertNewUsers', { count: 5 }) }}</div>
+                <div class="alert-time">{{ t('dashboard.alertNewUsersTime') }}</div>
               </div>
             </div>
           </div>
@@ -535,5 +536,26 @@ function goToUsers() {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .search-card :deep(.el-form--inline .el-form-item) {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  .search-card :deep(.el-form--inline .el-form-item .el-input),
+  .search-card :deep(.el-form--inline .el-form-item .el-select) {
+    width: 100% !important;
+  }
+  .pagination-row {
+    justify-content: center;
+  }
 }
 </style>

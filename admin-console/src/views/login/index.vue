@@ -58,8 +58,8 @@ async function handleLogin() {
         <div class="brand-logo">
           <el-icon :size="48" color="#fff"><Ship /></el-icon>
         </div>
-        <h1 class="brand-name">青岛汇</h1>
-        <p class="brand-tagline">保税仓无人机配送管理平台</p>
+        <h1 class="brand-name">{{ t('login.brandName') }}</h1>
+        <p class="brand-tagline">{{ t('login.brandTagline') }}</p>
       </div>
 
       <div class="feature-list">
@@ -68,8 +68,8 @@ async function handleLogin() {
             <el-icon :size="20"><Ship /></el-icon>
           </div>
           <div class="feature-text">
-            <div class="feature-title">船舶配送管理</div>
-            <div class="feature-desc">实时追踪订单配送状态</div>
+            <div class="feature-title">{{ t('login.feature1Title') }}</div>
+            <div class="feature-desc">{{ t('login.feature1Desc') }}</div>
           </div>
         </div>
         <div class="feature-item">
@@ -77,8 +77,8 @@ async function handleLogin() {
             <el-icon :size="20"><Ship /></el-icon>
           </div>
           <div class="feature-text">
-            <div class="feature-title">无人机调度</div>
-            <div class="feature-desc">智能匹配最优配送方案</div>
+            <div class="feature-title">{{ t('login.feature2Title') }}</div>
+            <div class="feature-desc">{{ t('login.feature2Desc') }}</div>
           </div>
         </div>
         <div class="feature-item">
@@ -86,14 +86,14 @@ async function handleLogin() {
             <el-icon :size="20"><Ship /></el-icon>
           </div>
           <div class="feature-text">
-            <div class="feature-title">海关数据同步</div>
-            <div class="feature-desc">自动化合规数据上报</div>
+            <div class="feature-title">{{ t('login.feature3Title') }}</div>
+            <div class="feature-desc">{{ t('login.feature3Desc') }}</div>
           </div>
         </div>
       </div>
 
       <div class="login-footer">
-        <p>© 2026 青岛汇 Tsingtaohui. All rights reserved.</p>
+        <p>{{ t('login.copyright') }}</p>
       </div>
     </div>
 
@@ -102,7 +102,7 @@ async function handleLogin() {
       <div class="login-card">
         <div class="login-header">
           <h2 class="login-title">{{ t('login.title') }}</h2>
-          <p class="login-subtitle">欢迎回来，请登录您的账号</p>
+          <p class="login-subtitle">{{ t('login.subtitle') }}</p>
         </div>
 
         <el-form
@@ -146,7 +146,7 @@ async function handleLogin() {
 
         <div class="login-tips">
           <el-icon :size="14" class="tips-icon"><Info-Filled /></el-icon>
-          <span>演示账号: admin2 / admin123</span>
+          <span>{{ t('login.demoAccount') }}</span>
         </div>
       </div>
     </div>

@@ -63,7 +63,7 @@
             />
             <text v-else class="image-placeholder">{{ $t('product.image') }}</text>
             <view v-if="product.droneDeliverable" class="product-badge">
-              <text class="badge-text">可配送</text>
+              <text class="badge-text">{{ $t('product.deliverable') }}</text>
             </view>
           </view>
           <view class="product-info">
@@ -71,10 +71,10 @@
             <text class="product-spec">{{ product.specification }}</text>
             <view class="product-tags">
               <view class="tag tag-primary">
-                <text class="tag-text">保税仓</text>
+                <text class="tag-text">{{ $t('product.bondedWarehouse') }}</text>
               </view>
               <view v-if="product.droneDeliverable" class="tag tag-success">
-                <text class="tag-text">无人机</text>
+                <text class="tag-text">{{ $t('product.drone') }}</text>
               </view>
             </view>
             <view class="product-bottom">
@@ -82,7 +82,7 @@
                 <text class="price-symbol">¥</text>
                 <text class="price-value">{{ formatPrice(product.price) }}</text>
               </view>
-              <text class="stock-text">库存 {{ product.availableQty }}</text>
+              <text class="stock-text">{{ $t('product.stockCount', { qty: product.availableQty }) }}</text>
             </view>
           </view>
         </view>

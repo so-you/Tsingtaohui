@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useResponsive } from '@/composables/useResponsive'
 import { getAuditLogs } from '@/api/audit'
 import type { IAuditLog } from '@/types'
 import { Search, Refresh } from '@element-plus/icons-vue'
 
 const { t } = useI18n()
+const { isMobile } = useResponsive()
 
 const loading = ref(false)
 const rows = ref<IAuditLog[]>([])
@@ -66,7 +68,7 @@ function viewDetail(row: IAuditLog) {
   <div class="audit-page">
     <div class="page-header">
       <h2 class="page-title">{{ t('audit.title') }}</h2>
-      <p class="page-subtitle">查看系统操作审计日志，追溯变更记录</p>
+      <p class="page-subtitle">{{ t('audit.pageSubtitle') }}</p>
     </div>
 
     <el-card shadow="never" class="search-card">
@@ -121,7 +123,7 @@ function viewDetail(row: IAuditLog) {
       </div>
     </el-card>
 
-    <el-dialog v-model="dialogVisible" :title="t('audit.detailTitle')" width="560px">
+    <el-dialog v-model="dialogVisible" :title="t('audit.detailTitle')" :fullscreen="isMobile">
       <template v-if="detailRow">
         <el-descriptions :column="2" border>
           <el-descriptions-item :label="t('audit.actorName')">{{ detailRow.actorName }}</el-descriptions-item>
@@ -152,4 +154,25 @@ function viewDetail(row: IAuditLog) {
 .search-card { margin-bottom: 16px; border-radius: 8px; }
 .mono { font-family: 'SF Mono', monospace; font-size: 13px; }
 .pagination-row { display: flex; justify-content: flex-end; margin-top: 16px; }
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .search-card :deep(.el-form--inline .el-form-item) {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  .search-card :deep(.el-form--inline .el-form-item .el-input),
+  .search-card :deep(.el-form--inline .el-form-item .el-select) {
+    width: 100% !important;
+  }
+  .pagination-row {
+    justify-content: center;
+  }
+}
 </style>

@@ -5,7 +5,19 @@ export default {
     password: 'Password',
     loginBtn: 'Login',
     usernameRequired: 'Please enter username',
-    passwordRequired: 'Please enter password'
+    passwordRequired: 'Please enter password',
+    brandName: 'Tsingtaohui',
+    brandTagline: 'Bonded Warehouse Drone Delivery Management Platform',
+    subtitle: 'Welcome back, please sign in',
+    copyright: '© 2026 Tsingtaohui. All rights reserved.',
+    demoAccount: 'Demo: admin2 / admin123',
+    feature1Title: 'Ship Delivery Management',
+    feature1Desc: 'Real-time order delivery tracking',
+    feature2Title: 'Drone Dispatch',
+    feature2Desc: 'Smart delivery route optimization',
+    feature3Title: 'Customs Data Sync',
+    feature3Desc: 'Automated compliance data reporting',
+    tokenExpired: 'Session expired, please sign in again',
   },
   menu: {
     dashboard: 'Dashboard',
@@ -30,6 +42,7 @@ export default {
     export: 'Export',
     success: 'Operation successful',
     error: 'Operation failed',
+    networkError: 'Network request failed',
     languageZh: '中文',
     languageEn: 'English',
     logout: 'Logout',
@@ -55,7 +68,9 @@ export default {
     actions: 'Actions',
     enableAction: 'Enable',
     disableAction: 'Disable',
-    lockAction: 'Lock'
+    lockAction: 'Lock',
+    pageSubtitle: 'Manage user accounts and permissions',
+    userColumn: 'User',
   },
   product: {
     productsTab: 'Products',
@@ -80,7 +95,8 @@ export default {
     on_sale: 'On Sale',
     off_sale: 'Off Sale',
     onSaleAction: 'Put On Sale',
-    offSaleAction: 'Take Off Sale'
+    offSaleAction: 'Take Off Sale',
+    pageSubtitle: 'Manage products, inventory and listing status',
   },
   order: {
     ordersTab: 'Orders',
@@ -98,6 +114,7 @@ export default {
     confirmAction: 'Confirm',
     exceptionAction: 'Exception',
     cancelAction: 'Cancel',
+    pageSubtitle: 'Manage order status, handle matching and exception orders',
     tradeModes: {
       AUTO_TRADE: 'Auto Trade',
       MATCHING_ORDER: 'Matching Order'
@@ -129,7 +146,32 @@ export default {
     totalUsers: 'Total Users',
     totalOrders: 'Total Orders',
     activeDeliveries: 'Active Deliveries',
-    pendingMatches: 'Pending Matches'
+    pendingMatches: 'Pending Matches',
+    subtitle: 'Real-time platform operations monitoring',
+    refresh: 'Refresh',
+    lastWeek: 'vs last week',
+    recentOrders: 'Recent Orders',
+    viewAll: 'View All',
+    orderNo: 'Order No.',
+    orderStatus: 'Status',
+    amount: 'Amount',
+    shipNo: 'Ship No.',
+    consignee: 'Consignee',
+    orderTime: 'Time',
+    quickActions: 'Quick Actions',
+    pendingItems: 'Pending Items',
+    actionOrdersTitle: 'Orders',
+    actionOrdersDesc: 'Handle pending and exception orders',
+    actionUsersTitle: 'Users',
+    actionUsersDesc: 'View and manage user accounts',
+    actionProductsTitle: 'Products',
+    actionProductsDesc: 'Manage products and inventory',
+    alertPendingOrders: '{count} orders pending confirmation',
+    alertPendingOrdersTime: 'Within 30 minutes',
+    alertDeliveryException: '{count} delivery exceptions',
+    alertDeliveryExceptionDesc: 'Drone malfunction',
+    alertNewUsers: '{count} new user registrations',
+    alertNewUsersTime: 'Today',
   },
   drone: {
     title: 'Drone Management',
@@ -142,6 +184,25 @@ export default {
     deliverableCategories: 'Deliverable Categories',
     status: 'Status',
     addDrone: 'Add Drone',
+    pageSubtitle: 'Manage drone devices, status monitoring and dispatch records',
+    keywordLabel: 'Keyword',
+    keywordPlaceholder: 'Code / Model / Flight No.',
+    droneCodeLabel: 'Drone Code',
+    droneCodePlaceholder: 'e.g. DRONE-001',
+    modelPlaceholder: 'e.g. DJI M600',
+    flightNoPlaceholder: 'e.g. FL-20260001',
+    categoryPlaceholder: 'Enter category name',
+    addCategory: 'Add',
+    addSuccess: 'Added successfully',
+    validation: {
+      droneCode: 'Please enter drone code',
+      model: 'Please enter model',
+      flightNo: 'Please enter flight number',
+      maxPayload: 'Please enter max payload',
+      maxVolume: 'Please enter max volume',
+      maxRange: 'Please enter max range',
+      status: 'Please select status',
+    },
     statuses: {
       AVAILABLE: 'Available',
       DISPATCHED: 'Dispatched',
@@ -158,6 +219,13 @@ export default {
     status: 'Status',
     retryCount: 'Retries',
     retryAction: 'Retry',
+    pageSubtitle: 'Monitor customs data sync status, handle failures and retries',
+    keywordLabel: 'Keyword',
+    keywordPlaceholder: 'Sync No. / Order No.',
+    retryConfirmTitle: 'Retry Confirmation',
+    retryConfirmMessage: 'Confirm retry sync record {syncNo}?',
+    retryConfirmBtn: 'Confirm Retry',
+    retryTriggered: 'Retry triggered',
     levels: {
       RED: 'Red Card',
       YELLOW: 'Yellow Card'
@@ -189,7 +257,9 @@ export default {
     agentNameEn: 'English Name',
     contactName: 'Contact',
     contactPhone: 'Phone',
-    keywordPlaceholder: 'Ship no. / name / IMO'
+    keywordPlaceholder: 'Ship no. / name / IMO',
+    shipsSubtitle: 'Manage ship master data',
+    agentsSubtitle: 'View shipping agent list',
   },
   rule: {
     title: 'Rule Configuration',
@@ -199,7 +269,9 @@ export default {
     description: 'Description',
     status: 'Status',
     editTitle: 'Edit Rule',
-    statuses: { ENABLED: 'Enabled', DISABLED: 'Disabled' }
+    statuses: { ENABLED: 'Enabled', DISABLED: 'Disabled' },
+    pageSubtitle: 'Manage platform rules and configuration parameters',
+    searchPlaceholder: 'Rule key / name',
   },
   audit: {
     title: 'Audit Logs',
@@ -214,6 +286,7 @@ export default {
     createdAt: 'Time',
     dateRange: 'Date Range',
     detailTitle: 'Audit Detail',
+    pageSubtitle: 'View system audit logs and trace change history',
     modules: {
       USER: 'User',
       PRODUCT: 'Product',
@@ -232,5 +305,20 @@ export default {
     endDate: 'End Date',
     exportBtn: 'Export CSV',
     hint: 'Select a date range and export completed order data as CSV'
-  }
+  },
+  route: {
+    dashboard: 'Dashboard',
+    users: 'User Management',
+    products: 'Product Management',
+    orders: 'Order Management',
+    drones: 'Drone Management',
+    customsSync: 'Customs Sync',
+    ships: 'Ships',
+    rules: 'Rules',
+    auditLogs: 'Audit Logs',
+    reconciliation: 'Reconciliation',
+  },
+  layout: {
+    brandName: 'Tsingtaohui',
+  },
 }

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useResponsive } from '@/composables/useResponsive'
 import { ElMessage } from 'element-plus'
 import { getRules, updateRule } from '@/api/rule'
 import type { IRuleConfig } from '@/types'
 import { Search, Refresh } from '@element-plus/icons-vue'
 
 const { t } = useI18n()
+const { isMobile } = useResponsive()
 
 const loading = ref(false)
 const rows = ref<IRuleConfig[]>([])
@@ -81,13 +83,13 @@ async function submitEdit() {
   <div class="rules-page">
     <div class="page-header">
       <h2 class="page-title">{{ t('rule.title') }}</h2>
-      <p class="page-subtitle">管理平台运营规则和配置参数</p>
+      <p class="page-subtitle">{{ t('rule.pageSubtitle') }}</p>
     </div>
 
     <el-card shadow="never" class="search-card">
       <el-form :model="query" inline>
         <el-form-item :label="t('ship.keywordPlaceholder')">
-          <el-input v-model="query.keyword" placeholder="规则键/名称" clearable style="width: 240px"
+          <el-input v-model="query.keyword" :placeholder="t('rule.searchPlaceholder')" clearable style="width: 240px"
             :prefix-icon="Search" @keyup.enter="searchRules" />
         </el-form-item>
         <el-form-item :label="t('user.status')">
@@ -135,7 +137,7 @@ async function submitEdit() {
       </div>
     </el-card>
 
-    <el-dialog v-model="dialogVisible" :title="t('rule.editTitle')" width="480px">
+    <el-dialog v-model="dialogVisible" :title="t('rule.editTitle')" :fullscreen="isMobile">
       <el-form :model="editForm" label-width="80px">
         <el-form-item :label="t('rule.ruleValue')">
           <el-input v-model="editForm.ruleValue" />
@@ -166,4 +168,25 @@ async function submitEdit() {
 .search-card { margin-bottom: 16px; border-radius: 8px; }
 .rule-key { font-family: 'SF Mono', monospace; font-size: 13px; color: #1677ff; }
 .pagination-row { display: flex; justify-content: flex-end; margin-top: 16px; }
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .search-card :deep(.el-form--inline .el-form-item) {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  .search-card :deep(.el-form--inline .el-form-item .el-input),
+  .search-card :deep(.el-form--inline .el-form-item .el-select) {
+    width: 100% !important;
+  }
+  .pagination-row {
+    justify-content: center;
+  }
+}
 </style>

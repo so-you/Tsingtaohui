@@ -68,4 +68,25 @@ async function handleExport() {
 .page-title { margin: 0 0 4px; font-size: 22px; font-weight: 600; color: #1a1a1a; }
 .page-subtitle { margin: 0; font-size: 13px; color: #999; }
 .export-card { border-radius: 8px; }
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .search-card :deep(.el-form--inline .el-form-item) {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  .search-card :deep(.el-form--inline .el-form-item .el-input),
+  .search-card :deep(.el-form--inline .el-form-item .el-select) {
+    width: 100% !important;
+  }
+  .pagination-row {
+    justify-content: center;
+  }
+}
 </style>

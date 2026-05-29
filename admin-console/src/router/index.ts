@@ -16,61 +16,61 @@ const routes = [
         path: 'dashboard',
         name: 'Dashboard',
         component: () => import('@/views/dashboard/index.vue'),
-        meta: { title: '运营仪表盘' }
+        meta: { titleKey: 'route.dashboard' }
       },
       {
         path: 'users',
         name: 'Users',
         component: () => import('@/views/users/index.vue'),
-        meta: { title: '用户管理' }
+        meta: { titleKey: 'route.users' }
       },
       {
         path: 'products',
         name: 'Products',
         component: () => import('@/views/products/index.vue'),
-        meta: { title: '商品管理' }
+        meta: { titleKey: 'route.products' }
       },
       {
         path: 'orders',
         name: 'Orders',
         component: () => import('@/views/orders/index.vue'),
-        meta: { title: '订单管理' }
+        meta: { titleKey: 'route.orders' }
       },
       {
         path: 'drones',
         name: 'Drones',
         component: () => import('@/views/drones/index.vue'),
-        meta: { title: '无人机管理' }
+        meta: { titleKey: 'route.drones' }
       },
       {
         path: 'customs-sync',
         name: 'CustomsSync',
         component: () => import('@/views/customs-sync/index.vue'),
-        meta: { title: '海关同步' }
+        meta: { titleKey: 'route.customsSync' }
       },
       {
         path: 'ships',
         name: 'Ships',
         component: () => import('@/views/ships/index.vue'),
-        meta: { title: '船舶管理' }
+        meta: { titleKey: 'route.ships' }
       },
       {
         path: 'rules',
         name: 'Rules',
         component: () => import('@/views/rules/index.vue'),
-        meta: { title: '规则配置' }
+        meta: { titleKey: 'route.rules' }
       },
       {
         path: 'audit-logs',
         name: 'AuditLogs',
         component: () => import('@/views/audit-logs/index.vue'),
-        meta: { title: '审计日志' }
+        meta: { titleKey: 'route.auditLogs' }
       },
       {
         path: 'reconciliation',
         name: 'Reconciliation',
         component: () => import('@/views/reconciliation/index.vue'),
-        meta: { title: '对账导出' }
+        meta: { titleKey: 'route.reconciliation' }
       }
     ]
   }

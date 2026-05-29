@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useResponsive } from '@/composables/useResponsive'
 import { ElMessage } from 'element-plus'
 import { getInventory, getProducts, updateProduct, updateProductStatus } from '@/api/product'
 import type { IInventoryItem, IProductItem } from '@/types'
 import { Search, Refresh, Picture } from '@element-plus/icons-vue'
 
 const { t, locale } = useI18n()
+const { isMobile } = useResponsive()
 
 const activeTab = ref('products')
 const productLoading = ref(false)
@@ -186,7 +188,7 @@ function productStatusTag(status?: string) {
     <div class="page-header">
       <div>
         <h2 class="page-title">{{ t('menu.products') }}</h2>
-        <p class="page-subtitle">管理商品信息、库存和上架状态</p>
+        <p class="page-subtitle">{{ t('product.pageSubtitle') }}</p>
       </div>
     </div>
 
@@ -376,7 +378,7 @@ function productStatusTag(status?: string) {
       </el-tab-pane>
     </el-tabs>
 
-    <el-dialog v-model="productDialogVisible" :title="t('product.editTitle')" width="720px" destroy-on-close>
+    <el-dialog v-model="productDialogVisible" :title="t('product.editTitle')" :fullscreen="isMobile" destroy-on-close>
       <el-form :model="productForm" label-width="130px">
         <el-row :gutter="16">
           <el-col :span="12">
@@ -558,5 +560,26 @@ function productStatusTag(status?: string) {
   display: flex;
   justify-content: flex-end;
   margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .search-card :deep(.el-form--inline .el-form-item) {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  .search-card :deep(.el-form--inline .el-form-item .el-input),
+  .search-card :deep(.el-form--inline .el-form-item .el-select) {
+    width: 100% !important;
+  }
+  .pagination-row {
+    justify-content: center;
+  }
 }
 </style>

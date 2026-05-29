@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores/user'
+import { useResponsive } from '@/composables/useResponsive'
 import {
   Odometer,
   User,
@@ -24,8 +25,10 @@ const router = useRouter()
 const route = useRoute()
 const { t, locale } = useI18n()
 const userStore = useUserStore()
+const { isMobile } = useResponsive()
 
 const isCollapse = ref(false)
+const mobileMenuOpen = ref(false)
 
 const activeMenu = computed(() => {
   return route.path
@@ -34,13 +37,16 @@ const activeMenu = computed(() => {
 const breadcrumb = computed(() => {
   const matched = route.matched
   return matched.map(m => ({
-    title: m.meta.title as string || m.name as string,
+    title: m.meta.titleKey ? t(m.meta.titleKey as string) : (m.name as string),
     path: m.path
   })).filter(b => b.title)
 })
 
 function handleSelect(path: string) {
   router.push(path)
+  if (isMobile.value) {
+    mobileMenuOpen.value = false
+  }
 }
 
 function handleLanguage(lang: string) {
@@ -53,23 +59,52 @@ function handleLogout() {
   router.push('/login')
 }
 
-const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '240px'))
+function toggleSidebar() {
+  if (isMobile.value) {
+    mobileMenuOpen.value = !mobileMenuOpen.value
+  } else {
+    isCollapse.value = !isCollapse.value
+  }
+}
+
+const sidebarWidth = computed(() => {
+  if (isMobile.value) return '240px'
+  return isCollapse.value ? '64px' : '240px'
+})
+
+// Close mobile menu on route change
+watch(() => route.path, () => {
+  if (isMobile.value) {
+    mobileMenuOpen.value = false
+  }
+})
 </script>
 
 <template>
   <el-container class="admin-layout">
+    <!-- Mobile Backdrop -->
+    <div
+      v-if="isMobile && mobileMenuOpen"
+      class="sidebar-backdrop"
+      @click="mobileMenuOpen = false"
+    />
+
     <!-- Sidebar -->
-    <el-aside :width="sidebarWidth" class="sidebar">
+    <el-aside
+      :width="sidebarWidth"
+      class="sidebar"
+      :class="{ 'mobile-open': isMobile && mobileMenuOpen }"
+    >
       <div class="logo">
         <div class="logo-icon">
           <el-icon :size="28"><Odometer /></el-icon>
         </div>
-        <h1 v-show="!isCollapse" class="logo-text">青岛汇</h1>
+        <h1 v-show="!isCollapse || isMobile" class="logo-text">{{ t('layout.brandName') }}</h1>
       </div>
 
       <el-menu
         :default-active="activeMenu"
-        :collapse="isCollapse"
+        :collapse="isCollapse && !isMobile"
         :collapse-transition="false"
         router
         class="sidebar-menu"
@@ -117,7 +152,7 @@ const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '240px'))
         </el-menu-item>
       </el-menu>
 
-      <div class="sidebar-footer" v-show="!isCollapse">
+      <div class="sidebar-footer" v-show="!isCollapse || isMobile">
         <p class="version">v1.0.0</p>
       </div>
     </el-aside>
@@ -126,14 +161,14 @@ const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '240px'))
       <!-- Header -->
       <el-header class="header">
         <div class="header-left">
-          <div class="collapse-btn" @click="isCollapse = !isCollapse">
+          <div class="collapse-btn" @click="toggleSidebar">
             <el-icon :size="18">
-              <Fold v-if="!isCollapse" />
+              <Fold v-if="isMobile ? mobileMenuOpen : !isCollapse" />
               <Expand v-else />
             </el-icon>
           </div>
 
-          <el-breadcrumb separator="/">
+          <el-breadcrumb separator="/" class="header-breadcrumb">
             <el-breadcrumb-item :to="{ path: '/dashboard' }">
               {{ t('menu.dashboard') }}
             </el-breadcrumb-item>
@@ -363,5 +398,54 @@ const sidebarWidth = computed(() => (isCollapse.value ? '64px' : '240px'))
 
 .main-wrapper {
   background: #f0f2f5;
+}
+
+/* Mobile Responsive */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1999;
+  transition: opacity 0.3s;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 2000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .main-wrapper {
+    width: 100%;
+  }
+
+  .header-breadcrumb {
+    display: none;
+  }
+
+  .main-content {
+    padding: 12px;
+  }
+
+  .trigger-text {
+    display: none;
+  }
+
+  .header-divider {
+    display: none;
+  }
+
+  .header {
+    padding: 0 12px;
+  }
 }
 </style>

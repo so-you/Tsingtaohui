@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useResponsive } from '@/composables/useResponsive'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { getDrones, createDrone } from '@/api/drone'
 import type { ICreateDroneParams, IDrone, TDroneStatus } from '@/types'
 import { Search, Refresh, Plus } from '@element-plus/icons-vue'
+
+const { t } = useI18n()
+const { isMobile } = useResponsive()
 
 const loading = ref(false)
 const rows = ref<IDrone[]>([])
@@ -36,13 +41,13 @@ const defaultForm: ICreateDroneParams = {
 const form = reactive<ICreateDroneParams>({ ...defaultForm })
 
 const formRules: FormRules = {
-  droneCode: [{ required: true, message: '请输入无人机编码', trigger: 'blur' }],
-  model: [{ required: true, message: '请输入型号', trigger: 'blur' }],
-  flightNo: [{ required: true, message: '请输入航班号', trigger: 'blur' }],
-  maxPayloadKg: [{ required: true, message: '请输入最大载重', trigger: 'blur' }],
-  maxVolumeM3: [{ required: true, message: '请输入最大体积', trigger: 'blur' }],
-  maxRangeKm: [{ required: true, message: '请输入最大航程', trigger: 'blur' }],
-  status: [{ required: true, message: '请选择状态', trigger: 'change' }]
+  droneCode: [{ required: true, message: () => t('drone.validation.droneCode'), trigger: 'blur' }],
+  model: [{ required: true, message: () => t('drone.validation.model'), trigger: 'blur' }],
+  flightNo: [{ required: true, message: () => t('drone.validation.flightNo'), trigger: 'blur' }],
+  maxPayloadKg: [{ required: true, message: () => t('drone.validation.maxPayload'), trigger: 'blur' }],
+  maxVolumeM3: [{ required: true, message: () => t('drone.validation.maxVolume'), trigger: 'blur' }],
+  maxRangeKm: [{ required: true, message: () => t('drone.validation.maxRange'), trigger: 'blur' }],
+  status: [{ required: true, message: () => t('drone.validation.status'), trigger: 'change' }]
 }
 
 const categoryInput = ref('')
@@ -81,13 +86,14 @@ function resetDrones() {
 }
 
 function statusTag(status: TDroneStatus) {
-  const map: Record<TDroneStatus, { type: '' | 'success' | 'warning' | 'info' | 'danger', label: string }> = {
-    AVAILABLE: { type: 'success', label: '可用' },
-    DISPATCHED: { type: '', label: '已调度' },
-    MAINTENANCE: { type: 'warning', label: '维护中' },
-    OFFLINE: { type: 'info', label: '离线' }
+  const map: Record<TDroneStatus, { type: '' | 'success' | 'warning' | 'info' | 'danger' }> = {
+    AVAILABLE: { type: 'success' },
+    DISPATCHED: { type: '' },
+    MAINTENANCE: { type: 'warning' },
+    OFFLINE: { type: 'info' }
   }
-  return map[status] || { type: 'info' as const, label: status }
+  const entry = map[status] || { type: 'info' as const }
+  return { ...entry, label: t(`drone.statuses.${status}`) || status }
 }
 
 function openDialog() {
@@ -115,7 +121,7 @@ async function submitForm() {
   submitting.value = true
   try {
     await createDrone({ ...form, deliverableCategories: [...form.deliverableCategories] })
-    ElMessage.success('添加成功')
+    ElMessage.success(t('drone.addSuccess'))
     dialogVisible.value = false
     loadRows()
   } finally {
@@ -128,25 +134,25 @@ async function submitForm() {
   <div class="drones-page">
     <div class="page-header">
       <div>
-        <h2 class="page-title">无人机管理</h2>
-        <p class="page-subtitle">管理无人机设备信息、状态监控与调度记录</p>
+        <h2 class="page-title">{{ t('drone.title') }}</h2>
+        <p class="page-subtitle">{{ t('drone.pageSubtitle') }}</p>
       </div>
-      <el-button type="primary" :icon="Plus" @click="openDialog">添加无人机</el-button>
+      <el-button type="primary" :icon="Plus" @click="openDialog">{{ t('drone.addDrone') }}</el-button>
     </div>
 
     <el-card shadow="never" class="search-card">
       <el-form :model="query" inline>
-        <el-form-item label="关键词">
+        <el-form-item :label="t('drone.keywordLabel')">
           <el-input
             v-model="query.keyword"
-            placeholder="编码 / 型号 / 航班号"
+            :placeholder="t('drone.keywordPlaceholder')"
             clearable
             style="width: 240px"
             :prefix-icon="Search"
             @keyup.enter="searchDrones"
           />
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item :label="t('drone.status')">
           <el-select v-model="query.status" clearable style="width: 150px">
             <el-option
               v-for="item in statusOptions"
@@ -157,25 +163,25 @@ async function submitForm() {
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="searchDrones">搜索</el-button>
-          <el-button :icon="Refresh" @click="resetDrones">重置</el-button>
+          <el-button type="primary" :icon="Search" @click="searchDrones">{{ t('common.search') }}</el-button>
+          <el-button :icon="Refresh" @click="resetDrones">{{ t('common.reset') }}</el-button>
         </el-form-item>
       </el-form>
     </el-card>
 
     <el-card shadow="never">
       <el-table v-loading="loading" :data="rows" stripe>
-        <el-table-column prop="droneCode" label="编码" min-width="130">
+        <el-table-column prop="droneCode" :label="t('drone.droneCode')" min-width="130">
           <template #default="{ row }">
             <span class="drone-code">{{ row.droneCode }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="model" label="型号" min-width="120" />
-        <el-table-column prop="flightNo" label="航班号" min-width="120" />
-        <el-table-column prop="maxPayloadKg" label="最大载重(kg)" min-width="120" />
-        <el-table-column prop="maxVolumeM3" label="最大体积(m³)" min-width="120" />
-        <el-table-column prop="maxRangeKm" label="航程(km)" min-width="100" />
-        <el-table-column label="可配送品类" min-width="160">
+        <el-table-column prop="model" :label="t('drone.model')" min-width="120" />
+        <el-table-column prop="flightNo" :label="t('drone.flightNo')" min-width="120" />
+        <el-table-column prop="maxPayloadKg" :label="t('drone.maxPayloadKg')" min-width="120" />
+        <el-table-column prop="maxVolumeM3" :label="t('drone.maxVolumeM3')" min-width="120" />
+        <el-table-column prop="maxRangeKm" :label="t('drone.maxRangeKm')" min-width="100" />
+        <el-table-column :label="t('drone.deliverableCategories')" min-width="160">
           <template #default="{ row }">
             <div class="categories-cell">
               <el-tag
@@ -198,14 +204,14 @@ async function submitForm() {
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="状态" min-width="100">
+        <el-table-column :label="t('drone.status')" min-width="100">
           <template #default="{ row }">
             <el-tag :type="statusTag(row.status).type" size="small" effect="light">
               {{ statusTag(row.status).label }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="创建时间" min-width="170" />
+        <el-table-column prop="createdAt" :label="t('common.createdAt')" min-width="170" />
       </el-table>
 
       <div class="pagination-row">
@@ -221,27 +227,27 @@ async function submitForm() {
     </el-card>
 
     <!-- Add Drone Dialog -->
-    <el-dialog v-model="dialogVisible" title="添加无人机" width="520px" destroy-on-close>
+    <el-dialog v-model="dialogVisible" :title="t('drone.addDrone')" :fullscreen="isMobile" destroy-on-close>
       <el-form ref="formRef" :model="form" :rules="formRules" label-width="110px">
-        <el-form-item label="无人机编码" prop="droneCode">
-          <el-input v-model="form.droneCode" placeholder="如 DRONE-001" />
+        <el-form-item :label="t('drone.droneCodeLabel')" prop="droneCode">
+          <el-input v-model="form.droneCode" :placeholder="t('drone.droneCodePlaceholder')" />
         </el-form-item>
-        <el-form-item label="型号" prop="model">
-          <el-input v-model="form.model" placeholder="如 DJI M600" />
+        <el-form-item :label="t('drone.model')" prop="model">
+          <el-input v-model="form.model" :placeholder="t('drone.modelPlaceholder')" />
         </el-form-item>
-        <el-form-item label="航班号" prop="flightNo">
-          <el-input v-model="form.flightNo" placeholder="如 FL-20260001" />
+        <el-form-item :label="t('drone.flightNo')" prop="flightNo">
+          <el-input v-model="form.flightNo" :placeholder="t('drone.flightNoPlaceholder')" />
         </el-form-item>
-        <el-form-item label="最大载重(kg)" prop="maxPayloadKg">
+        <el-form-item :label="t('drone.maxPayloadKg')" prop="maxPayloadKg">
           <el-input-number v-model="form.maxPayloadKg" :min="0" :precision="2" style="width: 100%" />
         </el-form-item>
-        <el-form-item label="最大体积(m³)" prop="maxVolumeM3">
+        <el-form-item :label="t('drone.maxVolumeM3')" prop="maxVolumeM3">
           <el-input-number v-model="form.maxVolumeM3" :min="0" :precision="3" style="width: 100%" />
         </el-form-item>
-        <el-form-item label="最大航程(km)" prop="maxRangeKm">
+        <el-form-item :label="t('drone.maxRangeKm')" prop="maxRangeKm">
           <el-input-number v-model="form.maxRangeKm" :min="0" :precision="1" style="width: 100%" />
         </el-form-item>
-        <el-form-item label="可配送品类">
+        <el-form-item :label="t('drone.deliverableCategories')">
           <div class="categories-input">
             <div class="categories-tags">
               <el-tag
@@ -259,16 +265,16 @@ async function submitForm() {
             <div class="categories-add">
               <el-input
                 v-model="categoryInput"
-                placeholder="输入品类名称"
+                :placeholder="t('drone.categoryPlaceholder')"
                 size="small"
                 style="width: 180px"
                 @keyup.enter="addCategory"
               />
-              <el-button size="small" @click="addCategory">添加</el-button>
+              <el-button size="small" @click="addCategory">{{ t('drone.addCategory') }}</el-button>
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item :label="t('drone.status')" prop="status">
           <el-select v-model="form.status" style="width: 100%">
             <el-option
               v-for="item in statusOptions"
@@ -280,8 +286,8 @@ async function submitForm() {
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="submitting" @click="submitForm">确定</el-button>
+        <el-button @click="dialogVisible = false">{{ t('common.cancel') }}</el-button>
+        <el-button type="primary" :loading="submitting" @click="submitForm">{{ t('common.confirm') }}</el-button>
       </template>
     </el-dialog>
   </div>
@@ -354,5 +360,26 @@ async function submitForm() {
 .categories-add {
   display: flex;
   gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .search-card :deep(.el-form--inline .el-form-item) {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  .search-card :deep(.el-form--inline .el-form-item .el-input),
+  .search-card :deep(.el-form--inline .el-form-item .el-select) {
+    width: 100% !important;
+  }
+  .pagination-row {
+    justify-content: center;
+  }
 }
 </style>

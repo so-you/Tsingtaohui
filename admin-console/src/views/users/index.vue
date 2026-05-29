@@ -99,7 +99,7 @@ function avatarLetter(name?: string) {
     <div class="page-header">
       <div>
         <h2 class="page-title">{{ t('user.title') }}</h2>
-        <p class="page-subtitle">管理平台用户账号和权限</p>
+        <p class="page-subtitle">{{ t('user.pageSubtitle') }}</p>
       </div>
     </div>
 
@@ -146,7 +146,7 @@ function avatarLetter(name?: string) {
     <!-- Table Card -->
     <el-card shadow="never" class="table-card">
       <el-table v-loading="loading" :data="tableData" stripe>
-        <el-table-column label="用户" min-width="180">
+        <el-table-column :label="t('user.userColumn')" min-width="180">
           <template #default="{ row }">
             <div class="user-cell">
               <el-avatar :size="36" class="user-avatar">
@@ -289,5 +289,26 @@ function avatarLetter(name?: string) {
   display: flex;
   justify-content: flex-end;
   margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .search-card :deep(.el-form--inline .el-form-item) {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  .search-card :deep(.el-form--inline .el-form-item .el-input),
+  .search-card :deep(.el-form--inline .el-form-item .el-select) {
+    width: 100% !important;
+  }
+  .pagination-row {
+    justify-content: center;
+  }
 }
 </style>

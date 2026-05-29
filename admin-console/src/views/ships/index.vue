@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useResponsive } from '@/composables/useResponsive'
 import { ElMessage } from 'element-plus'
 import { getShips, createShip, updateShip, getShippingAgents } from '@/api/ship'
 import type { IShip, IShippingAgent } from '@/types'
 import { Search, Refresh, Plus } from '@element-plus/icons-vue'
 
 const { t } = useI18n()
+const { isMobile } = useResponsive()
 
 const activeTab = ref<'ships' | 'agents'>('ships')
 const loading = ref(false)
@@ -135,7 +137,7 @@ const currentQuery = computed(() => activeTab.value === 'ships' ? shipQuery : ag
   <div class="ships-page">
     <div class="page-header">
       <h2 class="page-title">{{ t('ship.title') }}</h2>
-      <p class="page-subtitle">{{ activeTab === 'ships' ? '管理船舶主数据信息' : '查看船舶代理人列表' }}</p>
+      <p class="page-subtitle">{{ activeTab === 'ships' ? t('ship.shipsSubtitle') : t('ship.agentsSubtitle') }}</p>
     </div>
 
     <el-tabs v-model="activeTab" @tab-change="switchTab" type="border-card" class="page-tabs">
@@ -211,7 +213,7 @@ const currentQuery = computed(() => activeTab.value === 'ships' ? shipQuery : ag
     </div>
 
     <!-- Ship Create/Edit Dialog -->
-    <el-dialog v-model="dialogVisible" :title="isEdit ? t('ship.editShip') : t('ship.addShip')" width="520px">
+    <el-dialog v-model="dialogVisible" :title="isEdit ? t('ship.editShip') : t('ship.addShip')" :fullscreen="isMobile">
       <el-form :model="form" label-width="100px">
         <el-form-item :label="t('ship.shipNo')" required>
           <el-input v-model="form.shipNo" />
@@ -251,4 +253,25 @@ const currentQuery = computed(() => activeTab.value === 'ships' ? shipQuery : ag
 .page-tabs { margin-bottom: 16px; }
 .search-card { margin-bottom: 16px; border-radius: 8px; }
 .pagination-row { display: flex; justify-content: flex-end; margin-top: 16px; }
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .search-card :deep(.el-form--inline .el-form-item) {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  .search-card :deep(.el-form--inline .el-form-item .el-input),
+  .search-card :deep(.el-form--inline .el-form-item .el-select) {
+    width: 100% !important;
+  }
+  .pagination-row {
+    justify-content: center;
+  }
+}
 </style>

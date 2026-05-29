@@ -5,10 +5,10 @@
       <view class="brand-row">
         <view class="brand-badge">
           <text class="brand-icon">🚁</text>
-          <text class="brand-name">青岛汇</text>
+          <text class="brand-name">{{ $t('home.brandName') }}</text>
         </view>
         <view class="brand-tag">
-          <text class="tag-text">保税仓直发</text>
+          <text class="tag-text">{{ $t('home.brandTag') }}</text>
         </view>
       </view>
       <text class="subtitle">{{ $t('home.subtitle') }}</text>
@@ -19,15 +19,15 @@
       <text class="search-icon">🔍</text>
       <text class="search-placeholder">{{ $t('home.search') }}</text>
       <view class="search-btn">
-        <text class="search-btn-text">搜索</text>
+        <text class="search-btn-text">{{ $t('home.searchBtn') }}</text>
       </view>
     </view>
 
     <!-- Banner (decorative) -->
     <view class="banner-card">
       <view class="banner-content">
-        <text class="banner-title">无人机极速配送</text>
-        <text class="banner-desc">30分钟送达船舶</text>
+        <text class="banner-title">{{ $t('home.bannerTitle') }}</text>
+        <text class="banner-desc">{{ $t('home.bannerDesc') }}</text>
       </view>
       <text class="banner-emoji">🚁</text>
     </view>
@@ -36,7 +36,7 @@
     <view class="section">
       <view class="section-header">
         <text class="section-title">{{ $t('home.categories') }}</text>
-        <text class="section-more" @tap="handleSearch">查看全部 ›</text>
+        <text class="section-more" @tap="handleSearch">{{ $t('home.viewAll') }}</text>
       </view>
 
       <AppSkeleton :loading="loading">
@@ -66,7 +66,7 @@
     <view class="section">
       <view class="section-header">
         <text class="section-title">{{ $t('home.recommend') }}</text>
-        <text class="section-more" @tap="handleSearch">更多 ›</text>
+        <text class="section-more" @tap="handleSearch">{{ $t('home.viewMore') }}</text>
       </view>
 
       <AppSkeleton :loading="loading">
@@ -87,7 +87,7 @@
               />
               <text v-else class="image-placeholder">{{ $t('product.image') }}</text>
               <view v-if="product.droneDeliverable" class="product-badge">
-                <text class="badge-text">可配送</text>
+                <text class="badge-text">{{ $t('home.deliverable') }}</text>
               </view>
             </view>
             <view class="product-body">
@@ -99,7 +99,7 @@
                   <text class="price-value">{{ formatPrice(product.price) }}</text>
                 </view>
                 <view class="sales-tag">
-                  <text class="sales-text">热销</text>
+                  <text class="sales-text">{{ $t('home.hotSale') }}</text>
                 </view>
               </view>
             </view>

@@ -1,6 +1,6 @@
 export default {
   login: {
-    title: 'Tsingtaohui Warehouse',
+    title: 'Shitian Zhihui Warehouse',
     subtitle: 'Bonded warehouse scanning console',
     usernamePlaceholder: 'Warehouse account',
     passwordPlaceholder: 'Password',

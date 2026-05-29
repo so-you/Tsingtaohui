@@ -49,7 +49,7 @@ export default {
     recommend: 'Recommended',
     activeOrders: 'Active Orders',
     noActiveOrders: 'No active orders',
-    brandName: 'Tsingtaohui',
+    brandName: 'Shitian Zhihui',
     brandTag: 'Bonded Direct',
     searchBtn: 'Search',
     bannerTitle: 'Express Drone Delivery',

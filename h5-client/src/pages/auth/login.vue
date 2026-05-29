@@ -1,7 +1,7 @@
 <template>
   <view class="login-page">
     <view class="login-header">
-      <text class="app-title">Tsingtaohui</text>
+      <text class="app-title">{{ $t('brand.brandName') }}</text>
       <text class="app-subtitle">{{ $t('auth.login') }}</text>
     </view>
 

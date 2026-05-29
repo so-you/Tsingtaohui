@@ -38,6 +38,9 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 tsingtaohui:
+  branding:
+    app-name-zh: ${APP_NAME_ZH:青岛世天智汇}
+    app-name-en: ${APP_NAME_EN:Shitian Zhihui}
   jwt:
     secret: ${JWT_SECRET:tsingtaohui-dev-only-secret-key-do-not-use-in-production-env}
     access-token-expiration: 7200000

@@ -1,15 +1,15 @@
 export default {
   login: {
-    title: '青岛汇管理端',
+    title: '青岛世天智汇管理端',
     username: '用户名',
     password: '密码',
     loginBtn: '登录',
     usernameRequired: '请输入用户名',
     passwordRequired: '请输入密码',
-    brandName: '青岛汇',
+    brandName: '青岛世天智汇',
     brandTagline: '保税仓无人机配送管理平台',
     subtitle: '欢迎回来，请登录您的账号',
-    copyright: '© 2026 青岛汇 Tsingtaohui. All rights reserved.',
+    copyright: '© 2026 青岛世天智汇. All rights reserved.',
     demoAccount: '演示账号: admin2 / admin123',
     feature1Title: '船舶配送管理',
     feature1Desc: '实时追踪订单配送状态',
@@ -319,6 +319,6 @@ export default {
     reconciliation: '对账导出',
   },
   layout: {
-    brandName: '青岛汇',
+    brandName: '青岛世天智汇',
   },
 }

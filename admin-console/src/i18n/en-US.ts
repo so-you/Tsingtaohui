@@ -1,15 +1,15 @@
 export default {
   login: {
-    title: 'Tsingtaohui Admin',
+    title: 'Shitian Zhihui Admin',
     username: 'Username',
     password: 'Password',
     loginBtn: 'Login',
     usernameRequired: 'Please enter username',
     passwordRequired: 'Please enter password',
-    brandName: 'Tsingtaohui',
+    brandName: 'Shitian Zhihui',
     brandTagline: 'Bonded Warehouse Drone Delivery Management Platform',
     subtitle: 'Welcome back, please sign in',
-    copyright: '© 2026 Tsingtaohui. All rights reserved.',
+    copyright: '© 2026 Shitian Zhihui. All rights reserved.',
     demoAccount: 'Demo: admin2 / admin123',
     feature1Title: 'Ship Delivery Management',
     feature1Desc: 'Real-time order delivery tracking',
@@ -319,6 +319,6 @@ export default {
     reconciliation: 'Reconciliation',
   },
   layout: {
-    brandName: 'Tsingtaohui',
+    brandName: 'Shitian Zhihui',
   },
 }

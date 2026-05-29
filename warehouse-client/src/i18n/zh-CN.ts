@@ -1,6 +1,6 @@
 export default {
   login: {
-    title: '青岛汇仓库端',
+    title: '青岛世天智汇仓库端',
     subtitle: '保税仓扫码作业工作台',
     usernamePlaceholder: '请输入仓库账号',
     passwordPlaceholder: '请输入密码',

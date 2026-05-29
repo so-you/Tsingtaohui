@@ -6,7 +6,7 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## 项目概述
 
-**青岛汇 (Tsingtaohui)** 是面向青岛港的保税仓货物上船无人机配送平台。提供从在线下单、保税仓履约、无人机配送、船舶收货到海关数据同步的闭环业务流程。
+**青岛世天智汇 (Shitian Zhihui)** 是面向青岛港的保税仓货物上船无人机配送平台。提供从在线下单、保税仓履约、无人机配送、船舶收货到海关数据同步的闭环业务流程。
 
 目标用户：靠港船舶的船员（通过 H5 商城下单购买保税仓商品，由无人机配送至船上）。
 

@@ -49,7 +49,7 @@ export default {
     recommend: '推荐商品',
     activeOrders: '进行中的订单',
     noActiveOrders: '暂无进行中的订单',
-    brandName: '青岛汇',
+    brandName: '青岛世天智汇',
     brandTag: '保税仓直发',
     searchBtn: '搜索',
     bannerTitle: '无人机极速配送',

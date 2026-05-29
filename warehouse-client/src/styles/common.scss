@@ -1,0 +1,139 @@
+@use './theme-warehouse.scss' as *;
+
+page {
+  min-height: 100%;
+  background-color: $bg-page;
+  color: $text-primary;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
+  font-size: $font-base;
+  box-sizing: border-box;
+}
+
+view,
+text,
+input,
+button {
+  box-sizing: border-box;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  line-height: inherit;
+}
+
+button::after {
+  border: 0;
+}
+
+.warehouse-page {
+  width: 100%;
+  max-width: 720px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: $space-md $space-md calc(128rpx + env(safe-area-inset-bottom));
+  background: $bg-page;
+}
+
+.warehouse-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+  margin-bottom: $space-md;
+}
+
+.warehouse-title-group {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.warehouse-title {
+  color: $text-primary;
+  font-size: $font-lg;
+  font-weight: $font-weight-semibold;
+  line-height: 1.25;
+}
+
+.warehouse-subtitle {
+  color: $text-tertiary;
+  font-size: $font-sm;
+  line-height: 1.35;
+}
+
+.warehouse-card {
+  background: $bg-card;
+  border: 1rpx solid $border-color;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+}
+
+.warehouse-primary-button {
+  display: flex;
+  min-height: 88rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-md;
+  background: $warehouse-gradient;
+  color: #ffffff;
+  font-size: $font-base;
+  font-weight: $font-weight-semibold;
+}
+
+.warehouse-primary-button--disabled {
+  background: #cbd5e1;
+  color: #ffffff;
+}
+
+.warehouse-secondary-button {
+  display: flex;
+  min-height: 80rpx;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid rgba(37, 99, 235, 0.24);
+  border-radius: $radius-md;
+  background: $warehouse-primary-bg;
+  color: $warehouse-primary;
+  font-size: $font-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.warehouse-meta-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $space-md;
+  padding: 6rpx 0;
+}
+
+.warehouse-meta-label {
+  flex-shrink: 0;
+  color: $text-tertiary;
+  font-size: $font-sm;
+}
+
+.warehouse-meta-value {
+  min-width: 0;
+  color: $text-primary;
+  font-size: $font-sm;
+  font-weight: $font-weight-medium;
+  line-height: 1.35;
+  text-align: right;
+  word-break: break-word;
+}
+
+.warehouse-section {
+  margin-top: $space-md;
+}
+
+.warehouse-section-title {
+  display: block;
+  margin-bottom: $space-sm;
+  color: $text-primary;
+  font-size: $font-md;
+  font-weight: $font-weight-semibold;
+}

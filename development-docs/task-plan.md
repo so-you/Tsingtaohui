@@ -84,18 +84,23 @@
 
 | # | 任务 | 状态 | 分支 | 提交 |
 |---|------|------|------|------|
-| 5-1 | 设计系统（SCSS 设计令牌 + 仓库端色彩主题 + 公共样式） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
-| 5-2 | 通用组件（ScanInput / StatusTag / TaskCard / EmptyState） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
-| 5-3 | Mock 数据模块（dashboard / picking / review / outbound / inventory） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
-| 5-4 | 登录页（WH-001） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
-| 5-5 | 工作台重写（WH-002）+ 底部导航 | ⏳ 待开发 | feat/warehouse-client-optimization | — |
-| 5-6 | 拣货页重写（WH-003） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
-| 5-7 | 复核打包页重写（WH-004） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
-| 5-8 | 出库页重写（WH-005） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
-| 5-9 | 库存查询页重写（WH-007） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
-| 5-10 | 扫码设备兼容（WH-006）+ 中英文补全（WH-008） | ⏳ 待开发 | feat/warehouse-client-optimization | — |
+| 5-1 | 设计系统（SCSS 设计令牌 + 仓库端色彩主题 + 公共样式） | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
+| 5-2 | 通用组件（ScanInput / StatusTag / TaskCard / EmptyState） | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
+| 5-3 | Mock 数据模块（dashboard / picking / review / outbound / inventory） | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
+| 5-4 | 登录页（WH-001） | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
+| 5-5 | 工作台重写（WH-002）+ 底部导航 | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
+| 5-6 | 拣货页重写（WH-003） | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
+| 5-7 | 复核打包页重写（WH-004） | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
+| 5-8 | 出库页重写（WH-005） | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
+| 5-9 | 库存查询页重写（WH-007） | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
+| 5-10 | 扫码设备兼容（WH-006）+ 中英文补全（WH-008） | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
 
 设计文档：`docs/superpowers/specs/2026-05-29-warehouse-client-redesign.md`
+
+### 阶段 5 验证摘要
+- 仓库端：新增 mock 示例数据模式，可通过 `VITE_USE_MOCK=true` 开启，覆盖登录、工作台、拣货、复核、出库、库存查询和扫码反馈。
+- 测试：新增 Vitest 纯逻辑测试，覆盖扫码标准化、扫描历史截断、库存 SKU 搜索和拣货扫描结果。
+- 前端：仓库端 TypeScript 类型检查、H5 生产构建、浏览器渲染烟测通过。
 
 ## 每阶段执行流程
 

@@ -1,35 +1,57 @@
 {
   "pages": [
     {
+      "path": "pages/login/index",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/dashboard/index",
-      "style": { "navigationBarTitleText": "工作台" }
+      "style": {
+        "navigationBarTitleText": "工作台",
+        "navigationStyle": "custom"
+      }
     },
     {
       "path": "pages/picking/index",
-      "style": { "navigationBarTitleText": "拣货" }
+      "style": {
+        "navigationBarTitleText": "拣货",
+        "navigationStyle": "custom"
+      }
     },
     {
       "path": "pages/review/index",
-      "style": { "navigationBarTitleText": "复核打包" }
+      "style": {
+        "navigationBarTitleText": "复核打包",
+        "navigationStyle": "custom"
+      }
     },
     {
       "path": "pages/outbound/index",
-      "style": { "navigationBarTitleText": "出库" }
+      "style": {
+        "navigationBarTitleText": "出库",
+        "navigationStyle": "custom"
+      }
     },
     {
       "path": "pages/inventory/index",
-      "style": { "navigationBarTitleText": "库存" }
+      "style": {
+        "navigationBarTitleText": "库存",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "青岛汇仓库",
     "navigationBarBackgroundColor": "#FFFFFF",
-    "backgroundColor": "#F7F8FA"
+    "backgroundColor": "#F5F5F5"
   },
   "tabBar": {
     "color": "#6B7280",
-    "selectedColor": "#1677FF",
+    "selectedColor": "#2563EB",
     "backgroundColor": "#FFFFFF",
     "borderStyle": "black",
     "list": [

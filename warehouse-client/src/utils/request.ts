@@ -44,7 +44,7 @@ http.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('warehouse_user')
-      uni.reLaunch({ url: '/pages/dashboard/index' })
+      uni.reLaunch({ url: '/pages/login/index' })
     }
     return Promise.reject(error)
   },

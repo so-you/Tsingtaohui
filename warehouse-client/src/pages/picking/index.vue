@@ -1,65 +1,79 @@
 <template>
-  <view class="page">
-    <view class="header">
-      <text class="title">{{ t('picking.title') }}</text>
+  <view class="warehouse-page">
+    <view class="warehouse-header">
+      <view class="warehouse-title-group">
+        <text class="warehouse-title">{{ t('picking.title') }}</text>
+        <text class="warehouse-subtitle">{{ t('picking.subtitle') }}</text>
+      </view>
     </view>
 
-    <view class="scan-area">
-      <input
-        class="scan-input"
-        :placeholder="t('picking.scanToConfirm')"
-        focus
-        confirm-type="done"
-        @confirm="handleScan"
+    <ScanInput
+      :title="t('picking.scanToConfirm')"
+      :hint="t('dashboard.scanMode')"
+      :mode-label="t('dashboard.scanMode')"
+      :placeholder="t('picking.scanToConfirm')"
+      border-color="#16A34A"
+      :feedback="scanFeedback"
+      @scan="handleScan"
+    />
+
+    <view class="warehouse-section">
+      <EmptyState
+        v-if="store.pickingTasks.length === 0"
+        :title="t('picking.noTasks')"
+        :description="t('picking.noTasksDesc')"
+        icon="task"
       />
-    </view>
-
-    <view v-if="store.pickingTasks.length === 0" class="empty">
-      <text>{{ t('picking.noTasks') }}</text>
-    </view>
-
-    <view v-for="task in store.pickingTasks" :key="task.orderNo" class="task-card">
-      <view class="task-row"><text class="label">{{ t('picking.orderNo') }}</text><text>{{ task.orderNo }}</text></view>
-      <view class="task-row"><text class="label">{{ t('picking.product') }}</text><text>{{ task.productName }}</text></view>
-      <view class="task-row"><text class="label">{{ t('picking.quantity') }}</text><text>{{ task.quantity }}</text></view>
-      <view class="task-row"><text class="label">{{ t('picking.location') }}</text><text>{{ task.location }}</text></view>
-      <view class="task-row"><text class="label">{{ t('picking.batch') }}</text><text>{{ task.batch }}</text></view>
+      <view v-else>
+        <TaskCard
+          v-for="task in store.pickingTasks"
+          :key="task.taskId"
+          :task="task"
+          type="picking"
+        />
+      </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { ref } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
+import EmptyState from '../../components/EmptyState.vue'
+import ScanInput from '../../components/ScanInput.vue'
+import TaskCard from '../../components/TaskCard.vue'
 import { useWarehouseStore } from '../../stores/warehouse'
+import type { IScanHistoryItem } from '../../utils/scanner'
+import { createScanHistoryItem } from '../../utils/scanner'
 
 const { t } = useI18n()
 const store = useWarehouseStore()
+const scanFeedback = ref<IScanHistoryItem | null>(null)
 
-async function handleScan(e: any) {
-  const skuCode = e.detail.value
-  if (!skuCode || store.pickingTasks.length === 0) return
+function errorMessage(error: any, fallbackKey: string) {
+  const message = error?.message || fallbackKey
+  return message.includes('.') ? t(message) : message
+}
+
+async function handleScan(code: string) {
   try {
-    await store.scanPicking(store.pickingTasks[0].taskId, skuCode)
-    uni.showToast({ title: 'OK', icon: 'success' })
-  } catch (err: any) {
-    uni.showToast({ title: err.message || 'Scan failed', icon: 'none' })
+    const result = await store.scanPicking(code)
+    scanFeedback.value = createScanHistoryItem(code, result, t(result.messageKey))
+    uni.showToast({ title: t(result.messageKey), icon: 'success' })
+  } catch (error: any) {
+    const message = errorMessage(error, 'picking.scanMismatch')
+    scanFeedback.value = {
+      code,
+      status: error?.code === 'duplicate' || error?.code === 'overflow' ? error.code : 'failed',
+      message,
+      scannedAt: new Date().toISOString(),
+    }
+    uni.showToast({ title: message, icon: 'none' })
   }
 }
 
-onMounted(() => {
+onShow(() => {
   store.fetchPickingTasks()
 })
 </script>
-
-<style scoped>
-.page { padding: 12px; background: #F7F8FA; min-height: 100vh; }
-.header { margin-bottom: 12px; }
-.title { font-size: 18px; font-weight: 600; }
-.scan-area { margin-bottom: 16px; }
-.scan-input { height: 44px; border: 2px solid #16A34A; border-radius: 8px; padding: 0 12px; font-size: 16px; background: #fff; }
-.empty { text-align: center; padding: 40px; color: #6B7280; }
-.task-card { background: #fff; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
-.task-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; }
-.label { color: #6B7280; }
-</style>

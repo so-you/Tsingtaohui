@@ -101,11 +101,11 @@ Tsingtaohui/
 │   ├── pom.xml
 │   └── Dockerfile
 │
-├── development-docs/           # 开发文档
-├── docs/superpowers/specs/     # 产品规格说明书与设计文档
-│   ├── 2026-05-22-bonded-warehouse-ship-drone-delivery-product-spec.md
-│   └── 2026-05-29-warehouse-client-redesign.md
-├── docs/superpowers/plans/     # 实现计划
+├── docs/                       # 项目文档
+│   ├── 00-original-requirements/ # 原始需求、讨论记录、阶段计划和样例数据
+│   ├── 01-product-design/        # 整体功能设计、系统架构、数据模型、接口契约、统一 UI 和研发规范
+│   ├── 02-service-design/        # H5 客户端、仓库端、管理端和后端服务独立设计文档
+│   └── 99-archive/               # 历史索引、审查报告和工具归档
 │
 ├── CLAUDE.md                   # 本文件 — AI 编码指导
 ├── AGENTS.md                   # Codex 编码指导

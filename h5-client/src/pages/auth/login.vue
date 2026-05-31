@@ -28,6 +28,11 @@
       <button class="btn-primary" :disabled="loading" @tap="handleLogin">
         {{ loading ? $t('common.loading') : $t('auth.loginBtn') }}
       </button>
+
+      <view class="demo-account">
+        <text class="demo-title">{{ $t('auth.demoAccountTitle') }}</text>
+        <text class="demo-line">customer01 / demo1234</text>
+      </view>
     </view>
 
     <view class="login-footer">
@@ -145,6 +150,29 @@ function goRegister() {
 
 .btn-primary[disabled] {
   opacity: 0.6;
+}
+
+.demo-account {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 32rpx;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  background-color: #f8fafc;
+  border: 2rpx solid #e5e7eb;
+}
+
+.demo-title {
+  font-size: 26rpx;
+  color: #6b7280;
+}
+
+.demo-line {
+  font-size: 28rpx;
+  color: #374151;
+  font-weight: 500;
 }
 
 .login-footer {

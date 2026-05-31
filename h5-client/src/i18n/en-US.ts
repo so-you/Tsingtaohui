@@ -1,4 +1,8 @@
 export default {
+  brand: {
+    brandName: 'Shitian Zhihui',
+    brandTag: 'Bonded Direct',
+  },
   nav: {
     home: 'Home',
     goods: 'Products',
@@ -25,6 +29,7 @@ export default {
     loginSuccess: 'Login successful',
     logout: 'Logout',
     logoutConfirm: 'Are you sure you want to logout?',
+    demoAccountTitle: 'Demo accounts',
   },
   mine: {
     title: 'Mine',

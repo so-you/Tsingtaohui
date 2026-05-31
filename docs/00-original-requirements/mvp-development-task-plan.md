@@ -105,7 +105,7 @@
 | 5-9 | 库存查询页重写（WH-007） | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
 | 5-10 | 扫码设备兼容（WH-006）+ 中英文补全（WH-008） | ✅ 完成 | feat/warehouse-client-optimization | (本次) |
 
-设计文档：`docs/superpowers/specs/2026-05-29-warehouse-client-redesign.md`
+设计文档：`docs/02-service-design/warehouse-client/warehouse-client-redesign-design.md`
 
 ### 阶段 5 验证摘要
 - 仓库端：新增 mock 示例数据模式，可通过 `VITE_USE_MOCK=true` 开启，覆盖登录、工作台、拣货、复核、出库、库存查询和扫码反馈。

@@ -15,8 +15,11 @@ Tsingtaohui/
   warehouse-client/
   admin-console/
   backend/
-  development-docs/
   docs/
+    00-original-requirements/
+    01-product-design/
+    02-service-design/
+    99-archive/
 ```
 
 说明：
@@ -25,8 +28,10 @@ Tsingtaohui/
 2. `warehouse-client`：Uni-app 仓库端。
 3. `admin-console`：Vue 3 + Element Plus 管理端。
 4. `backend`：Spring Boot 后端。
-5. `development-docs`：研发文档。
-6. `docs`：产品规格说明书和其他文档。
+5. `docs/00-original-requirements`：原始需求、讨论记录、阶段计划和样例数据。
+6. `docs/01-product-design`：整体功能设计、系统架构、数据模型、接口契约、统一 UI 和研发规范。
+7. `docs/02-service-design`：H5 客户端、仓库端、管理端和后端服务的独立设计文档。
+8. `docs/99-archive`：历史索引、审查报告和工具归档。
 
 ## 3. 本地开发环境
 

@@ -1,4 +1,8 @@
 export default {
+  brand: {
+    brandName: '青岛世天智汇',
+    brandTag: '保税仓直发',
+  },
   nav: {
     home: '首页',
     goods: '商品',
@@ -25,6 +29,7 @@ export default {
     loginSuccess: '登录成功',
     logout: '退出登录',
     logoutConfirm: '确定要退出登录吗？',
+    demoAccountTitle: '示例账号',
   },
   mine: {
     title: '我的',

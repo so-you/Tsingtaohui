@@ -9,6 +9,9 @@
 /warehouse-client/node_modules/
 /warehouse-client/dist/
 /admin-console/dist/
+# Environment secrets
+.env
+
 # Local OS and log files
 .DS_Store
 *.log

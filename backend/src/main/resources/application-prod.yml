@@ -1,0 +1,9 @@
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+
+logging:
+  level:
+    com.tsingtaohui: INFO
+    org.springframework.security: WARN
+    org.springframework.web: WARN

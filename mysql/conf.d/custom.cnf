@@ -1,0 +1,22 @@
+[mysqld]
+# 字符集
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+
+# 连接数（按云服务器配置调整，2C4G 建议 200）
+max_connections = 200
+
+# InnoDB 缓冲池（建议设为服务器内存的 60-70%）
+# 以下为 2GB 内存服务器的配置
+innodb_buffer_pool_size = 1G
+
+# 日志
+slow_query_log = 1
+slow_query_log_file = /var/lib/mysql/slow.log
+long_query_time = 2
+
+# 时区
+default-time-zone = +08:00
+
+[client]
+default-character-set = utf8mb4

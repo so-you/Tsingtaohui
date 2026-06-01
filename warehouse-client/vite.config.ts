@@ -3,6 +3,7 @@ import uni from "@dcloudio/vite-plugin-uni";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/warehouse/',
   plugins: [uni()],
   server: {
     proxy: {

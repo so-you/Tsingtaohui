@@ -56,7 +56,7 @@ function handleLanguage(lang: string) {
 
 function handleLogout() {
   userStore.logout()
-  router.push('/login')
+  router.push('/admin/login')
 }
 
 function toggleSidebar() {

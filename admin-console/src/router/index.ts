@@ -77,14 +77,14 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/admin/'),
   routes
 })
 
 router.beforeEach((to, _from, next) => {
   const token = localStorage.getItem('token')
   if (to.meta.requiresAuth !== false && !token) {
-    next('/login')
+    next('/admin/login')
   } else {
     next()
   }

@@ -36,7 +36,7 @@ request.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token')
-      router.push('/login')
+      router.push('/admin/login')
       ElMessage.warning(t('login.tokenExpired'))
     } else {
       ElMessage.error(error.response?.data?.message || t('common.networkError'))

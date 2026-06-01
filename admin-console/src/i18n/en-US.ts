@@ -10,7 +10,7 @@ export default {
     brandTagline: 'Bonded Warehouse Drone Delivery Management Platform',
     subtitle: 'Welcome back, please sign in',
     copyright: '© 2026 Shitian Zhihui. All rights reserved.',
-    demoAccount: 'Demo: admin2 / admin123',
+    demoAccount: 'Demo: admin01 / demo1234',
     feature1Title: 'Ship Delivery Management',
     feature1Desc: 'Real-time order delivery tracking',
     feature2Title: 'Drone Dispatch',

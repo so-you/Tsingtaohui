@@ -10,7 +10,7 @@ export default {
     brandTagline: '保税仓无人机配送管理平台',
     subtitle: '欢迎回来，请登录您的账号',
     copyright: '© 2026 青岛世天智汇. All rights reserved.',
-    demoAccount: '演示账号: admin2 / admin123',
+    demoAccount: '演示账号: admin01 / demo1234',
     feature1Title: '船舶配送管理',
     feature1Desc: '实时追踪订单配送状态',
     feature2Title: '无人机调度',

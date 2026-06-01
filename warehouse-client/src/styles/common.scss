@@ -1,5 +1,17 @@
 @use './theme-warehouse.scss' as *;
 
+/* Constrain to mobile width on desktop browsers */
+html {
+  background-color: #f0f0f0;
+}
+
+body {
+  max-width: 450px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  background-color: $bg-page;
+}
+
 page {
   min-height: 100%;
   background-color: $bg-page;
